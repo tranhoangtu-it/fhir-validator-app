@@ -1,2 +1,2 @@
-Flask==2.2.2 # Hoặc phiên bản Flask mới nhất
-Flask-Cors==3.0.10 # Hoặc phiên bản Flask-Cors mới nhất
+Flask==2.2.5 # Hoặc phiên bản Flask mới nhất
+Flask-Cors==6.0.0 # Hoặc phiên bản Flask-Cors mới nhất
