@@ -1,0 +1,3944 @@
+{
+    "resourceType": "StructureDefinition",
+    "id": "Composition",
+    "meta": {
+        "lastUpdated": "2019-11-01T09:29:23.356+11:00"
+    },
+    "extension": [
+        {
+            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-category",
+            "valueString": "Foundation.Documents"
+        },
+        {
+            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
+            "valueCode": "trial-use"
+        },
+        {
+            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fmm",
+            "valueInteger": 2
+        },
+        {
+            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-security-category",
+            "valueCode": "not-classified"
+        },
+        {
+            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-wg",
+            "valueCode": "sd"
+        }
+    ],
+    "url": "http://hl7.org/fhir/StructureDefinition/Composition",
+    "version": "4.0.1",
+    "name": "Composition",
+    "status": "draft",
+    "date": "2019-11-01T09:29:23+11:00",
+    "publisher": "Health Level Seven International (Structured Documents)",
+    "contact": [
+        {
+            "telecom": [
+                {
+                    "system": "url",
+                    "value": "http://hl7.org/fhir"
+                }
+            ]
+        },
+        {
+            "telecom": [
+                {
+                    "system": "url",
+                    "value": "http://www.hl7.org/Special/committees/structure/index.cfm"
+                }
+            ]
+        }
+    ],
+    "description": "「単一の一貫した意味の文脈を確立し、文書化するための論理的に一つにまとめられた医療に関連する情報のセットであり、文書化するためにはクリニカルな承認が必要である。コンポジションは、文書化するために必要な構造とナラティブコンテンツを定義しますが、コンポジションだけでは文書ではありません。代わりに、文書タイプ= documentのバンドルの最初のエントリである必要があり、コンポジションから参照される他のリソース（患者、実行者、エンカウンタなど）はバンドルの後続のエントリとして含まれている必要があります。」",
+    "purpose": "To support documents, and also to capture the EN13606 notion of an attested commit to the patient EHR, and to allow a set of disparate resources at the information/engineering level to be gathered into a clinical statement.",
+    "fhirVersion": "4.0.1",
+    "mapping": [
+        {
+            "identity": "workflow",
+            "uri": "http://hl7.org/fhir/workflow",
+            "name": "Workflow Pattern"
+        },
+        {
+            "identity": "rim",
+            "uri": "http://hl7.org/v3",
+            "name": "RIM Mapping"
+        },
+        {
+            "identity": "cda",
+            "uri": "http://hl7.org/v3/cda",
+            "name": "CDA (R2)"
+        },
+        {
+            "identity": "fhirdocumentreference",
+            "uri": "http://hl7.org/fhir/documentreference",
+            "name": "FHIR DocumentReference"
+        },
+        {
+            "identity": "w5",
+            "uri": "http://hl7.org/fhir/fivews",
+            "name": "FiveWs Pattern Mapping"
+        }
+    ],
+    "kind": "resource",
+    "abstract": false,
+    "type": "Composition",
+    "baseDefinition": "http://hl7.org/fhir/StructureDefinition/DomainResource",
+    "derivation": "specialization",
+    "snapshot": {
+        "element": [
+            {
+                "id": "Composition",
+                "path": "Composition",
+                "short": "「臨床証明による単一の一貫した臨床声明で構成されたリソースのセット」",
+                "definition": "「単一の一貫した意味の文脈を確立し、文書化するための論理的に一つにまとめられた医療に関連する情報のセットであり、文書化するためにはクリニカルな承認が必要である。コンポジションは、文書化するために必要な構造とナラティブコンテンツを定義しますが、コンポジションだけでは文書ではありません。代わりに、文書タイプ= documentのバンドルの最初のエントリである必要があり、コンポジションから参照される他のリソース（患者、実行者、エンカウンタなど）はバンドルの後続のエントリとして含まれている必要があります。」",
+                "comment": "この仕様書の焦点は患者固有の臨床陳述にあるが、この資源は研究プロトコルの設計、医療請求書など、必ずしも患者固有の臨床的でない活動にも適用できます。",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Composition",
+                    "min": 0,
+                    "max": "*"
+                },
+                "constraint": [
+                    {
+                        "key": "dom-2",
+                        "severity": "error",
+                        "human": "もしリソースが他のリソースに含まれている場合、そのリソースにはネストされたリソースを含めてはなりません (moshi risōsu ga hoka no risōsu ni fukumarete iru baai, sono risōsu ni wa nesuto sareta risōsu o fukumete wa narimasen).",
+                        "expression": "contained.contained.empty()",
+                        "xpath": "not(parent::f:contained and f:contained)",
+                        "source": "http://hl7.org/fhir/StructureDefinition/DomainResource"
+                    },
+                    {
+                        "key": "dom-3",
+                        "severity": "error",
+                        "human": "もしリソースが他のリソースに含まれている場合、それはリソースの他の場所から参照されるか、含まれるリソースに参照されるべきです。",
+                        "expression": "contained.where((('#'+id in (%resource.descendants().reference | %resource.descendants().as(canonical) | %resource.descendants().as(uri) | %resource.descendants().as(url))) or descendants().where(reference = '#').exists() or descendants().where(as(canonical) = '#').exists() or descendants().where(as(canonical) = '#').exists()).not()).trace('unmatched', id).empty()",
+                        "xpath": "not(exists(for $id in f:contained/*/f:id/@value return $contained[not(parent::*/descendant::f:reference/@value=concat('#', $contained/*/id/@value) or descendant::f:reference[@value='#'])]))",
+                        "source": "http://hl7.org/fhir/StructureDefinition/DomainResource"
+                    },
+                    {
+                        "key": "dom-4",
+                        "severity": "error",
+                        "human": "もしリソースが別のリソースの中に含まれる場合、meta.versionIdまたはmeta.lastUpdatedを持つべきではありません。",
+                        "expression": "contained.meta.versionId.empty() and contained.meta.lastUpdated.empty()",
+                        "xpath": "not(exists(f:contained/*/f:meta/f:versionId)) and not(exists(f:contained/*/f:meta/f:lastUpdated))",
+                        "source": "http://hl7.org/fhir/StructureDefinition/DomainResource"
+                    },
+                    {
+                        "key": "dom-5",
+                        "severity": "error",
+                        "human": "「もしリソースが他のリソースに含まれている場合、セキュリティラベルを持つべきではありません。」",
+                        "expression": "contained.meta.security.empty()",
+                        "xpath": "not(exists(f:contained/*/f:meta/f:security))",
+                        "source": "http://hl7.org/fhir/StructureDefinition/DomainResource"
+                    },
+                    {
+                        "extension": [
+                            {
+                                "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bestpractice",
+                                "valueBoolean": true
+                            },
+                            {
+                                "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bestpractice-explanation",
+                                "valueMarkdown": "When a resource has no narrative, only systems that fully understand the data can display the resource to a human safely. Including a human readable representation in the resource makes for a much more robust eco-system and cheaper handling of resources by intermediary systems. Some ecosystems restrict distribution of resources to only those systems that do fully understand the resources, and as a consequence implementers may believe that the narrative is superfluous. However experience shows that such eco-systems often open up to new participants over time."
+                            }
+                        ],
+                        "key": "dom-6",
+                        "severity": "warning",
+                        "human": "「資源は堅牢な管理のために物語を持つべきである。」",
+                        "expression": "text.`div`.exists()",
+                        "xpath": "exists(f:text/h:div)",
+                        "source": "http://hl7.org/fhir/StructureDefinition/DomainResource"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "Entity. Role, or Act"
+                    },
+                    {
+                        "identity": "workflow",
+                        "map": "Event"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": "Document[classCode=\"DOC\" and moodCode=\"EVN\" and isNormalAct()]"
+                    },
+                    {
+                        "identity": "cda",
+                        "map": "ClinicalDocument"
+                    },
+                    {
+                        "identity": "fhirdocumentreference",
+                        "map": "when described by DocumentReference"
+                    }
+                ]
+            },
+            {
+                "id": "Composition.id",
+                "path": "Composition.id",
+                "short": "このアーティファクトの論理ID",
+                "definition": "「リソースのURLで使用される論理ID。一度割り当てられたら、この値は変更されません。」",
+                "comment": "「リソースにIDがないのは、作成操作を使用してサーバーに送信されているときだけです。」",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Resource.id",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "extension": [
+                            {
+                                "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fhir-type",
+                                "valueUrl": "string"
+                            }
+                        ],
+                        "code": "http://hl7.org/fhirpath/System.String"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true
+            },
+            {
+                "id": "Composition.meta",
+                "path": "Composition.meta",
+                "short": "「リソースに関するメタデータ」",
+                "definition": "リソースに関するメタデータ。これはインフラストラクチャによって維持されるコンテンツです。 コンテンツの変更は、リソースのバージョン変更と常に関連しているわけではありません。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Resource.meta",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "Meta"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true
+            },
+            {
+                "id": "Composition.implicitRules",
+                "path": "Composition.implicitRules",
+                "short": "このコンテンツが作成されたルールセット",
+                "definition": "「リソース構築時に遵守された一連のルールを指すものであり、コンテンツを処理する際に理解する必要があります。しばしば、特別なルールを定義する実装ガイドとその他のプロファイルなどを含むものです。」",
+                "comment": "このルールセットを主張することで、取引先の限られた集団にしか内容を理解させることができず、長期的にはデータの有用性が制限されます。しかしながら、現存するヘルスエコシステムは高度に分断化しており、一般的に計算可能な形式でデータを定義、収集、交換する準備が整っていません。できる限り、実装者および/または仕様ライターはこの要素の使用を避けるべきです。使用する場合、URLは、そのナラティブとともに他のプロファイル、値セットなどを含む実装ガイドを定義する参照となります。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Resource.implicitRules",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "uri"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": true,
+                "isModifierReason": "This element is labeled as a modifier because the implicit rules may provide additional knowledge about the resource that modifies it's meaning or interpretation",
+                "isSummary": true
+            },
+            {
+                "id": "Composition.language",
+                "path": "Composition.language",
+                "short": "「リソースコンテンツの言語」(Risōsukontentsu no gengo)",
+                "definition": "「リソースが書かれている基本言語。」",
+                "comment": "言語はインデックスとアクセシビリティをサポートするために提供されます（通常、テキスト読み上げなどのサービスは言語タグを使用します）。物語のHTML言語タグは、物語に適用されます。リソース上の言語タグは、リソース内のデータから生成される他のプレゼンテーションの言語を指定するために使用できます。すべてのコンテンツが基本言語である必要はありません。Resource.languageは自動的に物語に適用されたと想定してはいけません。言語が指定されている場合、HTMLのdiv要素にも指定する必要があります（xml：langとhtml lang属性の関係に関する情報はHTML5の規則を参照）。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Resource.language",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "code"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-maxValueSet",
+                            "valueCanonical": "http://hl7.org/fhir/ValueSet/all-languages"
+                        },
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "Language"
+                        },
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-isCommonBinding",
+                            "valueBoolean": true
+                        }
+                    ],
+                    "strength": "preferred",
+                    "description": "「人間の言語。」(Ningen no gengo.)",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/languages"
+                }
+            },
+            {
+                "id": "Composition.text",
+                "path": "Composition.text",
+                "short": "「人間の解釈のためのリソースのテキスト要約」",
+                "definition": "「リソースの要約を含む人が読めるナビゲーションであり、リソースの内容を人に表現するために使用できます。ナビゲーションはすべての構造化されたデータをエンコードする必要はありませんが、人間がナビゲーションを読むだけで「臨床的に安全」であるために十分な詳細を含む必要があります。リソース定義には、臨床的な安全性を確保するためにナビゲーションで表現する必要があるコンテンツが定義される場合があります。」",
+                "comment": "含まれるリソースには説明がありません。含まれないリソースには説明が必要です。場合によっては、リソースが少量のデータしか含まず、テキストだけで表現されることがあります（minOccurs = 1要素がすべて満たされている限り）。これは、情報が「テキストの塊」としてキャプチャされるレガシーシステムからのデータや、テキストが生またはナレーションされて符号化された情報が後で追加される場合に必要な場合があります。",
+                "alias": [
+                    "narrative",
+                    "html",
+                    "xhtml",
+                    "display"
+                ],
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "DomainResource.text",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "Narrative"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "Act.text?"
+                    }
+                ]
+            },
+            {
+                "id": "Composition.contained",
+                "path": "Composition.contained",
+                "short": "「含まれている、インラインのリソース」(Fukuma rete iru, inrain no risōsu)",
+                "definition": "「これらのリソースは、それらを含むリソースから独立した存在を持ちません。それらは独立して識別することはできず、独自の独立したトランザクション範囲を持つこともできません。」",
+                "comment": "「コンテンツが適切に識別できる場合には、これを行うべきではありません。識別が失われると、再び復元することは非常に困難であり（文脈に依存します）、メタ要素にプロファイルとタグを持つことができますが、セキュリティのラベルを持っていてはいけません。」",
+                "alias": [
+                    "inline resources",
+                    "anonymous resources",
+                    "contained resources"
+                ],
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "DomainResource.contained",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "Resource"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "N/A"
+                    }
+                ]
+            },
+            {
+                "id": "Composition.extension",
+                "path": "Composition.extension",
+                "short": "実装によって定義される追加コンテンツ",
+                "definition": "「リソースの基本的な定義の一部ではない追加情報を表すために使用することができます。拡張機能の使用を安全かつ管理可能にするために、定義と使用の一定のガバナンスが適用されます。実装者はどんな拡張機能でも定義できますが、拡張機能の定義の一部として満たす必要がある要件があります」",
+                "comment": "どのようなアプリケーション、プロジェクト、または標準が拡張機能を使用しているかに関わらず、拡張機能の使用には決して汚名が付くわけではありません - それらを使用または定義する機関または管轄区域に関係なく。拡張機能の使用こそが、FHIR仕様を誰にとっても簡単なコアレベルで維持することを可能にします。",
+                "alias": [
+                    "extensions",
+                    "user content"
+                ],
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "DomainResource.extension",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "Extension"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    },
+                    {
+                        "key": "ext-1",
+                        "severity": "error",
+                        "human": "「拡張機能または値[x]のいずれかが必要です。両方ではありません。」",
+                        "expression": "extension.exists() != value.exists()",
+                        "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Extension"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "N/A"
+                    }
+                ]
+            },
+            {
+                "id": "Composition.modifierExtension",
+                "path": "Composition.modifierExtension",
+                "short": "無視できない拡張機能 (Mushi dekinai kakuchou kinou)",
+                "definition": "「リソースの基本的な定義に含まれない、要素の理解や、それを含む要素の子孫の理解を修正する追加情報を表すためにも使用されることがあります。通常、修飾要素は否定や修飾を提供します。拡張機能の使用を安全で管理しやすくするために、拡張機能の定義と使用に対して厳格な統治が適用されます。実装者は拡張機能を定義することが許可されていますが、拡張機能の定義の一部として満たす必要がある要件があります。リソースを処理するアプリケーションは、修飾子拡張をチェックする必要があります。修飾子拡張は、リソースまたはドメインリソースの任意の要素の意味を変更してはなりません（修飾子拡張自体の意味も変更できません）。」",
+                "comment": "どのようなアプリケーション、プロジェクト、または標準が拡張機能を使用しているかに関わらず、拡張機能の使用には決して汚名が付くわけではありません - それらを使用または定義する機関または管轄区域に関係なく。拡張機能の使用こそが、FHIR仕様を誰にとっても簡単なコアレベルで維持することを可能にします。",
+                "requirements": "Modifier extensions allow for extensions that *cannot* be safely ignored to be clearly distinguished from the vast majority of extensions which can be safely ignored.  This promotes interoperability by eliminating the need for implementers to prohibit the presence of extensions. For further information, see the [definition of modifier extensions](extensibility.html#modifierExtension).",
+                "alias": [
+                    "extensions",
+                    "user content"
+                ],
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "DomainResource.modifierExtension",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "Extension"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    },
+                    {
+                        "key": "ext-1",
+                        "severity": "error",
+                        "human": "「拡張機能または値[x]のいずれかが必要です。両方ではありません。」",
+                        "expression": "extension.exists() != value.exists()",
+                        "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Extension"
+                    }
+                ],
+                "isModifier": true,
+                "isModifierReason": "Modifier extensions are expected to modify the meaning or interpretation of the resource that contains them",
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "N/A"
+                    }
+                ]
+            },
+            {
+                "id": "Composition.identifier",
+                "path": "Composition.identifier",
+                "short": "「作成物に対するバージョン非依存の識別子」(Sakusei-butsu ni tai suru bājon hi-izon no shiki-shi)",
+                "definition": "「作曲のバージョンに依存しない識別子。この識別子は、作曲が時間の経過とともに変更されても一定のままです。」",
+                "comment": "「ClinicalDocument/setId in CDA に類似したもの。これらがどのように関連するかについては、リソース定義の議論を参照してください。」",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Composition.identifier",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "Identifier"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Event.identifier"
+                    },
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.identifier"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": "Document.id / Document.setId"
+                    },
+                    {
+                        "identity": "cda",
+                        "map": ".setId"
+                    },
+                    {
+                        "identity": "fhirdocumentreference",
+                        "map": "DocumentReference.masterIdentifier"
+                    }
+                ]
+            },
+            {
+                "id": "Composition.status",
+                "path": "Composition.status",
+                "short": "初期 | 最終 | 修正済み | エラー入力済み",
+                "definition": "この作文のワークフロー/臨床ステータス。そのステータスは文書の臨床的立場の指標です。",
+                "comment": "「もし作成物が取り下げられた場合、そのシリーズ内の作成物/文書やデータは、明らかに信用できないと指定されることなく、ユーザーに表示されることは決してないべきです。\"entered-in-error\"フラグは、この要素が他の要素の修飾子としてラベル付けされる理由です。\n\n一部のレポート作業フローでは、最終文書の元のナラティブを変更しないで、新しいナラティブのみを追加する必要があります。作成リソースには、このビジネスルールが有効かどうかを明示的に示す明確なステータスがありません。必要に応じて、拡張機能で処理されます。」",
+                "requirements": "Need to be able to mark interim, amended, or withdrawn compositions or documents.",
+                "min": 1,
+                "max": "1",
+                "base": {
+                    "path": "Composition.status",
+                    "min": 1,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "code"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": true,
+                "isModifierReason": "This element is labelled as a modifier because it is a status element that contains status entered-in-error which means that the resource should not be treated as valid",
+                "isSummary": true,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "CompositionStatus"
+                        }
+                    ],
+                    "strength": "required",
+                    "description": "作成物のワークフロー/臨床的状況。",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/composition-status|4.0.1"
+                },
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Event.status"
+                    },
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.status"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": "interim: .completionCode=\"IN\" & ./statusCode[isNormalDatatype()]=\"active\";  final: .completionCode=\"AU\" &&  ./statusCode[isNormalDatatype()]=\"complete\" and not(./inboundRelationship[typeCode=\"SUBJ\" and isNormalActRelationship()]/source[subsumesCode(\"ActClass#CACT\") and moodCode=\"EVN\" and domainMember(\"ReviseComposition\", code) and isNormalAct()]);  amended: .completionCode=\"AU\" &&  ./statusCode[isNormalDatatype()]=\"complete\" and ./inboundRelationship[typeCode=\"SUBJ\" and isNormalActRelationship()]/source[subsumesCode(\"ActClass#CACT\") and moodCode=\"EVN\" and domainMember(\"ReviseComposition\", code) and isNormalAct() and statusCode=\"completed\"];  withdrawn : .completionCode=NI &&  ./statusCode[isNormalDatatype()]=\"obsolete\""
+                    },
+                    {
+                        "identity": "cda",
+                        "map": "n/a"
+                    },
+                    {
+                        "identity": "fhirdocumentreference",
+                        "map": "DocumentReference.status"
+                    }
+                ]
+            },
+            {
+                "id": "Composition.type",
+                "path": "Composition.type",
+                "short": "作成の種類（可能であればLOINC）",
+                "definition": "「特定の作成方法（例えば、病歴と身体検査結果、退院まとめ、進行状況の記録）を指定します。通常、作成の目的に相当します。」",
+                "comment": "「構成タイプについては、LOINCは普及しており、HL7によって強く支持されています。多くの実装ガイドでは、特定のLOINCコードを必要とするか、LOINCを拡張バインディングとして使用します。」",
+                "requirements": "Key metadata element describing the composition, used in searching/filtering.",
+                "min": 1,
+                "max": "1",
+                "base": {
+                    "path": "Composition.type",
+                    "min": 1,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "CodeableConcept"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "DocumentType"
+                        }
+                    ],
+                    "strength": "preferred",
+                    "description": "作文の種類。",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/doc-typecodes"
+                },
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Event.code"
+                    },
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.class"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": "./code"
+                    },
+                    {
+                        "identity": "cda",
+                        "map": ".code"
+                    },
+                    {
+                        "identity": "fhirdocumentreference",
+                        "map": "DocumentReference.type"
+                    }
+                ]
+            },
+            {
+                "id": "Composition.category",
+                "path": "Composition.category",
+                "short": "\"作成物のカテゴリー分類\" (Sakuseibutsu no kategori bunrui)",
+                "definition": "「作文のタイプの分類 - インデックスや検索に役立ちます。これは、作文タイプで指定されたコードから暗示されるか、派生することができます。」",
+                "comment": "これは[XDS/MHD](http://wiki.ihe.net/index.php?title=Mobile_access_to_Health_Documents_(MHD))のメタデータフィールドです。",
+                "requirements": "Helps humans to assess whether the composition is of interest when viewing an index of compositions or documents.",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Composition.category",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "CodeableConcept"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "DocumentCategory"
+                        }
+                    ],
+                    "strength": "example",
+                    "description": "「マクロレベルで高度な臨床書類」",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/document-classcodes"
+                },
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Event.subject"
+                    },
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.class"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": ".outboundRelationship[typeCode=\"COMP].target[classCode=\"LIST\", moodCode=\"EVN\"].code"
+                    },
+                    {
+                        "identity": "cda",
+                        "map": "n/a"
+                    },
+                    {
+                        "identity": "fhirdocumentreference",
+                        "map": "DocumenttReference.category"
+                    }
+                ]
+            },
+            {
+                "id": "Composition.subject",
+                "path": "Composition.subject",
+                "short": "「作品が誰や何についてのものか」",
+                "definition": "「作品が誰か、または何についてのものか。作品は人物（患者または医療従事者）、装置（例：機械）または一群の主題（家畜の群れに関する文書や、共通の暴露を共有する患者のセットなど）についてのものであることもある。」",
+                "comment": "「臨床文書においては、通常患者が該当します。」",
+                "requirements": "Essential metadata for searching for the composition. Identifies who and/or what the composition/document is about.",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Composition.subject",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "Reference",
+                        "targetProfile": [
+                            "http://hl7.org/fhir/StructureDefinition/Resource"
+                        ]
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.subject[x]"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": ".participation[typeCode=\"SBJ\"].role[typeCode=\"PAT\"]"
+                    },
+                    {
+                        "identity": "cda",
+                        "map": ".recordTarget"
+                    },
+                    {
+                        "identity": "fhirdocumentreference",
+                        "map": "DocumentReference.subject"
+                    },
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.subject"
+                    }
+                ]
+            },
+            {
+                "id": "Composition.encounter",
+                "path": "Composition.encounter",
+                "short": "\"作品の文脈\" (Sakuhin no bunmyaku)",
+                "definition": "「この文書が関連する臨床面談やケアのタイプを説明します。」",
+                "requirements": "Provides context for the composition and supports searching.",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Composition.encounter",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "Reference",
+                        "targetProfile": [
+                            "http://hl7.org/fhir/StructureDefinition/Encounter"
+                        ]
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Event.context"
+                    },
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.context"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": "unique(highest(./outboundRelationship[typeCode=\"SUBJ\" and isNormalActRelationship()], priorityNumber)/target[moodCode=\"EVN\" and classCode=(\"ENC\", \"PCPR\") and isNormalAct])"
+                    },
+                    {
+                        "identity": "cda",
+                        "map": ".componentOf.encompassingEncounter"
+                    },
+                    {
+                        "identity": "fhirdocumentreference",
+                        "map": "DocumentReference.context.encounter"
+                    }
+                ]
+            },
+            {
+                "id": "Composition.date",
+                "path": "Composition.date",
+                "short": "作文編集時間 (Sakubun henshu jikan)",
+                "definition": "「作文の編集時間、著者によって最後に論理的に変更されたときです。」",
+                "comment": "「作成物の最終更新日は文書の日付よりも後になっている場合がありますが、変更されていない場合があります。」",
+                "requirements": "dateTime is used for tracking, organizing versions and searching. Note that this is the time of *authoring*. When packaged in a document, [Bundle.timestamp](bundle-definitions.html#Bundle.timestamp) is the date of packaging.",
+                "min": 1,
+                "max": "1",
+                "base": {
+                    "path": "Composition.date",
+                    "min": 1,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "dateTime"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Event.occurrence[x]"
+                    },
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.done[x]"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": ".effectiveTime[type=\"TS\"]"
+                    },
+                    {
+                        "identity": "cda",
+                        "map": ".effectiveTime"
+                    },
+                    {
+                        "identity": "fhirdocumentreference",
+                        "map": "DocumentReference.content.attachment.date, DocumentReference.created"
+                    }
+                ]
+            },
+            {
+                "id": "Composition.author",
+                "path": "Composition.author",
+                "short": "「その作品を作ったのは誰で、あるいは何ですか？」",
+                "definition": "「誰が作文の情報に責任を持つかを確認する。タイピングした人と必ずしも同じである必要はない。」",
+                "requirements": "Identifies who is responsible for the content.",
+                "min": 1,
+                "max": "*",
+                "base": {
+                    "path": "Composition.author",
+                    "min": 1,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "Reference",
+                        "targetProfile": [
+                            "http://hl7.org/fhir/StructureDefinition/Practitioner",
+                            "http://hl7.org/fhir/StructureDefinition/PractitionerRole",
+                            "http://hl7.org/fhir/StructureDefinition/Device",
+                            "http://hl7.org/fhir/StructureDefinition/Patient",
+                            "http://hl7.org/fhir/StructureDefinition/RelatedPerson",
+                            "http://hl7.org/fhir/StructureDefinition/Organization"
+                        ]
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Event.performer"
+                    },
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.author"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": ".participation[typeCode=\"AUT\"].role[classCode=\"ASSIGNED\"]"
+                    },
+                    {
+                        "identity": "cda",
+                        "map": ".author.assignedAuthor"
+                    },
+                    {
+                        "identity": "fhirdocumentreference",
+                        "map": "DocumentReference.agent"
+                    }
+                ]
+            },
+            {
+                "id": "Composition.title",
+                "path": "Composition.title",
+                "short": "「人間が読みやすい名前/タイトル」",
+                "definition": "「構成物の公式人間可読ラベル」",
+                "comment": "多くの構成物において、タイトルはテキストや構成型の表示名と同じです（例：「診察」「進行ノート」など）。 CDAではタイトルを必須としていませんが、タイトルを省略することが有用であるという事例はないため、ここでは必須です。この要件に関するフィードバックは、試用期間中に歓迎されます。",
+                "min": 1,
+                "max": "1",
+                "base": {
+                    "path": "Composition.title",
+                    "min": 1,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "./title"
+                    },
+                    {
+                        "identity": "cda",
+                        "map": ".title"
+                    },
+                    {
+                        "identity": "fhirdocumentreference",
+                        "map": "DocumentReference.description, DocumentReference.content.attachment.title"
+                    }
+                ]
+            },
+            {
+                "id": "Composition.confidentiality",
+                "path": "Composition.confidentiality",
+                "short": "「アフィニティー・ドメインによって定義される」",
+                "definition": "作成物の機密度レベルを指定するコード。",
+                "comment": "この要素の正確な使用方法、執行方法および高度に機密性の高い文書に関連する問題は、基本仕様の範囲外にあり、実装プロファイル（セキュリティセクションを参照）に委任されています。この要素は修飾子としてラベル付けされています。なぜなら、高度に機密性の高い文書を無視するような扱いを受けてはならないからです。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Composition.confidentiality",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "code"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "DocumentConfidentiality"
+                        }
+                    ],
+                    "strength": "required",
+                    "description": "「作成物の機密レベルを指定するコード。」",
+                    "valueSet": "http://terminology.hl7.org/ValueSet/v3-ConfidentialityClassification|2014-03-26"
+                },
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": ".confidentialityCode"
+                    },
+                    {
+                        "identity": "cda",
+                        "map": ".confidentialityCode"
+                    },
+                    {
+                        "identity": "fhirdocumentreference",
+                        "map": "DocumentReference.securityLabel"
+                    }
+                ]
+            },
+            {
+                "id": "Composition.attester",
+                "path": "Composition.attester",
+                "short": "作成物の正確さを証明します。",
+                "definition": "「構成物/文書の正確さを証明した参加者」",
+                "comment": "「各承認者を一度だけリストに挙げてください。」",
+                "requirements": "Identifies responsibility for the accuracy of the composition content.",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Composition.attester",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "BackboneElement"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": ".participation[typeCode=\"AUTHEN\"].role[classCode=\"ASSIGNED\"]"
+                    },
+                    {
+                        "identity": "cda",
+                        "map": ".authenticator/.legalAuthenticator"
+                    },
+                    {
+                        "identity": "fhirdocumentreference",
+                        "map": "DocumentReference.authenticator"
+                    }
+                ]
+            },
+            {
+                "id": "Composition.attester.id",
+                "path": "Composition.attester.id",
+                "representation": [
+                    "xmlAttr"
+                ],
+                "short": "エレメント相互参照のためのユニークID",
+                "definition": "リソース内の要素の固有ID（内部参照用）。これは、スペースを含まない任意の文字列値である可能性があります。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Element.id",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "extension": [
+                            {
+                                "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fhir-type",
+                                "valueUrl": "string"
+                            }
+                        ],
+                        "code": "http://hl7.org/fhirpath/System.String"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "Composition.attester.extension",
+                "path": "Composition.attester.extension",
+                "short": "実装によって定義される追加コンテンツ",
+                "definition": "「要素の基本的な定義に含まれない追加情報を表すために使用されることがあります。拡張機能の使用を安全かつ管理しやすくするために、定義および使用に適用される厳格なガバナンスのセットがあります。実装者は拡張機能を定義できますが、拡張機能の定義の一部として満たす必要のある要件のセットがあります。」",
+                "comment": "どのようなアプリケーション、プロジェクト、または標準が拡張機能を使用しているかに関わらず、拡張機能の使用には決して汚名が付くわけではありません - それらを使用または定義する機関または管轄区域に関係なく。拡張機能の使用こそが、FHIR仕様を誰にとっても簡単なコアレベルで維持することを可能にします。",
+                "alias": [
+                    "extensions",
+                    "user content"
+                ],
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Element.extension",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "Extension"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    },
+                    {
+                        "key": "ext-1",
+                        "severity": "error",
+                        "human": "「拡張機能または値[x]のいずれかが必要です。両方ではありません。」",
+                        "expression": "extension.exists() != value.exists()",
+                        "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Extension"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "Composition.attester.modifierExtension",
+                "path": "Composition.attester.modifierExtension",
+                "short": "「認識されなくても無視できない拡張機能」(Ninshiki sarenakutemo mushi dekinai kakuchou kinou)",
+                "definition": "「基本的な要素の定義に含まれない追加情報を表すために使用されることがあり、それによって、その要素自体または取り込んでいる要素の子孫の理解を修正する。修飾子要素は通常、否定または修飾を提供します。拡張機能の安全で管理しやすい使用を実現するために、定義および使用に厳しいガバナンスセットが適用されています。どの実装者でも拡張機能を定義できますが、拡張機能の定義の一部として満たす必要がある要件があります。リソースを処理するアプリケーションは、修飾子拡張子をチェックする必要があります。\n\n修飾子拡張機能は、リソースまたはドメインリソースの任意の要素の意味を変更してはなりません（修飾子拡張自体の意味を変更することもできません）。」",
+                "comment": "どのようなアプリケーション、プロジェクト、または標準が拡張機能を使用しているかに関わらず、拡張機能の使用には決して汚名が付くわけではありません - それらを使用または定義する機関または管轄区域に関係なく。拡張機能の使用こそが、FHIR仕様を誰にとっても簡単なコアレベルで維持することを可能にします。",
+                "requirements": "Modifier extensions allow for extensions that *cannot* be safely ignored to be clearly distinguished from the vast majority of extensions which can be safely ignored.  This promotes interoperability by eliminating the need for implementers to prohibit the presence of extensions. For further information, see the [definition of modifier extensions](extensibility.html#modifierExtension).",
+                "alias": [
+                    "extensions",
+                    "user content",
+                    "modifiers"
+                ],
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "BackboneElement.modifierExtension",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "Extension"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    },
+                    {
+                        "key": "ext-1",
+                        "severity": "error",
+                        "human": "「拡張機能または値[x]のいずれかが必要です。両方ではありません。」",
+                        "expression": "extension.exists() != value.exists()",
+                        "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Extension"
+                    }
+                ],
+                "isModifier": true,
+                "isModifierReason": "Modifier extensions are expected to modify the meaning or interpretation of the element that contains them",
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "N/A"
+                    }
+                ]
+            },
+            {
+                "id": "Composition.attester.mode",
+                "path": "Composition.attester.mode",
+                "short": "個人的 | 専門的 | 法的 | 公式的",
+                "definition": "正式証明書発行者が提供する承認の種類。",
+                "requirements": "Indicates the level of authority of the attestation.",
+                "min": 1,
+                "max": "1",
+                "base": {
+                    "path": "Composition.attester.mode",
+                    "min": 1,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "code"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "CompositionAttestationMode"
+                        }
+                    ],
+                    "strength": "required",
+                    "description": "「個人が作成物を認証する方法」",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/composition-attestation-mode|4.0.1"
+                },
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "unique(./modeCode)"
+                    },
+                    {
+                        "identity": "cda",
+                        "map": "implied by .authenticator/.legalAuthenticator"
+                    }
+                ]
+            },
+            {
+                "id": "Composition.attester.time",
+                "path": "Composition.attester.time",
+                "short": "「作文が証明されたとき」",
+                "definition": "「作文が当事者によって証明されたとき。」",
+                "requirements": "Identifies when the information in the composition was deemed accurate.  (Things may have changed since then.).",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Composition.attester.time",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "dateTime"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "./time[type=\"TS\" and isNormalDatatype()]"
+                    },
+                    {
+                        "identity": "cda",
+                        "map": ".authenticator.time"
+                    }
+                ]
+            },
+            {
+                "id": "Composition.attester.party",
+                "path": "Composition.attester.party",
+                "short": "「誰が構成を証明しましたか？」(Dare ga kōsei o shōmei shimashita ka?)",
+                "definition": "「誰が特定の方法で構成を証明したのですか？」(dare ga tokutei no houhou de kousei wo shoumei shita no desu ka?)",
+                "requirements": "Identifies who has taken on the responsibility for accuracy of the composition content.",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Composition.attester.party",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "Reference",
+                        "targetProfile": [
+                            "http://hl7.org/fhir/StructureDefinition/Patient",
+                            "http://hl7.org/fhir/StructureDefinition/RelatedPerson",
+                            "http://hl7.org/fhir/StructureDefinition/Practitioner",
+                            "http://hl7.org/fhir/StructureDefinition/PractitionerRole",
+                            "http://hl7.org/fhir/StructureDefinition/Organization"
+                        ]
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.witness"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": "./role[classCode=\"ASSIGNED\" and isNormalRole]/player[determinerCode=\"INST\" and classCode=(\"DEV\", \"PSN\") and isNormalEntity()] or ./role[classCode=\"ASSIGNED\" and isNormalRole and not(player)]/scoper[determinerCode=\"INST\" and classCode=\"ORG\" and isNormalEntity()]"
+                    },
+                    {
+                        "identity": "cda",
+                        "map": ".authenticator.assignedEnttty"
+                    }
+                ]
+            },
+            {
+                "id": "Composition.custodian",
+                "path": "Composition.custodian",
+                "short": "組成を維持する組織 (Sosei wo iji suru soshiki)",
+                "definition": "「構成/文書情報を維持し、アクセス可能にする責任を持つ組織またはグループを特定します。」",
+                "comment": "「これは文書が構成から派生している場合に便利であり、文書の最新バージョンを取得する方法についてのガイダンスを提供します。これは時にはオプションであり、作成システムによっては知られていない場合があるため、文脈から推測することができます。ただし、派生文書を扱う際にはこの情報を確認することが重要であるため、管理者を提供することが推奨されます。」",
+                "requirements": "Identifies where to go to find the current version, where to report issues, etc.",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Composition.custodian",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "Reference",
+                        "targetProfile": [
+                            "http://hl7.org/fhir/StructureDefinition/Organization"
+                        ]
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": ".participation[typeCode=\"RCV\"].role[classCode=\"CUST\"].scoper[classCode=\"ORG\" and determinerCode=\"INST\"]"
+                    },
+                    {
+                        "identity": "cda",
+                        "map": ".custodian.assignedCustodian"
+                    },
+                    {
+                        "identity": "fhirdocumentreference",
+                        "map": "DocumentReference.custodian"
+                    }
+                ]
+            },
+            {
+                "id": "Composition.relatesTo",
+                "path": "Composition.relatesTo",
+                "short": "「他の作品や文書との関係性」",
+                "definition": "この作成物が既存の他の作成物や文書と持つ関係。",
+                "comment": "「ドキュメントとは、バージョン固有の構成物である。」",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Composition.relatesTo",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "BackboneElement"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": ".outboundRelationship"
+                    },
+                    {
+                        "identity": "cda",
+                        "map": ".relatedDocument"
+                    },
+                    {
+                        "identity": "fhirdocumentreference",
+                        "map": "DocumentReference.relatesTo"
+                    }
+                ]
+            },
+            {
+                "id": "Composition.relatesTo.id",
+                "path": "Composition.relatesTo.id",
+                "representation": [
+                    "xmlAttr"
+                ],
+                "short": "エレメント相互参照のためのユニークID",
+                "definition": "リソース内の要素の固有ID（内部参照用）。これは、スペースを含まない任意の文字列値である可能性があります。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Element.id",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "extension": [
+                            {
+                                "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fhir-type",
+                                "valueUrl": "string"
+                            }
+                        ],
+                        "code": "http://hl7.org/fhirpath/System.String"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "Composition.relatesTo.extension",
+                "path": "Composition.relatesTo.extension",
+                "short": "実装によって定義される追加コンテンツ",
+                "definition": "「要素の基本的な定義に含まれない追加情報を表すために使用されることがあります。拡張機能の使用を安全かつ管理しやすくするために、定義および使用に適用される厳格なガバナンスのセットがあります。実装者は拡張機能を定義できますが、拡張機能の定義の一部として満たす必要のある要件のセットがあります。」",
+                "comment": "どのようなアプリケーション、プロジェクト、または標準が拡張機能を使用しているかに関わらず、拡張機能の使用には決して汚名が付くわけではありません - それらを使用または定義する機関または管轄区域に関係なく。拡張機能の使用こそが、FHIR仕様を誰にとっても簡単なコアレベルで維持することを可能にします。",
+                "alias": [
+                    "extensions",
+                    "user content"
+                ],
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Element.extension",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "Extension"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    },
+                    {
+                        "key": "ext-1",
+                        "severity": "error",
+                        "human": "「拡張機能または値[x]のいずれかが必要です。両方ではありません。」",
+                        "expression": "extension.exists() != value.exists()",
+                        "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Extension"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "Composition.relatesTo.modifierExtension",
+                "path": "Composition.relatesTo.modifierExtension",
+                "short": "「認識されなくても無視できない拡張機能」(Ninshiki sarenakutemo mushi dekinai kakuchou kinou)",
+                "definition": "「基本的な要素の定義に含まれない追加情報を表すために使用されることがあり、それによって、その要素自体または取り込んでいる要素の子孫の理解を修正する。修飾子要素は通常、否定または修飾を提供します。拡張機能の安全で管理しやすい使用を実現するために、定義および使用に厳しいガバナンスセットが適用されています。どの実装者でも拡張機能を定義できますが、拡張機能の定義の一部として満たす必要がある要件があります。リソースを処理するアプリケーションは、修飾子拡張子をチェックする必要があります。\n\n修飾子拡張機能は、リソースまたはドメインリソースの任意の要素の意味を変更してはなりません（修飾子拡張自体の意味を変更することもできません）。」",
+                "comment": "どのようなアプリケーション、プロジェクト、または標準が拡張機能を使用しているかに関わらず、拡張機能の使用には決して汚名が付くわけではありません - それらを使用または定義する機関または管轄区域に関係なく。拡張機能の使用こそが、FHIR仕様を誰にとっても簡単なコアレベルで維持することを可能にします。",
+                "requirements": "Modifier extensions allow for extensions that *cannot* be safely ignored to be clearly distinguished from the vast majority of extensions which can be safely ignored.  This promotes interoperability by eliminating the need for implementers to prohibit the presence of extensions. For further information, see the [definition of modifier extensions](extensibility.html#modifierExtension).",
+                "alias": [
+                    "extensions",
+                    "user content",
+                    "modifiers"
+                ],
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "BackboneElement.modifierExtension",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "Extension"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    },
+                    {
+                        "key": "ext-1",
+                        "severity": "error",
+                        "human": "「拡張機能または値[x]のいずれかが必要です。両方ではありません。」",
+                        "expression": "extension.exists() != value.exists()",
+                        "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Extension"
+                    }
+                ],
+                "isModifier": true,
+                "isModifierReason": "Modifier extensions are expected to modify the meaning or interpretation of the element that contains them",
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "N/A"
+                    }
+                ]
+            },
+            {
+                "id": "Composition.relatesTo.code",
+                "path": "Composition.relatesTo.code",
+                "short": "\"replaces | transforms | signs | appends\" の日本語訳は次の通りです。\n\n- replaces（置き換える）\n- transforms（変換する）\n- signs（署名する）\n- appends（追加する）",
+                "definition": "この作品が他の作品や文書とどのような関係を持っているか。 (Kono sakuhin ga hoka no sakuhin ya bunsho to dono yōna kankei o motte iru ka.)",
+                "comment": "もしこの文書が別の文書を付録として添付している場合、参照された文書にアクセスしなければ、この文書は完全に理解できません。",
+                "min": 1,
+                "max": "1",
+                "base": {
+                    "path": "Composition.relatesTo.code",
+                    "min": 1,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "code"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "DocumentRelationshipType"
+                        }
+                    ],
+                    "strength": "required",
+                    "description": "「文書間の関係のタイプ」",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/document-relationship-type|4.0.1"
+                },
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": ".outboundRelationship.typeCode"
+                    },
+                    {
+                        "identity": "cda",
+                        "map": ".relatedDocument.typeCode"
+                    },
+                    {
+                        "identity": "fhirdocumentreference",
+                        "map": "DocumentReference.relatesTo.code"
+                    }
+                ]
+            },
+            {
+                "id": "Composition.relatesTo.target[x]",
+                "path": "Composition.relatesTo.target[x]",
+                "short": "「関係のターゲット」(Kankei no taagetto)",
+                "definition": "この関係のターゲット構成/文書。",
+                "min": 1,
+                "max": "1",
+                "base": {
+                    "path": "Composition.relatesTo.target[x]",
+                    "min": 1,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "Identifier"
+                    },
+                    {
+                        "code": "Reference",
+                        "targetProfile": [
+                            "http://hl7.org/fhir/StructureDefinition/Composition"
+                        ]
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": ".target[classCode=\"DOC\", moodCode=\"EVN\"].id"
+                    },
+                    {
+                        "identity": "cda",
+                        "map": ".relatedDocument.id"
+                    },
+                    {
+                        "identity": "fhirdocumentreference",
+                        "map": "DocumentReference.relatesTo.target"
+                    }
+                ]
+            },
+            {
+                "id": "Composition.event",
+                "path": "Composition.event",
+                "short": "「記録されている臨床サービス」",
+                "definition": "「大腸内視鏡検査や虫垂切除などの臨床サービスが記録されること。」",
+                "comment": "イベントは、タイプ要素に一貫性が必要ですが、必要に応じてさらなる情報を提供することができます。",
+                "requirements": "Provides context for the composition and creates a linkage between a resource describing an event and the composition created describing the event.",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Composition.event",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "BackboneElement"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "outboundRelationship[typeCode=\"SUBJ\"].target[classCode<'ACT']"
+                    },
+                    {
+                        "identity": "cda",
+                        "map": ".documentationOf.serviceEvent"
+                    },
+                    {
+                        "identity": "fhirdocumentreference",
+                        "map": "DocumentReference.event"
+                    }
+                ]
+            },
+            {
+                "id": "Composition.event.id",
+                "path": "Composition.event.id",
+                "representation": [
+                    "xmlAttr"
+                ],
+                "short": "エレメント相互参照のためのユニークID",
+                "definition": "リソース内の要素の固有ID（内部参照用）。これは、スペースを含まない任意の文字列値である可能性があります。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Element.id",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "extension": [
+                            {
+                                "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fhir-type",
+                                "valueUrl": "string"
+                            }
+                        ],
+                        "code": "http://hl7.org/fhirpath/System.String"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "Composition.event.extension",
+                "path": "Composition.event.extension",
+                "short": "実装によって定義される追加コンテンツ",
+                "definition": "「要素の基本的な定義に含まれない追加情報を表すために使用されることがあります。拡張機能の使用を安全かつ管理しやすくするために、定義および使用に適用される厳格なガバナンスのセットがあります。実装者は拡張機能を定義できますが、拡張機能の定義の一部として満たす必要のある要件のセットがあります。」",
+                "comment": "どのようなアプリケーション、プロジェクト、または標準が拡張機能を使用しているかに関わらず、拡張機能の使用には決して汚名が付くわけではありません - それらを使用または定義する機関または管轄区域に関係なく。拡張機能の使用こそが、FHIR仕様を誰にとっても簡単なコアレベルで維持することを可能にします。",
+                "alias": [
+                    "extensions",
+                    "user content"
+                ],
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Element.extension",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "Extension"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    },
+                    {
+                        "key": "ext-1",
+                        "severity": "error",
+                        "human": "「拡張機能または値[x]のいずれかが必要です。両方ではありません。」",
+                        "expression": "extension.exists() != value.exists()",
+                        "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Extension"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "Composition.event.modifierExtension",
+                "path": "Composition.event.modifierExtension",
+                "short": "「認識されなくても無視できない拡張機能」(Ninshiki sarenakutemo mushi dekinai kakuchou kinou)",
+                "definition": "「基本的な要素の定義に含まれない追加情報を表すために使用されることがあり、それによって、その要素自体または取り込んでいる要素の子孫の理解を修正する。修飾子要素は通常、否定または修飾を提供します。拡張機能の安全で管理しやすい使用を実現するために、定義および使用に厳しいガバナンスセットが適用されています。どの実装者でも拡張機能を定義できますが、拡張機能の定義の一部として満たす必要がある要件があります。リソースを処理するアプリケーションは、修飾子拡張子をチェックする必要があります。\n\n修飾子拡張機能は、リソースまたはドメインリソースの任意の要素の意味を変更してはなりません（修飾子拡張自体の意味を変更することもできません）。」",
+                "comment": "どのようなアプリケーション、プロジェクト、または標準が拡張機能を使用しているかに関わらず、拡張機能の使用には決して汚名が付くわけではありません - それらを使用または定義する機関または管轄区域に関係なく。拡張機能の使用こそが、FHIR仕様を誰にとっても簡単なコアレベルで維持することを可能にします。",
+                "requirements": "Modifier extensions allow for extensions that *cannot* be safely ignored to be clearly distinguished from the vast majority of extensions which can be safely ignored.  This promotes interoperability by eliminating the need for implementers to prohibit the presence of extensions. For further information, see the [definition of modifier extensions](extensibility.html#modifierExtension).",
+                "alias": [
+                    "extensions",
+                    "user content",
+                    "modifiers"
+                ],
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "BackboneElement.modifierExtension",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "Extension"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    },
+                    {
+                        "key": "ext-1",
+                        "severity": "error",
+                        "human": "「拡張機能または値[x]のいずれかが必要です。両方ではありません。」",
+                        "expression": "extension.exists() != value.exists()",
+                        "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Extension"
+                    }
+                ],
+                "isModifier": true,
+                "isModifierReason": "Modifier extensions are expected to modify the meaning or interpretation of the element that contains them",
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "N/A"
+                    }
+                ]
+            },
+            {
+                "id": "Composition.event.code",
+                "path": "Composition.event.code",
+                "short": "\"ドキュメント化されるイベントに適用されるコード\"",
+                "definition": "このコードリストは、大腸内視鏡検査や虫垂切除術などの主要な臨床行為を文書化するものです。場合によっては、種類コードに本質的にイベントが含まれており、文書化されている手順が必ずしも「歴史および身体検査報告書」のような「歴史および身体検査」行為である必要はありません。",
+                "comment": "「イベントは、単なる「手順報告書」であり、手順が「大腸内視鏡検査」である場合など、typeCodeに内在する行為をより専門的にすることができます。1つ以上のイベントコードが含まれている場合、これらはclassCode、practiceSettingCode、またはtypeCodeに内在する値と衝突してはならず、そうすると曖昧な状況が生じます。このコードの簡単なリストは、特定の種類のクエリのキーワードとして使用するために提供されています。」",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Composition.event.code",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "CodeableConcept"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "DocumentEventType"
+                        }
+                    ],
+                    "strength": "example",
+                    "description": "このコードリストは、記録されている主要な臨床行為を表します。",
+                    "valueSet": "http://terminology.hl7.org/ValueSet/v3-ActCode"
+                },
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": ".code"
+                    },
+                    {
+                        "identity": "cda",
+                        "map": ".code"
+                    },
+                    {
+                        "identity": "fhirdocumentreference",
+                        "map": "DocumentReference.event.code"
+                    }
+                ]
+            },
+            {
+                "id": "Composition.event.period",
+                "path": "Composition.event.period",
+                "short": "「文書に含まれる期間」",
+                "definition": "文書でカバーされている期間。この期間において、文書が完全な表現であることを主張するものではありませんが、この期間のイベントを文書化していることだけを示しています。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Composition.event.period",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "Period"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": ".effectiveTime"
+                    },
+                    {
+                        "identity": "cda",
+                        "map": ".effectiveTime"
+                    },
+                    {
+                        "identity": "fhirdocumentreference",
+                        "map": "DocumentReference.event.period"
+                    }
+                ]
+            },
+            {
+                "id": "Composition.event.detail",
+                "path": "Composition.event.detail",
+                "short": "「記録されているイベント」(Kiroku sarete iru ibento)",
+                "definition": "ドキュメンテーションされているイベントの説明や参照。例えば、このように大腸内視鏡検査や虫垂切除手術をドキュメンテーションするために使用することができます。",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Composition.event.detail",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "Reference",
+                        "targetProfile": [
+                            "http://hl7.org/fhir/StructureDefinition/Resource"
+                        ]
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": ".outboundRelationship[typeCode=\"SUBJ\"].target"
+                    },
+                    {
+                        "identity": "cda",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "Composition.section",
+                "extension": [
+                    {
+                        "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-explicit-type-name",
+                        "valueString": "Section"
+                    }
+                ],
+                "path": "Composition.section",
+                "short": "「構成はセクションに分割されます」",
+                "definition": "作品を構成するセクションの根源。",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Composition.section",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "BackboneElement"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "cmp-1",
+                        "severity": "error",
+                        "human": "「セクションには、テキスト、エントリー、またはサブセクションのいずれかが少なくとも1つ必要です。」",
+                        "expression": "text.exists() or entry.exists() or section.exists()",
+                        "xpath": "exists(f:text) or exists(f:entry) or exists(f:section)"
+                    },
+                    {
+                        "key": "cmp-2",
+                        "severity": "error",
+                        "human": "「セクションが空の場合、emptyReasonを持つことはできません。」",
+                        "expression": "emptyReason.empty() or entry.empty()",
+                        "xpath": "not(exists(f:emptyReason) and exists(f:entry))"
+                    },
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "./outboundRelationship[typeCode=\"COMP\" and isNormalActRelationship()]/target[moodCode=\"EVN\" and classCode=\"DOCSECT\" and isNormalAct]"
+                    },
+                    {
+                        "identity": "cda",
+                        "map": ".component.structuredBody.component.section"
+                    }
+                ]
+            },
+            {
+                "id": "Composition.section.id",
+                "path": "Composition.section.id",
+                "representation": [
+                    "xmlAttr"
+                ],
+                "short": "エレメント相互参照のためのユニークID",
+                "definition": "リソース内の要素の固有ID（内部参照用）。これは、スペースを含まない任意の文字列値である可能性があります。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Element.id",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "extension": [
+                            {
+                                "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fhir-type",
+                                "valueUrl": "string"
+                            }
+                        ],
+                        "code": "http://hl7.org/fhirpath/System.String"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "Composition.section.extension",
+                "path": "Composition.section.extension",
+                "short": "実装によって定義される追加コンテンツ",
+                "definition": "「要素の基本的な定義に含まれない追加情報を表すために使用されることがあります。拡張機能の使用を安全かつ管理しやすくするために、定義および使用に適用される厳格なガバナンスのセットがあります。実装者は拡張機能を定義できますが、拡張機能の定義の一部として満たす必要のある要件のセットがあります。」",
+                "comment": "どのようなアプリケーション、プロジェクト、または標準が拡張機能を使用しているかに関わらず、拡張機能の使用には決して汚名が付くわけではありません - それらを使用または定義する機関または管轄区域に関係なく。拡張機能の使用こそが、FHIR仕様を誰にとっても簡単なコアレベルで維持することを可能にします。",
+                "alias": [
+                    "extensions",
+                    "user content"
+                ],
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Element.extension",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "Extension"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    },
+                    {
+                        "key": "ext-1",
+                        "severity": "error",
+                        "human": "「拡張機能または値[x]のいずれかが必要です。両方ではありません。」",
+                        "expression": "extension.exists() != value.exists()",
+                        "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Extension"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "Composition.section.modifierExtension",
+                "path": "Composition.section.modifierExtension",
+                "short": "「認識されなくても無視できない拡張機能」(Ninshiki sarenakutemo mushi dekinai kakuchou kinou)",
+                "definition": "「基本的な要素の定義に含まれない追加情報を表すために使用されることがあり、それによって、その要素自体または取り込んでいる要素の子孫の理解を修正する。修飾子要素は通常、否定または修飾を提供します。拡張機能の安全で管理しやすい使用を実現するために、定義および使用に厳しいガバナンスセットが適用されています。どの実装者でも拡張機能を定義できますが、拡張機能の定義の一部として満たす必要がある要件があります。リソースを処理するアプリケーションは、修飾子拡張子をチェックする必要があります。\n\n修飾子拡張機能は、リソースまたはドメインリソースの任意の要素の意味を変更してはなりません（修飾子拡張自体の意味を変更することもできません）。」",
+                "comment": "どのようなアプリケーション、プロジェクト、または標準が拡張機能を使用しているかに関わらず、拡張機能の使用には決して汚名が付くわけではありません - それらを使用または定義する機関または管轄区域に関係なく。拡張機能の使用こそが、FHIR仕様を誰にとっても簡単なコアレベルで維持することを可能にします。",
+                "requirements": "Modifier extensions allow for extensions that *cannot* be safely ignored to be clearly distinguished from the vast majority of extensions which can be safely ignored.  This promotes interoperability by eliminating the need for implementers to prohibit the presence of extensions. For further information, see the [definition of modifier extensions](extensibility.html#modifierExtension).",
+                "alias": [
+                    "extensions",
+                    "user content",
+                    "modifiers"
+                ],
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "BackboneElement.modifierExtension",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "Extension"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    },
+                    {
+                        "key": "ext-1",
+                        "severity": "error",
+                        "human": "「拡張機能または値[x]のいずれかが必要です。両方ではありません。」",
+                        "expression": "extension.exists() != value.exists()",
+                        "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Extension"
+                    }
+                ],
+                "isModifier": true,
+                "isModifierReason": "Modifier extensions are expected to modify the meaning or interpretation of the element that contains them",
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "N/A"
+                    }
+                ]
+            },
+            {
+                "id": "Composition.section.title",
+                "path": "Composition.section.title",
+                "short": "「セクションのラベル（例：目次用）」",
+                "definition": "この特定のセクションのラベル。これは文書のレンダリングされたコンテンツの一部となり、目次を作成するためにしばしば使用されます。",
+                "comment": "「タイトルは人間の読者のためのセクションを識別します。タイトルは、セクションの対象となるリソースのナラティブに一貫性が必要です。通常、セクションにはタイトルが必要ですが、一部の文書では不要または不適切です。これは、サブセクションに独自の区別的なタイトルがあるセクション、または単一のセクションしか持たない文書の場合です。ほとんどの実装ガイドでは、セクションタイトルを必須要素にすることがあります。」",
+                "requirements": "Section headings are often standardized for different types of documents.  They give guidance to humans on how the document is organized.",
+                "alias": [
+                    "header",
+                    "label",
+                    "caption"
+                ],
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Composition.section.title",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "./title"
+                    },
+                    {
+                        "identity": "cda",
+                        "map": ".title"
+                    }
+                ]
+            },
+            {
+                "id": "Composition.section.code",
+                "path": "Composition.section.code",
+                "short": "「セクションの分類（推奨）」",
+                "definition": "「セクションに含まれるコンテンツの種類を識別するコードです。これはセクションタイトルと一致する必要があります。」",
+                "comment": "「そのコードは、文書の自動処理用のセクションを識別します。文書の構造を制御するためにプロファイルを使用する場合、これは特に関連しています。\nもしセクションにサブセクションではなくコンテンツが含まれている場合、セクションコードは、セクションコードの注釈にあるリソースの意味や解釈を変更しません。」",
+                "requirements": "Provides computable standardized labels to topics within the document.",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Composition.section.code",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "CodeableConcept"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "CompositionSectionType"
+                        }
+                    ],
+                    "strength": "example",
+                    "description": "作品/文書の一部の分類。",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/doc-section-codes"
+                },
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "./code"
+                    },
+                    {
+                        "identity": "cda",
+                        "map": ".code"
+                    }
+                ]
+            },
+            {
+                "id": "Composition.section.author",
+                "path": "Composition.section.author",
+                "short": "「誰または何がこの部分を著したか」",
+                "definition": "「このセクションの情報の責任者を識別することであり、入力した人ではない」という意味です。",
+                "requirements": "Identifies who is responsible for the content.",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Composition.section.author",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "Reference",
+                        "targetProfile": [
+                            "http://hl7.org/fhir/StructureDefinition/Practitioner",
+                            "http://hl7.org/fhir/StructureDefinition/PractitionerRole",
+                            "http://hl7.org/fhir/StructureDefinition/Device",
+                            "http://hl7.org/fhir/StructureDefinition/Patient",
+                            "http://hl7.org/fhir/StructureDefinition/RelatedPerson",
+                            "http://hl7.org/fhir/StructureDefinition/Organization"
+                        ]
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.author"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": ".participation[typeCode=\"AUT\"].role[classCode=\"ASSIGNED\"]"
+                    },
+                    {
+                        "identity": "cda",
+                        "map": ".author.assignedAuthor"
+                    }
+                ]
+            },
+            {
+                "id": "Composition.section.focus",
+                "path": "Composition.section.focus",
+                "short": "「セクションが何についているか、構成の主題でない場合はいつでも。」",
+                "definition": "「セクションの実際のフォーカスは、作成物の主題ではなく、代わりに(患者の主題の場合)配偶者、親、胎児、あるいはドナーなどの何かまたは誰かを表すときのことです。フォーカスが指定されていない場合、フォーカスは親セクションのフォーカス、または作成物自体の主題になるものと仮定されます。フォーカスを持つセクションには、論理的な主体（患者、主題、フォーカスなど）がセクションのフォーカスに一致するリソースしか含まれません。または論理的な主体（少数のリソース）が存在しない場合にも含まれます。」",
+                "comment": "通常、文書のセクションは、その文書の対象である患者、または患者グループ、場所、機器などに関するものです。一部の文書においては、いくつかのセクションには関連するエンティティに関するデータが実際に含まれています。典型的な例は、母親に関する新生児退院の要約のセクションや、各家族メンバーについてのセクションを含む家族歴の文書などがありますが、その他の例もあります。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Composition.section.focus",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "Reference",
+                        "targetProfile": [
+                            "http://hl7.org/fhir/StructureDefinition/Resource"
+                        ]
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "cda",
+                        "map": ".subject? (CDA did not differentiate between subject and focus)"
+                    }
+                ]
+            },
+            {
+                "id": "Composition.section.text",
+                "path": "Composition.section.text",
+                "short": "「人間の解釈のために、節のテキストの要約」",
+                "definition": "「人が理解しやすい物語形式で、セクションの確認されたコンテンツを含み、人間がリソースのコンテンツを表現するために使用されます。この物語には、すべての構造化データをエンコードする必要はありませんが、人間が物語を読んで十分に「臨床的に安全」であるために、十分な詳細を含む必要があります。」",
+                "comment": "「文書プロファイルは、臨床的安全性を確保するために、物語に表現すべき内容を定義することができます。」",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Composition.section.text",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "Narrative"
+                    }
+                ],
+                "condition": [
+                    "cmp-1"
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": ".text"
+                    },
+                    {
+                        "identity": "cda",
+                        "map": ".text"
+                    }
+                ]
+            },
+            {
+                "id": "Composition.section.mode",
+                "path": "Composition.section.mode",
+                "short": "働いている | スナップショット | 変更。",
+                "definition": "エントリーリストの作成方法 – それが継続的に維持されるのに適した作業リストであるか、別のソースからのアイテムのリストのスナップショットを表すか、またはアイテムが追加、変更、削除されることができる作成済みのリストであるかを示す。",
+                "comment": "「変更リストが完全なリストと誤解されることを防ぐため、この要素は修飾子としてラベル付けされます。」(Henkō risuto ga kanzen'na risuto to gokai sareru koto wo fusegu tame, kono yōso wa shūshūshi to shite raberu tsuke saremasu.)",
+                "requirements": "Sections are used in various ways, and it must be known in what way it is safe to use the entries in them.",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Composition.section.mode",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "code"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "SectionMode"
+                        }
+                    ],
+                    "strength": "required",
+                    "description": "このセクションに適用される処理モード。 (Kono sekushon ni tekiyō sareru shori mōdo.)",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/list-mode|4.0.1"
+                },
+                "mapping": [
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.class"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": ".outBoundRelationship[typeCode=COMP].target[classCode=OBS\"].value"
+                    },
+                    {
+                        "identity": "cda",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "Composition.section.orderedBy",
+                "path": "Composition.section.orderedBy",
+                "short": "セクションエントリーの順序",
+                "definition": "「セクションエントリー内のアイテムに適用される順序を指定します。」",
+                "comment": "アプリケーションは提供された順序で順序付きリストを描画する必要がありますが、ユーザーが自分の好みに基づいて再順序付けすることもできます。順序が指定されていない場合、順序は不明ですが、それでも何らかの順序がある可能性があります。",
+                "requirements": "Important for presentation and rendering.  Lists may be sorted to place more important information first or to group related entries.",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Composition.section.orderedBy",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "CodeableConcept"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "SectionEntryOrder"
+                        }
+                    ],
+                    "strength": "preferred",
+                    "description": "「エントリーに含まれるアイテムにはどのような順序が適用されますか？」(Entorī ni fukumareru aitemu ni wa dono yōna jyunjo ga tekiyō saremasu ka?)",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/list-order"
+                },
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": ".outboundRelationship[typeCode=COMP].sequenceNumber > 1"
+                    },
+                    {
+                        "identity": "cda",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "Composition.section.entry",
+                "path": "Composition.section.entry",
+                "short": "「このセクションを支持するデータに対する参照」(Kono sekushon wo shiji suru data ni tai suru sansho)",
+                "definition": "\"このセクションの物語の出典となる実際のリソースへの言及。\"",
+                "comment": "もしリストにエントリーがなければ、空の理由を提供する必要があります。",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Composition.section.entry",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "Reference",
+                        "targetProfile": [
+                            "http://hl7.org/fhir/StructureDefinition/Resource"
+                        ]
+                    }
+                ],
+                "condition": [
+                    "cmp-2"
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": ".outboundRelationship[typeCode=COMP] or  .participation[typeCode=SBJ]"
+                    },
+                    {
+                        "identity": "cda",
+                        "map": ".entry"
+                    }
+                ]
+            },
+            {
+                "id": "Composition.section.emptyReason",
+                "path": "Composition.section.emptyReason",
+                "short": "なぜそのセクションは空ですか？ (Naze sono sekushon wa karadesu ka?)",
+                "definition": "\"セクションが空の場合、なぜリストが空なのですか。空のセクションには通常、空の理由を説明するテキストがあります。\"",
+                "comment": "「空白セクションの多様な理由は、その解釈に重要な意味を持ちます。このコードは、セクション全体の内容が抑制されている場合に使用するものであり、単一のアイテムが省略されている場合には、実装者はテキストノートまたはエントリにフラグを使用することを検討することができます。」",
+                "requirements": "Allows capturing things like \"none exist\" or \"not asked\" which can be important for most lists.",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Composition.section.emptyReason",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "CodeableConcept"
+                    }
+                ],
+                "condition": [
+                    "cmp-2"
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "SectionEmptyReason"
+                        }
+                    ],
+                    "strength": "preferred",
+                    "description": "「もしセクションが空っぽなら、なぜ空っぽなのか。」",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/list-empty-reason"
+                },
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": ".inboundRelationship[typeCode=SUBJ,code<ListEmptyReason].value[type=CD]"
+                    },
+                    {
+                        "identity": "cda",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "Composition.section.section",
+                "path": "Composition.section.section",
+                "short": "ネストされたセクション",
+                "definition": "このセクション内の入れ子のサブセクション。",
+                "comment": "ネスティングされたセクションは、主に人間の読者がドキュメントの特定の部分に移動するのを助けるために使用されます。",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Composition.section.section",
+                    "min": 0,
+                    "max": "*"
+                },
+                "contentReference": "#Composition.section",
+                "condition": [
+                    "cmp-1"
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "./outboundRelationship[typeCode=\"COMP\" and isNormalActRelationship()]/target[moodCode=\"EVN\" and classCode=\"DOCSECT\" and isNormalAct]"
+                    },
+                    {
+                        "identity": "cda",
+                        "map": ".component.section"
+                    }
+                ]
+            }
+        ]
+    },
+    "differential": {
+        "element": [
+            {
+                "id": "Composition",
+                "path": "Composition",
+                "short": "「臨床証明による単一の一貫した臨床声明で構成されたリソースのセット」",
+                "definition": "「単一の一貫した意味の文脈を確立し、文書化するための論理的に一つにまとめられた医療に関連する情報のセットであり、文書化するためにはクリニカルな承認が必要である。コンポジションは、文書化するために必要な構造とナラティブコンテンツを定義しますが、コンポジションだけでは文書ではありません。代わりに、文書タイプ= documentのバンドルの最初のエントリである必要があり、コンポジションから参照される他のリソース（患者、実行者、エンカウンタなど）はバンドルの後続のエントリとして含まれている必要があります。」",
+                "comment": "この仕様書の焦点は患者固有の臨床陳述にあるが、この資源は研究プロトコルの設計、医療請求書など、必ずしも患者固有の臨床的でない活動にも適用できます。",
+                "min": 0,
+                "max": "*",
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Event"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": "Document[classCode=\"DOC\" and moodCode=\"EVN\" and isNormalAct()]"
+                    },
+                    {
+                        "identity": "cda",
+                        "map": "ClinicalDocument"
+                    },
+                    {
+                        "identity": "fhirdocumentreference",
+                        "map": "when described by DocumentReference"
+                    }
+                ]
+            },
+            {
+                "id": "Composition.identifier",
+                "path": "Composition.identifier",
+                "short": "「作成物に対するバージョン非依存の識別子」(Sakusei-butsu ni tai suru bājon hi-izon no shiki-shi)",
+                "definition": "「作曲のバージョンに依存しない識別子。この識別子は、作曲が時間の経過とともに変更されても一定のままです。」",
+                "comment": "「ClinicalDocument/setId in CDA に類似したもの。これらがどのように関連するかについては、リソース定義の議論を参照してください。」",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "Identifier"
+                    }
+                ],
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Event.identifier"
+                    },
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.identifier"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": "Document.id / Document.setId"
+                    },
+                    {
+                        "identity": "cda",
+                        "map": ".setId"
+                    },
+                    {
+                        "identity": "fhirdocumentreference",
+                        "map": "DocumentReference.masterIdentifier"
+                    }
+                ]
+            },
+            {
+                "id": "Composition.status",
+                "path": "Composition.status",
+                "short": "初期 | 最終 | 修正済み | エラー入力済み",
+                "definition": "この作文のワークフロー/臨床ステータス。そのステータスは文書の臨床的立場の指標です。",
+                "comment": "「もし作成物が取り下げられた場合、そのシリーズ内の作成物/文書やデータは、明らかに信用できないと指定されることなく、ユーザーに表示されることは決してないべきです。\"entered-in-error\"フラグは、この要素が他の要素の修飾子としてラベル付けされる理由です。\n\n一部のレポート作業フローでは、最終文書の元のナラティブを変更しないで、新しいナラティブのみを追加する必要があります。作成リソースには、このビジネスルールが有効かどうかを明示的に示す明確なステータスがありません。必要に応じて、拡張機能で処理されます。」",
+                "requirements": "Need to be able to mark interim, amended, or withdrawn compositions or documents.",
+                "min": 1,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "code"
+                    }
+                ],
+                "isModifier": true,
+                "isModifierReason": "This element is labelled as a modifier because it is a status element that contains status entered-in-error which means that the resource should not be treated as valid",
+                "isSummary": true,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "CompositionStatus"
+                        }
+                    ],
+                    "strength": "required",
+                    "description": "作成物のワークフロー/臨床的状況。",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/composition-status|4.0.1"
+                },
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Event.status"
+                    },
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.status"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": "interim: .completionCode=\"IN\" & ./statusCode[isNormalDatatype()]=\"active\";  final: .completionCode=\"AU\" &&  ./statusCode[isNormalDatatype()]=\"complete\" and not(./inboundRelationship[typeCode=\"SUBJ\" and isNormalActRelationship()]/source[subsumesCode(\"ActClass#CACT\") and moodCode=\"EVN\" and domainMember(\"ReviseComposition\", code) and isNormalAct()]);  amended: .completionCode=\"AU\" &&  ./statusCode[isNormalDatatype()]=\"complete\" and ./inboundRelationship[typeCode=\"SUBJ\" and isNormalActRelationship()]/source[subsumesCode(\"ActClass#CACT\") and moodCode=\"EVN\" and domainMember(\"ReviseComposition\", code) and isNormalAct() and statusCode=\"completed\"];  withdrawn : .completionCode=NI &&  ./statusCode[isNormalDatatype()]=\"obsolete\""
+                    },
+                    {
+                        "identity": "cda",
+                        "map": "n/a"
+                    },
+                    {
+                        "identity": "fhirdocumentreference",
+                        "map": "DocumentReference.status"
+                    }
+                ]
+            },
+            {
+                "id": "Composition.type",
+                "path": "Composition.type",
+                "short": "作成の種類（可能であればLOINC）",
+                "definition": "「特定の作成方法（例えば、病歴と身体検査結果、退院まとめ、進行状況の記録）を指定します。通常、作成の目的に相当します。」",
+                "comment": "「構成タイプについては、LOINCは普及しており、HL7によって強く支持されています。多くの実装ガイドでは、特定のLOINCコードを必要とするか、LOINCを拡張バインディングとして使用します。」",
+                "requirements": "Key metadata element describing the composition, used in searching/filtering.",
+                "min": 1,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "CodeableConcept"
+                    }
+                ],
+                "isSummary": true,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "DocumentType"
+                        }
+                    ],
+                    "strength": "preferred",
+                    "description": "作文の種類。",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/doc-typecodes"
+                },
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Event.code"
+                    },
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.class"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": "./code"
+                    },
+                    {
+                        "identity": "cda",
+                        "map": ".code"
+                    },
+                    {
+                        "identity": "fhirdocumentreference",
+                        "map": "DocumentReference.type"
+                    }
+                ]
+            },
+            {
+                "id": "Composition.category",
+                "path": "Composition.category",
+                "short": "\"作成物のカテゴリー分類\" (Sakuseibutsu no kategori bunrui)",
+                "definition": "「作文のタイプの分類 - インデックスや検索に役立ちます。これは、作文タイプで指定されたコードから暗示されるか、派生することができます。」",
+                "comment": "これは[XDS/MHD](http://wiki.ihe.net/index.php?title=Mobile_access_to_Health_Documents_(MHD))のメタデータフィールドです。",
+                "requirements": "Helps humans to assess whether the composition is of interest when viewing an index of compositions or documents.",
+                "min": 0,
+                "max": "*",
+                "type": [
+                    {
+                        "code": "CodeableConcept"
+                    }
+                ],
+                "isSummary": true,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "DocumentCategory"
+                        }
+                    ],
+                    "strength": "example",
+                    "description": "「マクロレベルで高度な臨床書類」",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/document-classcodes"
+                },
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Event.subject"
+                    },
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.class"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": ".outboundRelationship[typeCode=\"COMP].target[classCode=\"LIST\", moodCode=\"EVN\"].code"
+                    },
+                    {
+                        "identity": "cda",
+                        "map": "n/a"
+                    },
+                    {
+                        "identity": "fhirdocumentreference",
+                        "map": "DocumenttReference.category"
+                    }
+                ]
+            },
+            {
+                "id": "Composition.subject",
+                "path": "Composition.subject",
+                "short": "「作品が誰や何についてのものか」",
+                "definition": "「作品が誰か、または何についてのものか。作品は人物（患者または医療従事者）、装置（例：機械）または一群の主題（家畜の群れに関する文書や、共通の暴露を共有する患者のセットなど）についてのものであることもある。」",
+                "comment": "「臨床文書においては、通常患者が該当します。」",
+                "requirements": "Essential metadata for searching for the composition. Identifies who and/or what the composition/document is about.",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "Reference",
+                        "targetProfile": [
+                            "http://hl7.org/fhir/StructureDefinition/Resource"
+                        ]
+                    }
+                ],
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.subject[x]"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": ".participation[typeCode=\"SBJ\"].role[typeCode=\"PAT\"]"
+                    },
+                    {
+                        "identity": "cda",
+                        "map": ".recordTarget"
+                    },
+                    {
+                        "identity": "fhirdocumentreference",
+                        "map": "DocumentReference.subject"
+                    },
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.subject"
+                    }
+                ]
+            },
+            {
+                "id": "Composition.encounter",
+                "path": "Composition.encounter",
+                "short": "\"作品の文脈\" (Sakuhin no bunmyaku)",
+                "definition": "「この文書が関連する臨床面談やケアのタイプを説明します。」",
+                "requirements": "Provides context for the composition and supports searching.",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "Reference",
+                        "targetProfile": [
+                            "http://hl7.org/fhir/StructureDefinition/Encounter"
+                        ]
+                    }
+                ],
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Event.context"
+                    },
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.context"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": "unique(highest(./outboundRelationship[typeCode=\"SUBJ\" and isNormalActRelationship()], priorityNumber)/target[moodCode=\"EVN\" and classCode=(\"ENC\", \"PCPR\") and isNormalAct])"
+                    },
+                    {
+                        "identity": "cda",
+                        "map": ".componentOf.encompassingEncounter"
+                    },
+                    {
+                        "identity": "fhirdocumentreference",
+                        "map": "DocumentReference.context.encounter"
+                    }
+                ]
+            },
+            {
+                "id": "Composition.date",
+                "path": "Composition.date",
+                "short": "作文編集時間 (Sakubun henshu jikan)",
+                "definition": "「作文の編集時間、著者によって最後に論理的に変更されたときです。」",
+                "comment": "「作成物の最終更新日は文書の日付よりも後になっている場合がありますが、変更されていない場合があります。」",
+                "requirements": "dateTime is used for tracking, organizing versions and searching. Note that this is the time of *authoring*. When packaged in a document, [Bundle.timestamp](bundle-definitions.html#Bundle.timestamp) is the date of packaging.",
+                "min": 1,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "dateTime"
+                    }
+                ],
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Event.occurrence[x]"
+                    },
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.done[x]"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": ".effectiveTime[type=\"TS\"]"
+                    },
+                    {
+                        "identity": "cda",
+                        "map": ".effectiveTime"
+                    },
+                    {
+                        "identity": "fhirdocumentreference",
+                        "map": "DocumentReference.content.attachment.date, DocumentReference.created"
+                    }
+                ]
+            },
+            {
+                "id": "Composition.author",
+                "path": "Composition.author",
+                "short": "「その作品を作ったのは誰で、あるいは何ですか？」",
+                "definition": "「誰が作文の情報に責任を持つかを確認する。タイピングした人と必ずしも同じである必要はない。」",
+                "requirements": "Identifies who is responsible for the content.",
+                "min": 1,
+                "max": "*",
+                "type": [
+                    {
+                        "code": "Reference",
+                        "targetProfile": [
+                            "http://hl7.org/fhir/StructureDefinition/Practitioner",
+                            "http://hl7.org/fhir/StructureDefinition/PractitionerRole",
+                            "http://hl7.org/fhir/StructureDefinition/Device",
+                            "http://hl7.org/fhir/StructureDefinition/Patient",
+                            "http://hl7.org/fhir/StructureDefinition/RelatedPerson",
+                            "http://hl7.org/fhir/StructureDefinition/Organization"
+                        ]
+                    }
+                ],
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Event.performer"
+                    },
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.author"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": ".participation[typeCode=\"AUT\"].role[classCode=\"ASSIGNED\"]"
+                    },
+                    {
+                        "identity": "cda",
+                        "map": ".author.assignedAuthor"
+                    },
+                    {
+                        "identity": "fhirdocumentreference",
+                        "map": "DocumentReference.agent"
+                    }
+                ]
+            },
+            {
+                "id": "Composition.title",
+                "path": "Composition.title",
+                "short": "「人間が読みやすい名前/タイトル」",
+                "definition": "「構成物の公式人間可読ラベル」",
+                "comment": "多くの構成物において、タイトルはテキストや構成型の表示名と同じです（例：「診察」「進行ノート」など）。 CDAではタイトルを必須としていませんが、タイトルを省略することが有用であるという事例はないため、ここでは必須です。この要件に関するフィードバックは、試用期間中に歓迎されます。",
+                "min": 1,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ],
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "./title"
+                    },
+                    {
+                        "identity": "cda",
+                        "map": ".title"
+                    },
+                    {
+                        "identity": "fhirdocumentreference",
+                        "map": "DocumentReference.description, DocumentReference.content.attachment.title"
+                    }
+                ]
+            },
+            {
+                "id": "Composition.confidentiality",
+                "path": "Composition.confidentiality",
+                "short": "「アフィニティー・ドメインによって定義される」",
+                "definition": "作成物の機密度レベルを指定するコード。",
+                "comment": "この要素の正確な使用方法、執行方法および高度に機密性の高い文書に関連する問題は、基本仕様の範囲外にあり、実装プロファイル（セキュリティセクションを参照）に委任されています。この要素は修飾子としてラベル付けされています。なぜなら、高度に機密性の高い文書を無視するような扱いを受けてはならないからです。",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "code"
+                    }
+                ],
+                "isSummary": true,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "DocumentConfidentiality"
+                        }
+                    ],
+                    "strength": "required",
+                    "description": "「作成物の機密レベルを指定するコード。」",
+                    "valueSet": "http://terminology.hl7.org/ValueSet/v3-ConfidentialityClassification|2014-03-26"
+                },
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": ".confidentialityCode"
+                    },
+                    {
+                        "identity": "cda",
+                        "map": ".confidentialityCode"
+                    },
+                    {
+                        "identity": "fhirdocumentreference",
+                        "map": "DocumentReference.securityLabel"
+                    }
+                ]
+            },
+            {
+                "id": "Composition.attester",
+                "path": "Composition.attester",
+                "short": "作成物の正確さを証明します。",
+                "definition": "「構成物/文書の正確さを証明した参加者」",
+                "comment": "「各承認者を一度だけリストに挙げてください。」",
+                "requirements": "Identifies responsibility for the accuracy of the composition content.",
+                "min": 0,
+                "max": "*",
+                "type": [
+                    {
+                        "code": "BackboneElement"
+                    }
+                ],
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": ".participation[typeCode=\"AUTHEN\"].role[classCode=\"ASSIGNED\"]"
+                    },
+                    {
+                        "identity": "cda",
+                        "map": ".authenticator/.legalAuthenticator"
+                    },
+                    {
+                        "identity": "fhirdocumentreference",
+                        "map": "DocumentReference.authenticator"
+                    }
+                ]
+            },
+            {
+                "id": "Composition.attester.mode",
+                "path": "Composition.attester.mode",
+                "short": "個人的 | 専門的 | 法的 | 公式的",
+                "definition": "正式証明書発行者が提供する承認の種類。",
+                "requirements": "Indicates the level of authority of the attestation.",
+                "min": 1,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "code"
+                    }
+                ],
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "CompositionAttestationMode"
+                        }
+                    ],
+                    "strength": "required",
+                    "description": "「個人が作成物を認証する方法」",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/composition-attestation-mode|4.0.1"
+                },
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "unique(./modeCode)"
+                    },
+                    {
+                        "identity": "cda",
+                        "map": "implied by .authenticator/.legalAuthenticator"
+                    }
+                ]
+            },
+            {
+                "id": "Composition.attester.time",
+                "path": "Composition.attester.time",
+                "short": "「作文が証明されたとき」",
+                "definition": "「作文が当事者によって証明されたとき。」",
+                "requirements": "Identifies when the information in the composition was deemed accurate.  (Things may have changed since then.).",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "dateTime"
+                    }
+                ],
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "./time[type=\"TS\" and isNormalDatatype()]"
+                    },
+                    {
+                        "identity": "cda",
+                        "map": ".authenticator.time"
+                    }
+                ]
+            },
+            {
+                "id": "Composition.attester.party",
+                "path": "Composition.attester.party",
+                "short": "「誰が構成を証明しましたか？」(Dare ga kōsei o shōmei shimashita ka?)",
+                "definition": "「誰が特定の方法で構成を証明したのですか？」(dare ga tokutei no houhou de kousei wo shoumei shita no desu ka?)",
+                "requirements": "Identifies who has taken on the responsibility for accuracy of the composition content.",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "Reference",
+                        "targetProfile": [
+                            "http://hl7.org/fhir/StructureDefinition/Patient",
+                            "http://hl7.org/fhir/StructureDefinition/RelatedPerson",
+                            "http://hl7.org/fhir/StructureDefinition/Practitioner",
+                            "http://hl7.org/fhir/StructureDefinition/PractitionerRole",
+                            "http://hl7.org/fhir/StructureDefinition/Organization"
+                        ]
+                    }
+                ],
+                "mapping": [
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.witness"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": "./role[classCode=\"ASSIGNED\" and isNormalRole]/player[determinerCode=\"INST\" and classCode=(\"DEV\", \"PSN\") and isNormalEntity()] or ./role[classCode=\"ASSIGNED\" and isNormalRole and not(player)]/scoper[determinerCode=\"INST\" and classCode=\"ORG\" and isNormalEntity()]"
+                    },
+                    {
+                        "identity": "cda",
+                        "map": ".authenticator.assignedEnttty"
+                    }
+                ]
+            },
+            {
+                "id": "Composition.custodian",
+                "path": "Composition.custodian",
+                "short": "組成を維持する組織 (Sosei wo iji suru soshiki)",
+                "definition": "「構成/文書情報を維持し、アクセス可能にする責任を持つ組織またはグループを特定します。」",
+                "comment": "「これは文書が構成から派生している場合に便利であり、文書の最新バージョンを取得する方法についてのガイダンスを提供します。これは時にはオプションであり、作成システムによっては知られていない場合があるため、文脈から推測することができます。ただし、派生文書を扱う際にはこの情報を確認することが重要であるため、管理者を提供することが推奨されます。」",
+                "requirements": "Identifies where to go to find the current version, where to report issues, etc.",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "Reference",
+                        "targetProfile": [
+                            "http://hl7.org/fhir/StructureDefinition/Organization"
+                        ]
+                    }
+                ],
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": ".participation[typeCode=\"RCV\"].role[classCode=\"CUST\"].scoper[classCode=\"ORG\" and determinerCode=\"INST\"]"
+                    },
+                    {
+                        "identity": "cda",
+                        "map": ".custodian.assignedCustodian"
+                    },
+                    {
+                        "identity": "fhirdocumentreference",
+                        "map": "DocumentReference.custodian"
+                    }
+                ]
+            },
+            {
+                "id": "Composition.relatesTo",
+                "path": "Composition.relatesTo",
+                "short": "「他の作品や文書との関係性」",
+                "definition": "この作成物が既存の他の作成物や文書と持つ関係。",
+                "comment": "「ドキュメントとは、バージョン固有の構成物である。」",
+                "min": 0,
+                "max": "*",
+                "type": [
+                    {
+                        "code": "BackboneElement"
+                    }
+                ],
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": ".outboundRelationship"
+                    },
+                    {
+                        "identity": "cda",
+                        "map": ".relatedDocument"
+                    },
+                    {
+                        "identity": "fhirdocumentreference",
+                        "map": "DocumentReference.relatesTo"
+                    }
+                ]
+            },
+            {
+                "id": "Composition.relatesTo.code",
+                "path": "Composition.relatesTo.code",
+                "short": "\"replaces | transforms | signs | appends\" の日本語訳は次の通りです。\n\n- replaces（置き換える）\n- transforms（変換する）\n- signs（署名する）\n- appends（追加する）",
+                "definition": "この作品が他の作品や文書とどのような関係を持っているか。 (Kono sakuhin ga hoka no sakuhin ya bunsho to dono yōna kankei o motte iru ka.)",
+                "comment": "もしこの文書が別の文書を付録として添付している場合、参照された文書にアクセスしなければ、この文書は完全に理解できません。",
+                "min": 1,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "code"
+                    }
+                ],
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "DocumentRelationshipType"
+                        }
+                    ],
+                    "strength": "required",
+                    "description": "「文書間の関係のタイプ」",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/document-relationship-type|4.0.1"
+                },
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": ".outboundRelationship.typeCode"
+                    },
+                    {
+                        "identity": "cda",
+                        "map": ".relatedDocument.typeCode"
+                    },
+                    {
+                        "identity": "fhirdocumentreference",
+                        "map": "DocumentReference.relatesTo.code"
+                    }
+                ]
+            },
+            {
+                "id": "Composition.relatesTo.target[x]",
+                "path": "Composition.relatesTo.target[x]",
+                "short": "「関係のターゲット」(Kankei no taagetto)",
+                "definition": "この関係のターゲット構成/文書。",
+                "min": 1,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "Identifier"
+                    },
+                    {
+                        "code": "Reference",
+                        "targetProfile": [
+                            "http://hl7.org/fhir/StructureDefinition/Composition"
+                        ]
+                    }
+                ],
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": ".target[classCode=\"DOC\", moodCode=\"EVN\"].id"
+                    },
+                    {
+                        "identity": "cda",
+                        "map": ".relatedDocument.id"
+                    },
+                    {
+                        "identity": "fhirdocumentreference",
+                        "map": "DocumentReference.relatesTo.target"
+                    }
+                ]
+            },
+            {
+                "id": "Composition.event",
+                "path": "Composition.event",
+                "short": "「記録されている臨床サービス」",
+                "definition": "「大腸内視鏡検査や虫垂切除などの臨床サービスが記録されること。」",
+                "comment": "イベントは、タイプ要素に一貫性が必要ですが、必要に応じてさらなる情報を提供することができます。",
+                "requirements": "Provides context for the composition and creates a linkage between a resource describing an event and the composition created describing the event.",
+                "min": 0,
+                "max": "*",
+                "type": [
+                    {
+                        "code": "BackboneElement"
+                    }
+                ],
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "outboundRelationship[typeCode=\"SUBJ\"].target[classCode<'ACT']"
+                    },
+                    {
+                        "identity": "cda",
+                        "map": ".documentationOf.serviceEvent"
+                    },
+                    {
+                        "identity": "fhirdocumentreference",
+                        "map": "DocumentReference.event"
+                    }
+                ]
+            },
+            {
+                "id": "Composition.event.code",
+                "path": "Composition.event.code",
+                "short": "\"ドキュメント化されるイベントに適用されるコード\"",
+                "definition": "このコードリストは、大腸内視鏡検査や虫垂切除術などの主要な臨床行為を文書化するものです。場合によっては、種類コードに本質的にイベントが含まれており、文書化されている手順が必ずしも「歴史および身体検査報告書」のような「歴史および身体検査」行為である必要はありません。",
+                "comment": "「イベントは、単なる「手順報告書」であり、手順が「大腸内視鏡検査」である場合など、typeCodeに内在する行為をより専門的にすることができます。1つ以上のイベントコードが含まれている場合、これらはclassCode、practiceSettingCode、またはtypeCodeに内在する値と衝突してはならず、そうすると曖昧な状況が生じます。このコードの簡単なリストは、特定の種類のクエリのキーワードとして使用するために提供されています。」",
+                "min": 0,
+                "max": "*",
+                "type": [
+                    {
+                        "code": "CodeableConcept"
+                    }
+                ],
+                "isSummary": true,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "DocumentEventType"
+                        }
+                    ],
+                    "strength": "example",
+                    "description": "このコードリストは、記録されている主要な臨床行為を表します。",
+                    "valueSet": "http://terminology.hl7.org/ValueSet/v3-ActCode"
+                },
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": ".code"
+                    },
+                    {
+                        "identity": "cda",
+                        "map": ".code"
+                    },
+                    {
+                        "identity": "fhirdocumentreference",
+                        "map": "DocumentReference.event.code"
+                    }
+                ]
+            },
+            {
+                "id": "Composition.event.period",
+                "path": "Composition.event.period",
+                "short": "「文書に含まれる期間」",
+                "definition": "文書でカバーされている期間。この期間において、文書が完全な表現であることを主張するものではありませんが、この期間のイベントを文書化していることだけを示しています。",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "Period"
+                    }
+                ],
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": ".effectiveTime"
+                    },
+                    {
+                        "identity": "cda",
+                        "map": ".effectiveTime"
+                    },
+                    {
+                        "identity": "fhirdocumentreference",
+                        "map": "DocumentReference.event.period"
+                    }
+                ]
+            },
+            {
+                "id": "Composition.event.detail",
+                "path": "Composition.event.detail",
+                "short": "「記録されているイベント」(Kiroku sarete iru ibento)",
+                "definition": "ドキュメンテーションされているイベントの説明や参照。例えば、このように大腸内視鏡検査や虫垂切除手術をドキュメンテーションするために使用することができます。",
+                "min": 0,
+                "max": "*",
+                "type": [
+                    {
+                        "code": "Reference",
+                        "targetProfile": [
+                            "http://hl7.org/fhir/StructureDefinition/Resource"
+                        ]
+                    }
+                ],
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": ".outboundRelationship[typeCode=\"SUBJ\"].target"
+                    },
+                    {
+                        "identity": "cda",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "Composition.section",
+                "extension": [
+                    {
+                        "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-explicit-type-name",
+                        "valueString": "Section"
+                    }
+                ],
+                "path": "Composition.section",
+                "short": "「構成はセクションに分割されます」",
+                "definition": "作品を構成するセクションの根源。",
+                "min": 0,
+                "max": "*",
+                "type": [
+                    {
+                        "code": "BackboneElement"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "cmp-1",
+                        "severity": "error",
+                        "human": "「セクションには、テキスト、エントリー、またはサブセクションのいずれかが少なくとも1つ必要です。」",
+                        "expression": "text.exists() or entry.exists() or section.exists()",
+                        "xpath": "exists(f:text) or exists(f:entry) or exists(f:section)"
+                    },
+                    {
+                        "key": "cmp-2",
+                        "severity": "error",
+                        "human": "「セクションが空の場合、emptyReasonを持つことはできません。」",
+                        "expression": "emptyReason.empty() or entry.empty()",
+                        "xpath": "not(exists(f:emptyReason) and exists(f:entry))"
+                    }
+                ],
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "./outboundRelationship[typeCode=\"COMP\" and isNormalActRelationship()]/target[moodCode=\"EVN\" and classCode=\"DOCSECT\" and isNormalAct]"
+                    },
+                    {
+                        "identity": "cda",
+                        "map": ".component.structuredBody.component.section"
+                    }
+                ]
+            },
+            {
+                "id": "Composition.section.title",
+                "path": "Composition.section.title",
+                "short": "「セクションのラベル（例：目次用）」",
+                "definition": "この特定のセクションのラベル。これは文書のレンダリングされたコンテンツの一部となり、目次を作成するためにしばしば使用されます。",
+                "comment": "「タイトルは人間の読者のためのセクションを識別します。タイトルは、セクションの対象となるリソースのナラティブに一貫性が必要です。通常、セクションにはタイトルが必要ですが、一部の文書では不要または不適切です。これは、サブセクションに独自の区別的なタイトルがあるセクション、または単一のセクションしか持たない文書の場合です。ほとんどの実装ガイドでは、セクションタイトルを必須要素にすることがあります。」",
+                "requirements": "Section headings are often standardized for different types of documents.  They give guidance to humans on how the document is organized.",
+                "alias": [
+                    "header",
+                    "label",
+                    "caption"
+                ],
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ],
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "./title"
+                    },
+                    {
+                        "identity": "cda",
+                        "map": ".title"
+                    }
+                ]
+            },
+            {
+                "id": "Composition.section.code",
+                "path": "Composition.section.code",
+                "short": "「セクションの分類（推奨）」",
+                "definition": "「セクションに含まれるコンテンツの種類を識別するコードです。これはセクションタイトルと一致する必要があります。」",
+                "comment": "「そのコードは、文書の自動処理用のセクションを識別します。文書の構造を制御するためにプロファイルを使用する場合、これは特に関連しています。\nもしセクションにサブセクションではなくコンテンツが含まれている場合、セクションコードは、セクションコードの注釈にあるリソースの意味や解釈を変更しません。」",
+                "requirements": "Provides computable standardized labels to topics within the document.",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "CodeableConcept"
+                    }
+                ],
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "CompositionSectionType"
+                        }
+                    ],
+                    "strength": "example",
+                    "description": "作品/文書の一部の分類。",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/doc-section-codes"
+                },
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "./code"
+                    },
+                    {
+                        "identity": "cda",
+                        "map": ".code"
+                    }
+                ]
+            },
+            {
+                "id": "Composition.section.author",
+                "path": "Composition.section.author",
+                "short": "「誰または何がこの部分を著したか」",
+                "definition": "「このセクションの情報の責任者を識別することであり、入力した人ではない」という意味です。",
+                "requirements": "Identifies who is responsible for the content.",
+                "min": 0,
+                "max": "*",
+                "type": [
+                    {
+                        "code": "Reference",
+                        "targetProfile": [
+                            "http://hl7.org/fhir/StructureDefinition/Practitioner",
+                            "http://hl7.org/fhir/StructureDefinition/PractitionerRole",
+                            "http://hl7.org/fhir/StructureDefinition/Device",
+                            "http://hl7.org/fhir/StructureDefinition/Patient",
+                            "http://hl7.org/fhir/StructureDefinition/RelatedPerson",
+                            "http://hl7.org/fhir/StructureDefinition/Organization"
+                        ]
+                    }
+                ],
+                "mapping": [
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.author"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": ".participation[typeCode=\"AUT\"].role[classCode=\"ASSIGNED\"]"
+                    },
+                    {
+                        "identity": "cda",
+                        "map": ".author.assignedAuthor"
+                    }
+                ]
+            },
+            {
+                "id": "Composition.section.focus",
+                "path": "Composition.section.focus",
+                "short": "「セクションが何についているか、構成の主題でない場合はいつでも。」",
+                "definition": "「セクションの実際のフォーカスは、作成物の主題ではなく、代わりに(患者の主題の場合)配偶者、親、胎児、あるいはドナーなどの何かまたは誰かを表すときのことです。フォーカスが指定されていない場合、フォーカスは親セクションのフォーカス、または作成物自体の主題になるものと仮定されます。フォーカスを持つセクションには、論理的な主体（患者、主題、フォーカスなど）がセクションのフォーカスに一致するリソースしか含まれません。または論理的な主体（少数のリソース）が存在しない場合にも含まれます。」",
+                "comment": "通常、文書のセクションは、その文書の対象である患者、または患者グループ、場所、機器などに関するものです。一部の文書においては、いくつかのセクションには関連するエンティティに関するデータが実際に含まれています。典型的な例は、母親に関する新生児退院の要約のセクションや、各家族メンバーについてのセクションを含む家族歴の文書などがありますが、その他の例もあります。",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "Reference",
+                        "targetProfile": [
+                            "http://hl7.org/fhir/StructureDefinition/Resource"
+                        ]
+                    }
+                ],
+                "mapping": [
+                    {
+                        "identity": "cda",
+                        "map": ".subject? (CDA did not differentiate between subject and focus)"
+                    }
+                ]
+            },
+            {
+                "id": "Composition.section.text",
+                "path": "Composition.section.text",
+                "short": "「人間の解釈のために、節のテキストの要約」",
+                "definition": "「人が理解しやすい物語形式で、セクションの確認されたコンテンツを含み、人間がリソースのコンテンツを表現するために使用されます。この物語には、すべての構造化データをエンコードする必要はありませんが、人間が物語を読んで十分に「臨床的に安全」であるために、十分な詳細を含む必要があります。」",
+                "comment": "「文書プロファイルは、臨床的安全性を確保するために、物語に表現すべき内容を定義することができます。」",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "Narrative"
+                    }
+                ],
+                "condition": [
+                    "cmp-1"
+                ],
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": ".text"
+                    },
+                    {
+                        "identity": "cda",
+                        "map": ".text"
+                    }
+                ]
+            },
+            {
+                "id": "Composition.section.mode",
+                "path": "Composition.section.mode",
+                "short": "働いている | スナップショット | 変更。",
+                "definition": "エントリーリストの作成方法 – それが継続的に維持されるのに適した作業リストであるか、別のソースからのアイテムのリストのスナップショットを表すか、またはアイテムが追加、変更、削除されることができる作成済みのリストであるかを示す。",
+                "comment": "「変更リストが完全なリストと誤解されることを防ぐため、この要素は修飾子としてラベル付けされます。」(Henkō risuto ga kanzen'na risuto to gokai sareru koto wo fusegu tame, kono yōso wa shūshūshi to shite raberu tsuke saremasu.)",
+                "requirements": "Sections are used in various ways, and it must be known in what way it is safe to use the entries in them.",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "code"
+                    }
+                ],
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "SectionMode"
+                        }
+                    ],
+                    "strength": "required",
+                    "description": "このセクションに適用される処理モード。 (Kono sekushon ni tekiyō sareru shori mōdo.)",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/list-mode|4.0.1"
+                },
+                "mapping": [
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.class"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": ".outBoundRelationship[typeCode=COMP].target[classCode=OBS\"].value"
+                    },
+                    {
+                        "identity": "cda",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "Composition.section.orderedBy",
+                "path": "Composition.section.orderedBy",
+                "short": "セクションエントリーの順序",
+                "definition": "「セクションエントリー内のアイテムに適用される順序を指定します。」",
+                "comment": "アプリケーションは提供された順序で順序付きリストを描画する必要がありますが、ユーザーが自分の好みに基づいて再順序付けすることもできます。順序が指定されていない場合、順序は不明ですが、それでも何らかの順序がある可能性があります。",
+                "requirements": "Important for presentation and rendering.  Lists may be sorted to place more important information first or to group related entries.",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "CodeableConcept"
+                    }
+                ],
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "SectionEntryOrder"
+                        }
+                    ],
+                    "strength": "preferred",
+                    "description": "「エントリーに含まれるアイテムにはどのような順序が適用されますか？」(Entorī ni fukumareru aitemu ni wa dono yōna jyunjo ga tekiyō saremasu ka?)",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/list-order"
+                },
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": ".outboundRelationship[typeCode=COMP].sequenceNumber > 1"
+                    },
+                    {
+                        "identity": "cda",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "Composition.section.entry",
+                "path": "Composition.section.entry",
+                "short": "「このセクションを支持するデータに対する参照」(Kono sekushon wo shiji suru data ni tai suru sansho)",
+                "definition": "\"このセクションの物語の出典となる実際のリソースへの言及。\"",
+                "comment": "もしリストにエントリーがなければ、空の理由を提供する必要があります。",
+                "min": 0,
+                "max": "*",
+                "type": [
+                    {
+                        "code": "Reference",
+                        "targetProfile": [
+                            "http://hl7.org/fhir/StructureDefinition/Resource"
+                        ]
+                    }
+                ],
+                "condition": [
+                    "cmp-2"
+                ],
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": ".outboundRelationship[typeCode=COMP] or  .participation[typeCode=SBJ]"
+                    },
+                    {
+                        "identity": "cda",
+                        "map": ".entry"
+                    }
+                ]
+            },
+            {
+                "id": "Composition.section.emptyReason",
+                "path": "Composition.section.emptyReason",
+                "short": "なぜそのセクションは空ですか？ (Naze sono sekushon wa karadesu ka?)",
+                "definition": "\"セクションが空の場合、なぜリストが空なのですか。空のセクションには通常、空の理由を説明するテキストがあります。\"",
+                "comment": "「空白セクションの多様な理由は、その解釈に重要な意味を持ちます。このコードは、セクション全体の内容が抑制されている場合に使用するものであり、単一のアイテムが省略されている場合には、実装者はテキストノートまたはエントリにフラグを使用することを検討することができます。」",
+                "requirements": "Allows capturing things like \"none exist\" or \"not asked\" which can be important for most lists.",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "CodeableConcept"
+                    }
+                ],
+                "condition": [
+                    "cmp-2"
+                ],
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "SectionEmptyReason"
+                        }
+                    ],
+                    "strength": "preferred",
+                    "description": "「もしセクションが空っぽなら、なぜ空っぽなのか。」",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/list-empty-reason"
+                },
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": ".inboundRelationship[typeCode=SUBJ,code<ListEmptyReason].value[type=CD]"
+                    },
+                    {
+                        "identity": "cda",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "Composition.section.section",
+                "path": "Composition.section.section",
+                "short": "ネストされたセクション",
+                "definition": "このセクション内の入れ子のサブセクション。",
+                "comment": "ネスティングされたセクションは、主に人間の読者がドキュメントの特定の部分に移動するのを助けるために使用されます。",
+                "min": 0,
+                "max": "*",
+                "contentReference": "#Composition.section",
+                "condition": [
+                    "cmp-1"
+                ],
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "./outboundRelationship[typeCode=\"COMP\" and isNormalActRelationship()]/target[moodCode=\"EVN\" and classCode=\"DOCSECT\" and isNormalAct]"
+                    },
+                    {
+                        "identity": "cda",
+                        "map": ".component.section"
+                    }
+                ]
+            }
+        ]
+    }
+}

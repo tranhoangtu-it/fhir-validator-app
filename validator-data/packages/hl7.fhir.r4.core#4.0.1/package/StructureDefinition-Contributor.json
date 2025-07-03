@@ -1,0 +1,353 @@
+{
+    "resourceType": "StructureDefinition",
+    "id": "Contributor",
+    "meta": {
+        "lastUpdated": "2019-11-01T09:29:23.356+11:00"
+    },
+    "extension": [
+        {
+            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
+            "valueCode": "trial-use"
+        }
+    ],
+    "url": "http://hl7.org/fhir/StructureDefinition/Contributor",
+    "version": "4.0.1",
+    "name": "Contributor",
+    "status": "draft",
+    "date": "2019-11-01T09:29:23+11:00",
+    "publisher": "HL7 FHIR Standard",
+    "contact": [
+        {
+            "telecom": [
+                {
+                    "system": "url",
+                    "value": "http://hl7.org/fhir"
+                }
+            ]
+        }
+    ],
+    "description": "「貢献者タイプの基本構造定義：知的資産のコンテンツに対する貢献者、著者、編集者、レビューア、および支援者を含む。」",
+    "purpose": "Need to track contributor information in the same way across multiple resources.",
+    "fhirVersion": "4.0.1",
+    "mapping": [
+        {
+            "identity": "rim",
+            "uri": "http://hl7.org/v3",
+            "name": "RIM Mapping"
+        }
+    ],
+    "kind": "complex-type",
+    "abstract": false,
+    "type": "Contributor",
+    "baseDefinition": "http://hl7.org/fhir/StructureDefinition/Element",
+    "derivation": "specialization",
+    "snapshot": {
+        "element": [
+            {
+                "id": "Contributor",
+                "extension": [
+                    {
+                        "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
+                        "valueCode": "trial-use"
+                    }
+                ],
+                "path": "Contributor",
+                "short": "投稿者情報 (Tōkōsha jōhō)",
+                "definition": "知的財産の内容に貢献する人々には、著者、編集者、レビュアー、そして推薦者が含まれる。",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Contributor",
+                    "min": 0,
+                    "max": "*"
+                },
+                "condition": [
+                    "ele-1"
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "Contributor.id",
+                "path": "Contributor.id",
+                "representation": [
+                    "xmlAttr"
+                ],
+                "short": "エレメント相互参照のためのユニークID",
+                "definition": "リソース内の要素の固有ID（内部参照用）。これは、スペースを含まない任意の文字列値である可能性があります。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Element.id",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "extension": [
+                            {
+                                "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fhir-type",
+                                "valueUrl": "string"
+                            }
+                        ],
+                        "code": "http://hl7.org/fhirpath/System.String"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "Contributor.extension",
+                "path": "Contributor.extension",
+                "slicing": {
+                    "discriminator": [
+                        {
+                            "type": "value",
+                            "path": "url"
+                        }
+                    ],
+                    "description": "拡張子は常にURLで切り片にされます。",
+                    "rules": "open"
+                },
+                "short": "実装によって定義される追加コンテンツ",
+                "definition": "「要素の基本的な定義に含まれない追加情報を表すために使用されることがあります。拡張機能の使用を安全かつ管理しやすくするために、定義および使用に適用される厳格なガバナンスのセットがあります。実装者は拡張機能を定義できますが、拡張機能の定義の一部として満たす必要のある要件のセットがあります。」",
+                "comment": "どのようなアプリケーション、プロジェクト、または標準が拡張機能を使用しているかに関わらず、拡張機能の使用には決して汚名が付くわけではありません - それらを使用または定義する機関または管轄区域に関係なく。拡張機能の使用こそが、FHIR仕様を誰にとっても簡単なコアレベルで維持することを可能にします。",
+                "alias": [
+                    "extensions",
+                    "user content"
+                ],
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Element.extension",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "Extension"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    },
+                    {
+                        "key": "ext-1",
+                        "severity": "error",
+                        "human": "「拡張機能または値[x]のいずれかが必要です。両方ではありません。」",
+                        "expression": "extension.exists() != value.exists()",
+                        "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Extension"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "Contributor.type",
+                "path": "Contributor.type",
+                "short": "著者 | 編集者 | レビュアー | 支持者",
+                "definition": "貢献者のタイプ。",
+                "min": 1,
+                "max": "1",
+                "base": {
+                    "path": "Contributor.type",
+                    "min": 1,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "code"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "ContributorType"
+                        }
+                    ],
+                    "strength": "required",
+                    "description": "貢献者のタイプ。",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/contributor-type|4.0.1"
+                }
+            },
+            {
+                "id": "Contributor.name",
+                "path": "Contributor.name",
+                "short": "「誰がコンテンツを貢献したのですか？」(dare ga konten tsu o kōken shita no desu ka?)",
+                "definition": "「寄付を担当した個人または組織の名前」",
+                "min": 1,
+                "max": "1",
+                "base": {
+                    "path": "Contributor.name",
+                    "min": 1,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true
+            },
+            {
+                "id": "Contributor.contact",
+                "path": "Contributor.contact",
+                "short": "貢献者の連絡先詳細",
+                "definition": "利用者が投稿者を見つけ、コミュニケーションを取るための連絡先の詳細。",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Contributor.contact",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "ContactDetail"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true
+            }
+        ]
+    },
+    "differential": {
+        "element": [
+            {
+                "id": "Contributor",
+                "extension": [
+                    {
+                        "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
+                        "valueCode": "trial-use"
+                    }
+                ],
+                "path": "Contributor",
+                "short": "投稿者情報 (Tōkōsha jōhō)",
+                "definition": "知的財産の内容に貢献する人々には、著者、編集者、レビュアー、そして推薦者が含まれる。",
+                "min": 0,
+                "max": "*"
+            },
+            {
+                "id": "Contributor.type",
+                "path": "Contributor.type",
+                "short": "著者 | 編集者 | レビュアー | 支持者",
+                "definition": "貢献者のタイプ。",
+                "min": 1,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "code"
+                    }
+                ],
+                "isSummary": true,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "ContributorType"
+                        }
+                    ],
+                    "strength": "required",
+                    "description": "貢献者のタイプ。",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/contributor-type|4.0.1"
+                }
+            },
+            {
+                "id": "Contributor.name",
+                "path": "Contributor.name",
+                "short": "「誰がコンテンツを貢献したのですか？」(dare ga konten tsu o kōken shita no desu ka?)",
+                "definition": "「寄付を担当した個人または組織の名前」",
+                "min": 1,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ],
+                "isSummary": true
+            },
+            {
+                "id": "Contributor.contact",
+                "path": "Contributor.contact",
+                "short": "貢献者の連絡先詳細",
+                "definition": "利用者が投稿者を見つけ、コミュニケーションを取るための連絡先の詳細。",
+                "min": 0,
+                "max": "*",
+                "type": [
+                    {
+                        "code": "ContactDetail"
+                    }
+                ],
+                "isSummary": true
+            }
+        ]
+    }
+}

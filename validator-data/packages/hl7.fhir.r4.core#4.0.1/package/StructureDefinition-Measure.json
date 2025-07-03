@@ -1,0 +1,4486 @@
+{
+    "resourceType": "StructureDefinition",
+    "id": "Measure",
+    "meta": {
+        "lastUpdated": "2019-11-01T09:29:23.356+11:00"
+    },
+    "extension": [
+        {
+            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-category",
+            "valueString": "Specialized.Quality Reporting &amp; Testing"
+        },
+        {
+            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
+            "valueCode": "trial-use"
+        },
+        {
+            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fmm",
+            "valueInteger": 2
+        },
+        {
+            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-security-category",
+            "valueCode": "anonymous"
+        },
+        {
+            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-wg",
+            "valueCode": "cqi"
+        }
+    ],
+    "url": "http://hl7.org/fhir/StructureDefinition/Measure",
+    "version": "4.0.1",
+    "name": "Measure",
+    "status": "draft",
+    "date": "2019-11-01T09:29:23+11:00",
+    "publisher": "Health Level Seven International (Clinical Quality Information)",
+    "contact": [
+        {
+            "telecom": [
+                {
+                    "system": "url",
+                    "value": "http://hl7.org/fhir"
+                }
+            ]
+        },
+        {
+            "telecom": [
+                {
+                    "system": "url",
+                    "value": "http://www.hl7.org/Special/committees/cqi/index.cfm"
+                }
+            ]
+        }
+    ],
+    "description": "「メジャー・リソース」は、品質評価基準の定義を提供します。」",
+    "fhirVersion": "4.0.1",
+    "mapping": [
+        {
+            "identity": "workflow",
+            "uri": "http://hl7.org/fhir/workflow",
+            "name": "Workflow Pattern"
+        },
+        {
+            "identity": "w5",
+            "uri": "http://hl7.org/fhir/fivews",
+            "name": "FiveWs Pattern Mapping"
+        },
+        {
+            "identity": "objimpl",
+            "uri": "http://hl7.org/fhir/object-implementation",
+            "name": "Object Implementation Information"
+        },
+        {
+            "identity": "rim",
+            "uri": "http://hl7.org/v3",
+            "name": "RIM Mapping"
+        }
+    ],
+    "kind": "resource",
+    "abstract": false,
+    "type": "Measure",
+    "baseDefinition": "http://hl7.org/fhir/StructureDefinition/DomainResource",
+    "_baseDefinition": {
+        "extension": [
+            {
+                "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-codegen-super",
+                "valueString": "MetadataResource"
+            }
+        ]
+    },
+    "derivation": "specialization",
+    "snapshot": {
+        "element": [
+            {
+                "id": "Measure",
+                "path": "Measure",
+                "short": "品質評価の定義",
+                "definition": "「メジャー・リソース」は、品質評価基準の定義を提供します。」",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Measure",
+                    "min": 0,
+                    "max": "*"
+                },
+                "constraint": [
+                    {
+                        "key": "dom-2",
+                        "severity": "error",
+                        "human": "もしリソースが他のリソースに含まれている場合、そのリソースにはネストされたリソースを含めてはなりません (moshi risōsu ga hoka no risōsu ni fukumarete iru baai, sono risōsu ni wa nesuto sareta risōsu o fukumete wa narimasen).",
+                        "expression": "contained.contained.empty()",
+                        "xpath": "not(parent::f:contained and f:contained)",
+                        "source": "http://hl7.org/fhir/StructureDefinition/DomainResource"
+                    },
+                    {
+                        "key": "dom-3",
+                        "severity": "error",
+                        "human": "もしリソースが他のリソースに含まれている場合、それはリソースの他の場所から参照されるか、含まれるリソースに参照されるべきです。",
+                        "expression": "contained.where((('#'+id in (%resource.descendants().reference | %resource.descendants().as(canonical) | %resource.descendants().as(uri) | %resource.descendants().as(url))) or descendants().where(reference = '#').exists() or descendants().where(as(canonical) = '#').exists() or descendants().where(as(canonical) = '#').exists()).not()).trace('unmatched', id).empty()",
+                        "xpath": "not(exists(for $id in f:contained/*/f:id/@value return $contained[not(parent::*/descendant::f:reference/@value=concat('#', $contained/*/id/@value) or descendant::f:reference[@value='#'])]))",
+                        "source": "http://hl7.org/fhir/StructureDefinition/DomainResource"
+                    },
+                    {
+                        "key": "dom-4",
+                        "severity": "error",
+                        "human": "もしリソースが別のリソースの中に含まれる場合、meta.versionIdまたはmeta.lastUpdatedを持つべきではありません。",
+                        "expression": "contained.meta.versionId.empty() and contained.meta.lastUpdated.empty()",
+                        "xpath": "not(exists(f:contained/*/f:meta/f:versionId)) and not(exists(f:contained/*/f:meta/f:lastUpdated))",
+                        "source": "http://hl7.org/fhir/StructureDefinition/DomainResource"
+                    },
+                    {
+                        "key": "dom-5",
+                        "severity": "error",
+                        "human": "「もしリソースが他のリソースに含まれている場合、セキュリティラベルを持つべきではありません。」",
+                        "expression": "contained.meta.security.empty()",
+                        "xpath": "not(exists(f:contained/*/f:meta/f:security))",
+                        "source": "http://hl7.org/fhir/StructureDefinition/DomainResource"
+                    },
+                    {
+                        "extension": [
+                            {
+                                "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bestpractice",
+                                "valueBoolean": true
+                            },
+                            {
+                                "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bestpractice-explanation",
+                                "valueMarkdown": "When a resource has no narrative, only systems that fully understand the data can display the resource to a human safely. Including a human readable representation in the resource makes for a much more robust eco-system and cheaper handling of resources by intermediary systems. Some ecosystems restrict distribution of resources to only those systems that do fully understand the resources, and as a consequence implementers may believe that the narrative is superfluous. However experience shows that such eco-systems often open up to new participants over time."
+                            }
+                        ],
+                        "key": "dom-6",
+                        "severity": "warning",
+                        "human": "「資源は堅牢な管理のために物語を持つべきである。」",
+                        "expression": "text.`div`.exists()",
+                        "xpath": "exists(f:text/h:div)",
+                        "source": "http://hl7.org/fhir/StructureDefinition/DomainResource"
+                    },
+                    {
+                        "key": "mea-0",
+                        "severity": "warning",
+                        "human": "「名前は、コード生成などの機械処理アプリケーションによるモジュールの識別子として使用できる必要があります」",
+                        "expression": "name.matches('[A-Z]([A-Za-z0-9_]){0,254}')",
+                        "xpath": "not(exists(f:name/@value)) or matches(f:name/@value, '[A-Z]([A-Za-z0-9_]){0,254}')"
+                    },
+                    {
+                        "key": "mea-1",
+                        "severity": "error",
+                        "human": "Stratifierは、単一の基準または複数の基準要素のセットである必要があります。",
+                        "expression": "group.stratifier.all((code | description | criteria).exists() xor component.exists())",
+                        "xpath": "exists(f:group/stratifier/code) or exists(f:group/stratifier/component)"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "Entity. Role, or Act"
+                    },
+                    {
+                        "identity": "workflow",
+                        "map": "Definition"
+                    }
+                ]
+            },
+            {
+                "id": "Measure.id",
+                "path": "Measure.id",
+                "short": "このアーティファクトの論理ID",
+                "definition": "「リソースのURLで使用される論理ID。一度割り当てられたら、この値は変更されません。」",
+                "comment": "「リソースにIDがないのは、作成操作を使用してサーバーに送信されているときだけです。」",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Resource.id",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "extension": [
+                            {
+                                "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fhir-type",
+                                "valueUrl": "string"
+                            }
+                        ],
+                        "code": "http://hl7.org/fhirpath/System.String"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true
+            },
+            {
+                "id": "Measure.meta",
+                "path": "Measure.meta",
+                "short": "「リソースに関するメタデータ」",
+                "definition": "リソースに関するメタデータ。これはインフラストラクチャによって維持されるコンテンツです。 コンテンツの変更は、リソースのバージョン変更と常に関連しているわけではありません。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Resource.meta",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "Meta"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true
+            },
+            {
+                "id": "Measure.implicitRules",
+                "path": "Measure.implicitRules",
+                "short": "このコンテンツが作成されたルールセット",
+                "definition": "「リソース構築時に遵守された一連のルールを指すものであり、コンテンツを処理する際に理解する必要があります。しばしば、特別なルールを定義する実装ガイドとその他のプロファイルなどを含むものです。」",
+                "comment": "このルールセットを主張することで、取引先の限られた集団にしか内容を理解させることができず、長期的にはデータの有用性が制限されます。しかしながら、現存するヘルスエコシステムは高度に分断化しており、一般的に計算可能な形式でデータを定義、収集、交換する準備が整っていません。できる限り、実装者および/または仕様ライターはこの要素の使用を避けるべきです。使用する場合、URLは、そのナラティブとともに他のプロファイル、値セットなどを含む実装ガイドを定義する参照となります。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Resource.implicitRules",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "uri"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": true,
+                "isModifierReason": "This element is labeled as a modifier because the implicit rules may provide additional knowledge about the resource that modifies it's meaning or interpretation",
+                "isSummary": true
+            },
+            {
+                "id": "Measure.language",
+                "path": "Measure.language",
+                "short": "「リソースコンテンツの言語」(Risōsukontentsu no gengo)",
+                "definition": "「リソースが書かれている基本言語。」",
+                "comment": "言語はインデックスとアクセシビリティをサポートするために提供されます（通常、テキスト読み上げなどのサービスは言語タグを使用します）。物語のHTML言語タグは、物語に適用されます。リソース上の言語タグは、リソース内のデータから生成される他のプレゼンテーションの言語を指定するために使用できます。すべてのコンテンツが基本言語である必要はありません。Resource.languageは自動的に物語に適用されたと想定してはいけません。言語が指定されている場合、HTMLのdiv要素にも指定する必要があります（xml：langとhtml lang属性の関係に関する情報はHTML5の規則を参照）。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Resource.language",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "code"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-maxValueSet",
+                            "valueCanonical": "http://hl7.org/fhir/ValueSet/all-languages"
+                        },
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "Language"
+                        },
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-isCommonBinding",
+                            "valueBoolean": true
+                        }
+                    ],
+                    "strength": "preferred",
+                    "description": "「人間の言語。」(Ningen no gengo.)",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/languages"
+                }
+            },
+            {
+                "id": "Measure.text",
+                "path": "Measure.text",
+                "short": "「人間の解釈のためのリソースのテキスト要約」",
+                "definition": "「リソースの要約を含む人が読めるナビゲーションであり、リソースの内容を人に表現するために使用できます。ナビゲーションはすべての構造化されたデータをエンコードする必要はありませんが、人間がナビゲーションを読むだけで「臨床的に安全」であるために十分な詳細を含む必要があります。リソース定義には、臨床的な安全性を確保するためにナビゲーションで表現する必要があるコンテンツが定義される場合があります。」",
+                "comment": "含まれるリソースには説明がありません。含まれないリソースには説明が必要です。場合によっては、リソースが少量のデータしか含まず、テキストだけで表現されることがあります（minOccurs = 1要素がすべて満たされている限り）。これは、情報が「テキストの塊」としてキャプチャされるレガシーシステムからのデータや、テキストが生またはナレーションされて符号化された情報が後で追加される場合に必要な場合があります。",
+                "alias": [
+                    "narrative",
+                    "html",
+                    "xhtml",
+                    "display"
+                ],
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "DomainResource.text",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "Narrative"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "Act.text?"
+                    }
+                ]
+            },
+            {
+                "id": "Measure.contained",
+                "path": "Measure.contained",
+                "short": "「含まれている、インラインのリソース」(Fukuma rete iru, inrain no risōsu)",
+                "definition": "「これらのリソースは、それらを含むリソースから独立した存在を持ちません。それらは独立して識別することはできず、独自の独立したトランザクション範囲を持つこともできません。」",
+                "comment": "「コンテンツが適切に識別できる場合には、これを行うべきではありません。識別が失われると、再び復元することは非常に困難であり（文脈に依存します）、メタ要素にプロファイルとタグを持つことができますが、セキュリティのラベルを持っていてはいけません。」",
+                "alias": [
+                    "inline resources",
+                    "anonymous resources",
+                    "contained resources"
+                ],
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "DomainResource.contained",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "Resource"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "N/A"
+                    }
+                ]
+            },
+            {
+                "id": "Measure.extension",
+                "path": "Measure.extension",
+                "short": "実装によって定義される追加コンテンツ",
+                "definition": "「リソースの基本的な定義の一部ではない追加情報を表すために使用することができます。拡張機能の使用を安全かつ管理可能にするために、定義と使用の一定のガバナンスが適用されます。実装者はどんな拡張機能でも定義できますが、拡張機能の定義の一部として満たす必要がある要件があります」",
+                "comment": "どのようなアプリケーション、プロジェクト、または標準が拡張機能を使用しているかに関わらず、拡張機能の使用には決して汚名が付くわけではありません - それらを使用または定義する機関または管轄区域に関係なく。拡張機能の使用こそが、FHIR仕様を誰にとっても簡単なコアレベルで維持することを可能にします。",
+                "alias": [
+                    "extensions",
+                    "user content"
+                ],
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "DomainResource.extension",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "Extension"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    },
+                    {
+                        "key": "ext-1",
+                        "severity": "error",
+                        "human": "「拡張機能または値[x]のいずれかが必要です。両方ではありません。」",
+                        "expression": "extension.exists() != value.exists()",
+                        "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Extension"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "N/A"
+                    }
+                ]
+            },
+            {
+                "id": "Measure.modifierExtension",
+                "path": "Measure.modifierExtension",
+                "short": "無視できない拡張機能 (Mushi dekinai kakuchou kinou)",
+                "definition": "「リソースの基本的な定義に含まれない、要素の理解や、それを含む要素の子孫の理解を修正する追加情報を表すためにも使用されることがあります。通常、修飾要素は否定や修飾を提供します。拡張機能の使用を安全で管理しやすくするために、拡張機能の定義と使用に対して厳格な統治が適用されます。実装者は拡張機能を定義することが許可されていますが、拡張機能の定義の一部として満たす必要がある要件があります。リソースを処理するアプリケーションは、修飾子拡張をチェックする必要があります。修飾子拡張は、リソースまたはドメインリソースの任意の要素の意味を変更してはなりません（修飾子拡張自体の意味も変更できません）。」",
+                "comment": "どのようなアプリケーション、プロジェクト、または標準が拡張機能を使用しているかに関わらず、拡張機能の使用には決して汚名が付くわけではありません - それらを使用または定義する機関または管轄区域に関係なく。拡張機能の使用こそが、FHIR仕様を誰にとっても簡単なコアレベルで維持することを可能にします。",
+                "requirements": "Modifier extensions allow for extensions that *cannot* be safely ignored to be clearly distinguished from the vast majority of extensions which can be safely ignored.  This promotes interoperability by eliminating the need for implementers to prohibit the presence of extensions. For further information, see the [definition of modifier extensions](extensibility.html#modifierExtension).",
+                "alias": [
+                    "extensions",
+                    "user content"
+                ],
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "DomainResource.modifierExtension",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "Extension"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    },
+                    {
+                        "key": "ext-1",
+                        "severity": "error",
+                        "human": "「拡張機能または値[x]のいずれかが必要です。両方ではありません。」",
+                        "expression": "extension.exists() != value.exists()",
+                        "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Extension"
+                    }
+                ],
+                "isModifier": true,
+                "isModifierReason": "Modifier extensions are expected to modify the meaning or interpretation of the resource that contains them",
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "N/A"
+                    }
+                ]
+            },
+            {
+                "id": "Measure.url",
+                "path": "Measure.url",
+                "short": "この測定値の正準識別子は、URIとして表されます（グローバルで一意）。",
+                "definition": "この指標が仕様書、モデル、設計、インスタンスで参照される際に使用される、絶対URI；カノニカル識別子とも呼ばれます。このURIは、グローバルに一意であることがSHOULDされ、この指標の権威あるインスタンスが（またはされる）リテラルアドレスであることがSHOULDされます。このURIはカノニカル参照のターゲットになることができます。この指標は、異なるサーバに格納されてもSHALL同じままである必要があります。",
+                "comment": "\"urn:uuid:またはurn:oid:であることができますが、実際のhttp:アドレスが優先されます。異なるバージョンを有する複数のインスタンスが同じURLを共有することができます。\n\nリソース（同じURL、新しいバージョン）の新しいバージョンを作成するか新しいアーティファクトを定義するかどうかの決定は、著者に任されます。この決定を行うための考慮事項は、[Technical and Business Versions](resource.html#versions)に記載されています。\n\n一部の場合、リソースは指定されたURLで見つからなくなることがありますが、URL自体は変更できません。実装は[meta.source]要素を使用して、リソースの現在のマスターソースがどこにあるかを示すことができます。\"",
+                "requirements": "Allows the measure to be referenced by a single globally unique identifier.",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Measure.url",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "uri"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Definition.url"
+                    },
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.identifier"
+                    }
+                ]
+            },
+            {
+                "id": "Measure.identifier",
+                "path": "Measure.identifier",
+                "short": "\"測定の追加識別子\" (Sokutei no tsuika shikibetsu-shi)",
+                "definition": "「仕様書、モデル、設計、またはインスタンスで参照される場合に、この測定値を識別するために使用される正式な識別子」",
+                "comment": "「通常、これはHL7 V3 II（インスタンス識別子）データ型に入力できる識別子に使用され、論理URIを使用できないFHIR外のこの測定値を識別できます。」",
+                "requirements": "Allows externally provided and/or usable business identifiers to be easily associated with the module.",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Measure.identifier",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "Identifier"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Definition.identifier"
+                    },
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.identifier"
+                    },
+                    {
+                        "identity": "objimpl",
+                        "map": "no-gen-base"
+                    }
+                ]
+            },
+            {
+                "id": "Measure.version",
+                "path": "Measure.version",
+                "short": "「措置のビジネス版」(Soshi no bijinesu-ban)",
+                "definition": "この規定、モデル、設計、あるいはインスタンスで参照された場合に、この測定値のバージョンを識別するために使用される識別子。　この値は測定値の著者によって管理された任意の値であり、グローバルに一意であることは期待されていません。例えば、管理されたバージョンが存在しない場合、タイムスタンプ（例：yyyymmdd）である場合があります。　また、バージョンを辞書順に並べることが期待されているわけではありません。　Decision Support Serviceの仕様に準拠したバージョンを提供するには、Major.Minor.Revision（例：1.0.0）の形式を使用してください。　knowledge assetsをバージョン管理する方法については、Decision Support Serviceの仕様書を参照してください。非実験的なアクティブなアーティファクトにはバージョンが必要です。",
+                "comment": "同じ識別子を持つ異なる計測インスタンスが存在する可能性がありますが、バージョンが異なります。特定のビジネスバージョンの計測を参照するために、バージョンを[url]の後に追加してurlを参照に使用することができます。フォーマットは[url]|[version]です。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Measure.version",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Definition.version"
+                    },
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.version"
+                    }
+                ]
+            },
+            {
+                "id": "Measure.name",
+                "path": "Measure.name",
+                "short": "この対策の名前（コンピューターフレンドリー）",
+                "definition": "「測定を識別するための自然言語の名前。この名前は、コード生成などの機械処理アプリケーションによるモジュールの識別子として使用できる必要があります。」",
+                "comment": "その名前は、グローバルにユニークである必要はありません。機械処理に適していることを保証するために、単純で英数字の名前であるべきです。",
+                "requirements": "Support human navigation and code generation.",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Measure.name",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ],
+                "condition": [
+                    "inv-0"
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true
+            },
+            {
+                "id": "Measure.title",
+                "path": "Measure.title",
+                "short": "この対策の名前（人間に優しい）",
+                "definition": "「手頃で簡潔、わかりやすいタイトル」",
+                "comment": "この名前は機械処理に適している必要はなく、句読点、空白などが含まれていても構いません。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Measure.title",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Definition.title"
+                    }
+                ]
+            },
+            {
+                "id": "Measure.subtitle",
+                "path": "Measure.subtitle",
+                "short": "\"措置の下位タイトル\" (Sōchi no kai tai taitoru)",
+                "definition": "内容に関する追加情報を提供する備考又は代替タイトル。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Measure.subtitle",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false
+            },
+            {
+                "id": "Measure.status",
+                "path": "Measure.status",
+                "short": "下書き | アクティブ | 引退した | 不明",
+                "definition": "この対策のステータス。コンテンツのライフサイクルを追跡することができます。",
+                "comment": "適切に使用すべきかどうかをフィルタリングすることができます。",
+                "min": 1,
+                "max": "1",
+                "base": {
+                    "path": "Measure.status",
+                    "min": 1,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "code"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": true,
+                "isModifierReason": "This is labeled as \"Is Modifier\" because applications should not use a retired {{title}} without due consideration",
+                "isSummary": true,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "PublicationStatus"
+                        },
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-isCommonBinding",
+                            "valueBoolean": true
+                        }
+                    ],
+                    "strength": "required",
+                    "description": "「アーティファクトのライフサイクルステータス」",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/publication-status|4.0.1"
+                },
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Definition.status"
+                    },
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.status"
+                    }
+                ]
+            },
+            {
+                "id": "Measure.experimental",
+                "path": "Measure.experimental",
+                "short": "テスト目的であり、実際の使用を意図していません。",
+                "definition": "このメジャーがテスト目的（または教育/評価/マーケティング）のために作成され、本来使用することを意図されていないことを示すブール値。",
+                "comment": "適切に使用すべきかどうかをフィルタリングすることができます。",
+                "requirements": "Enables experimental content to be developed following the same lifecycle that would be used for a production-level measure.",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Measure.experimental",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "boolean"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Definition.experimental"
+                    },
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.class"
+                    }
+                ]
+            },
+            {
+                "id": "Measure.subject[x]",
+                "path": "Measure.subject[x]",
+                "short": "例：患者、医療従事者、関係者、組織、場所、デバイス",
+                "definition": "対象とする測定対象。この要素が提供されていない場合は、患者対象が想定されますが、測定対象は何でもできます。",
+                "comment": "「測定対象は、基準の定義を解釈する上で重要です。測定のロジックは、特定の対象に関する評価に基づいて評価されます。これは、コンパートメントの概念に大体一致し、手前味噌の関係に基づいて利用可能なコンテンツを制限するものです。CQLでは、これが文脈宣言に対応します。」",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Measure.subject[x]",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "CodeableConcept"
+                    },
+                    {
+                        "code": "Reference",
+                        "targetProfile": [
+                            "http://hl7.org/fhir/StructureDefinition/Group"
+                        ]
+                    }
+                ],
+                "meaningWhenMissing": "Patient",
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "SubjectType"
+                        }
+                    ],
+                    "strength": "extensible",
+                    "description": "「対象となる種類の測定（例：患者、医療従事者、組織、場所など）」",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/subject-type"
+                }
+            },
+            {
+                "id": "Measure.date",
+                "path": "Measure.date",
+                "short": "最終更新日 (Saishuu koushinbi)",
+                "definition": "「施策が公表された日付（必要に応じて時刻も含む）。ビジネスバージョンが変更された場合、ステータスコードが変更された場合には必ず日付を変更する必要があります。また、施策の実質的な内容が変更された場合にも、日付を変更することが望ましいです。」",
+                "comment": "「リソースの最終変更日」と同じではないことに注意してください。なぜなら、リソースは測定の2次表現である場合があるためです。追加の特定の日付は拡張機能として追加されることがあり、また、過去のバージョンに関連する起源を参照することで見つけることができます。」",
+                "alias": [
+                    "Revision Date"
+                ],
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Measure.date",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "dateTime"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Definition.date"
+                    },
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.recorded"
+                    }
+                ]
+            },
+            {
+                "id": "Measure.publisher",
+                "path": "Measure.publisher",
+                "short": "出版社の名前（組織または個人）",
+                "definition": "「措置を発行した組織または個人の名前。」",
+                "comment": "通常は組織であるが、個人である場合もあります。尺度の発行者（または管理者）は、尺度の維持および更新に主に責任を持つ組織または個人です。これは、元のコンテンツを開発および最初に著者にした個人または組織と必ずしも同じではありません。発行者は、尺度に関する質問や問題の主な連絡先です。この項目は、文脈から情報が利用可能である場合を除き、記入する必要があります。",
+                "requirements": "Helps establish the \"authority/credibility\" of the measure.  May also allow for contact.",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Measure.publisher",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Definition.publisher"
+                    },
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.witness"
+                    }
+                ]
+            },
+            {
+                "id": "Measure.contact",
+                "path": "Measure.contact",
+                "short": "出版社の連絡先詳細",
+                "definition": "ユーザーが出版者を見つけてコミュニケーションを取るのを支援するための連絡先詳細。",
+                "comment": "「ウェブサイト、メールアドレス、電話番号などかもしれません。」",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Measure.contact",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "ContactDetail"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Definition.contact"
+                    }
+                ]
+            },
+            {
+                "id": "Measure.description",
+                "path": "Measure.description",
+                "short": "「対策の自然言語説明」(Taisaku no shizen gongo setsumei)",
+                "definition": "「消費者の視点からの自然言語による措置の無料テキスト説明」",
+                "comment": "この記述は、測定がなぜ作られたのか、誤用に関するコメント、臨床使用や解釈のための指示、文献参照、紙の世界からの例など、細部をキャプチャするために使用できます。これは、リソースの「テキスト」フィールドで伝えられる測定方法の表現ではありません。この項目は、情報がコンテキストから利用可能でない場合（例：測定の言語が作成場所での主流の言語であると仮定される場合など）、入力する必要があります。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Measure.description",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "markdown"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Definition.description"
+                    }
+                ]
+            },
+            {
+                "id": "Measure.useContext",
+                "path": "Measure.useContext",
+                "short": "「コンテンツが支援することを意図した文脈」",
+                "definition": "この内容は、リストされた文脈をサポートすることを意図し、その重点を置いて開発されました。これらの文脈は一般的なカテゴリ（性別、年齢、...）である場合もあり、特定のプログラム（保険計画、調査など）への言及である場合もあります。これらは、適切な測定インスタンスの索引付けと検索に役立てることができます。",
+                "comment": "複数のuseContextが指定された場合、すべてまたはどれも適用されるという期待はありません。",
+                "requirements": "Assist in searching for appropriate content.",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Measure.useContext",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "UsageContext"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Definition.useContext"
+                    }
+                ]
+            },
+            {
+                "id": "Measure.jurisdiction",
+                "path": "Measure.jurisdiction",
+                "short": "「適用対象地域（該当する場合）」",
+                "definition": "「対象の措置が使用される法的または地勢的な地域」",
+                "comment": "「元々設計または意図された管轄地域以外でも、その対策が使用可能である可能性があります。」",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Measure.jurisdiction",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "CodeableConcept"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "Jurisdiction"
+                        },
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-isCommonBinding",
+                            "valueBoolean": true
+                        }
+                    ],
+                    "strength": "extensible",
+                    "description": "このアーティファクトの使用の対象となる国や地域。",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/jurisdiction"
+                },
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Definition.jurisdiction"
+                    }
+                ]
+            },
+            {
+                "id": "Measure.purpose",
+                "path": "Measure.purpose",
+                "short": "なぜこの対策が定義されたのか。 (Naze kono taisaku ga teigi sareta no ka?)",
+                "definition": "なぜこの措置が必要であるか、なぜこのように設計されたかの説明。 (Naze kono sochi ga hitsuyōdearu ka, naze kono yō ni sekkei sareta ka no setsumei.)",
+                "comment": "この要素は、測定の使用方法を説明するものではありません。代わりに、リソースがなぜ必要であるか、またはなぜそのように定義されたかのトレーサビリティを提供します。これは、この測定構造を駆動するソース資料や仕様に指し示すために使用される可能性があります。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Measure.purpose",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "markdown"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Definition.purpose"
+                    },
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.why[x]"
+                    },
+                    {
+                        "identity": "objimpl",
+                        "map": "no-gen-base"
+                    }
+                ]
+            },
+            {
+                "id": "Measure.usage",
+                "path": "Measure.usage",
+                "short": "「測定法の臨床利用を説明する」",
+                "definition": "「測定法がどのように使われているか、臨床的な観点から詳細に説明されたもの。」",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Measure.usage",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false
+            },
+            {
+                "id": "Measure.copyright",
+                "path": "Measure.copyright",
+                "short": "「使用および/または公開制限」",
+                "definition": "「対策と/またはその内容に関する著作権声明。著作権声明は、一般的に対策の使用や出版に関する法的制限です。」",
+                "requirements": "Consumers must be able to determine any legal restrictions on the use of the measure and/or its content.",
+                "alias": [
+                    "License",
+                    "Restrictions"
+                ],
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Measure.copyright",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "markdown"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Definition.copyright"
+                    },
+                    {
+                        "identity": "objimpl",
+                        "map": "no-gen-base"
+                    }
+                ]
+            },
+            {
+                "id": "Measure.approvalDate",
+                "path": "Measure.approvalDate",
+                "short": "「その対策が出版社に承認された時」",
+                "definition": "リソースのコンテンツが出版者によって承認された日付。承認は、コンテンツが公式に使用許可された際に一度行われます。",
+                "comment": "「'日付' 要素は、細かい修正や編集のために承認日よりも新しい場合があります。」",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Measure.approvalDate",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "date"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Definition.approvalDate"
+                    },
+                    {
+                        "identity": "objimpl",
+                        "map": "no-gen-base"
+                    }
+                ]
+            },
+            {
+                "id": "Measure.lastReviewDate",
+                "path": "Measure.lastReviewDate",
+                "short": "「最後にその措置が見直された際に」",
+                "definition": "「リソース内容が最後にレビューされた日付。承認後に定期的にレビューが行われますが、承認日は変更されません。」",
+                "comment": "「指定された場合、この日付は元の承認日付に続きます。」",
+                "requirements": "Gives a sense of how \"current\" the content is.  Resources that have not been reviewed in a long time may have a risk of being less appropriate/relevant.",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Measure.lastReviewDate",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "date"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Definition.lastReviewDate"
+                    },
+                    {
+                        "identity": "objimpl",
+                        "map": "no-gen-base"
+                    }
+                ]
+            },
+            {
+                "id": "Measure.effectivePeriod",
+                "path": "Measure.effectivePeriod",
+                "short": "「その対策が使われる予定の時」",
+                "definition": "「措置内容が活用された、または活用される予定の期間。」",
+                "comment": "「対策の有効期間は、使用可能なコンテンツの時期を決定し、公表やレビュー日とは独立しています。たとえば、2016年に使用するための対策が2015年に発表されることがあります。」",
+                "requirements": "Allows establishing a transition before a resource comes into effect and also allows for a sunsetting  process when new versions of the measure are or are expected to be used instead.",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Measure.effectivePeriod",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "Period"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Definition.effectivePeriod"
+                    },
+                    {
+                        "identity": "objimpl",
+                        "map": "no-gen-base"
+                    }
+                ]
+            },
+            {
+                "id": "Measure.topic",
+                "path": "Measure.topic",
+                "short": "「教育、治療、評価などのような尺度のカテゴリー」",
+                "definition": "「測定内容に関係する記述的トピック。トピックは、フィルタリングや検索に役立つ測定タイプの高レベルの分類グルーピングを提供します。」",
+                "requirements": "Repositories must be able to determine how to categorize the measure so that it can be found by topical searches.",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Measure.topic",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "CodeableConcept"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "DefinitionTopic"
+                        }
+                    ],
+                    "strength": "example",
+                    "description": "定義の高レベルの分類。検索、ソート、フィルタリングに使用されます。",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/definition-topic"
+                }
+            },
+            {
+                "id": "Measure.author",
+                "path": "Measure.author",
+                "short": "「誰がその内容を作成したのですか？」(dare ga sono naiyou wo sakusei shita no desu ka?)",
+                "definition": "「コンテンツの作成と維持に主に関与する個人または組織」",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Measure.author",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "ContactDetail"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": ".participation[typeCode=AUT]"
+                    }
+                ]
+            },
+            {
+                "id": "Measure.editor",
+                "path": "Measure.editor",
+                "short": "誰がコンテンツを編集しましたか？ (dare ga kontentsu o henshu shimashita ka?)",
+                "definition": "「コンテンツの内部的一貫性を主に責任を負う個人または組織。」",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Measure.editor",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "ContactDetail"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false
+            },
+            {
+                "id": "Measure.reviewer",
+                "path": "Measure.reviewer",
+                "short": "「誰がコンテンツを確認しましたか？」(dare ga kontentsu wo kakunin shimashita ka?)",
+                "definition": "「コンテンツの一部のレビューを主に担当する個人または組織」",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Measure.reviewer",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "ContactDetail"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": ".participation[typeCode=VRF] {not clear whether VRF best corresponds to reviewer or endorser}"
+                    }
+                ]
+            },
+            {
+                "id": "Measure.endorser",
+                "path": "Measure.endorser",
+                "short": "「誰が内容を承認しましたか？」(Dare ga naiyou wo shounin shimashita ka?)",
+                "definition": "ある設定で使用するためにコンテンツを正式に承認する責任を持つ個人または組織。",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Measure.endorser",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "ContactDetail"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": ".participation[typeCode=VRF] {not clear whether VRF best corresponds to reviewer or endorser}"
+                    }
+                ]
+            },
+            {
+                "id": "Measure.relatedArtifact",
+                "path": "Measure.relatedArtifact",
+                "short": "追加の文書、引用など。",
+                "definition": "追加の文書、正当性、または参考文献など、関連するアーティファクト。",
+                "comment": "「各関連アーティファクトは、添付ファイルまたは他のリソースへの参照のいずれかであり、両方ではありません。」",
+                "requirements": "Measures must be able to provide enough information for consumers of the content (and/or interventions or results produced by the content) to be able to determine and understand the justification for and evidence in support of the content.",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Measure.relatedArtifact",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "RelatedArtifact"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false
+            },
+            {
+                "id": "Measure.library",
+                "path": "Measure.library",
+                "short": "「採用される論理」(Saiyō sareru ronri)",
+                "definition": "「測定に使用される形式論理を含む図書館の資源の参照」",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Measure.library",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "canonical",
+                        "targetProfile": [
+                            "http://hl7.org/fhir/StructureDefinition/Library"
+                        ]
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false
+            },
+            {
+                "id": "Measure.disclaimer",
+                "path": "Measure.disclaimer",
+                "short": "「この測定法またはその参照内容の使用に関する免責事項」",
+                "definition": "「措置で参照される知的財産（コードシステムなど）に関する使用の通知と免責事項」",
+                "requirements": "Some organizations require that notices and disclosures be included when publishing measures that reference their intellecutal property.",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Measure.disclaimer",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "markdown"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true
+            },
+            {
+                "id": "Measure.scoring",
+                "path": "Measure.scoring",
+                "short": "比率 | 比 | 連続変数 | コホート",
+                "definition": "「指標の計算方法を示し、比率、比率、連続変数、およびコホートを含みます。値セットは拡張可能で、追加の測定スコアタイプを表すことができます。」",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Measure.scoring",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "CodeableConcept"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "MeasureScoring"
+                        }
+                    ],
+                    "strength": "extensible",
+                    "description": "測定の点数方式。",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/measure-scoring"
+                }
+            },
+            {
+                "id": "Measure.compositeScoring",
+                "path": "Measure.compositeScoring",
+                "short": "機会 | 全部か無かったかのうち一つ | 直線的な | 重み付けされた",
+                "definition": "もしこれが複合測定である場合は、部分的な測定を組み合わせて複合得点を決定するために使用されるスコアリング方法です。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Measure.compositeScoring",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "CodeableConcept"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "CompositeMeasureScoring"
+                        }
+                    ],
+                    "strength": "extensible",
+                    "description": "「評価の複合スコアリング方法。」(Hyōka no fukugō sukoringu hōhō.)",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/composite-measure-scoring"
+                }
+            },
+            {
+                "id": "Measure.type",
+                "path": "Measure.type",
+                "short": "プロセス | アウトカム | 構造 | 患者報告アウトカム | コンポジット",
+                "definition": "「その測定値がプロセスの検査、時間に伴う成果、患者報告の成果、あるいは利用率のような構造測定のどれかを表すことを示します。」",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Measure.type",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "CodeableConcept"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "MeasureType"
+                        }
+                    ],
+                    "strength": "extensible",
+                    "description": "「措置のタイプ（2.16.840.1.113883.1.11.20368からのコードを含む）」",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/measure-type"
+                }
+            },
+            {
+                "id": "Measure.riskAdjustment",
+                "path": "Measure.riskAdjustment",
+                "short": "この指標に対してリスク調整がどのように適用されるか。",
+                "definition": "「測定結果に影響を与えるリスク調整要因の説明と、測定結果を計算および報告する際にどのように考慮されるかについて説明します。」",
+                "comment": "「患者アウトカムの有効な比較を可能にするため、治療の開始段階で存在する臨床的重症度と条件を調整する方法を説明する。混乱要因の影響を縮小、除去、または明確化する統計プロセスが適用されるかどうかを示す。」",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Measure.riskAdjustment",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true
+            },
+            {
+                "id": "Measure.rateAggregation",
+                "path": "Measure.rateAggregation",
+                "short": "「この指標に対してレートの集約はどのように行われますか？」",
+                "definition": "複数の集団ごとに論理に基づいて計算された情報を組み合わせて、要約された結果を説明します。 (Fukusū no shūdan goto ni ronri ni motodzuite keisan sareta jōhō wo kumiawasete, yōyaku sareta kekka wo setsumei shimasu.)",
+                "comment": "組織や臨床家の測定率は、エンティティの集計データに基づき、一定期間（月次、四半期、年次など）にわたるエンティティのパフォーマンスをまとめたものです。集計データは、特定の測定アルゴリズムの結果から派生し、適切な場合には特定のリスク調整モデルの適用を含みます。また、eMeasureで説明されている補足データ要素に基づいてデータをリスク調整する方法を説明するためにも使用されます（例えば、肺炎の病院の測定値は、ICUと非ICUでの抗生物質選択を比較し、それらを合算する）。これは、集計コホート測定定義（例えば、CDCの州レベルでの結核の集計報告）にも適用できます。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Measure.rateAggregation",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true
+            },
+            {
+                "id": "Measure.rationale",
+                "path": "Measure.rationale",
+                "short": "「対策が存在する理由の詳細な説明」",
+                "definition": "措置の必要性の簡潔な陳述を提供します。通常、重要性基準に関する声明：影響、介護のギャップ、および証拠を含みます。",
+                "requirements": "Measure developers need to be able to provide a detailed description of the purpose of the measure. This element provides detailed rationale, where the purpose element provides a summary of the rationale.",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Measure.rationale",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "markdown"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true
+            },
+            {
+                "id": "Measure.clinicalRecommendationStatement",
+                "path": "Measure.clinicalRecommendationStatement",
+                "short": "臨床指針の要約 (Rinshou shishin no youyaku)",
+                "definition": "測定を支持する関連臨床ガイドラインやその他の臨床推奨事項の要約を提供します。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Measure.clinicalRecommendationStatement",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "markdown"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true
+            },
+            {
+                "id": "Measure.improvementNotation",
+                "path": "Measure.improvementNotation",
+                "short": "増加する | 減少する",
+                "definition": "スコアの増減が好ましい結果であるかどうかの情報（例えば、高いスコアが高品質を示す、または低いスコアが高品質を示す、または品質が範囲内にある）について。",
+                "requirements": "Measure consumers and implementers must be able to determine how to interpret a measure score.",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Measure.improvementNotation",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "CodeableConcept"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "MeasureImprovementNotation"
+                        }
+                    ],
+                    "strength": "required",
+                    "description": "測定値またはスコアの変化によって測定される項目またはスコア付け問題において、改善を示す観察値。",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/measure-improvement-notation|4.0.1"
+                }
+            },
+            {
+                "id": "Measure.definition",
+                "path": "Measure.definition",
+                "short": "「対象となる用語は、測定文書に定義されます。」",
+                "definition": "「測定内で使用される個別の用語の説明を提供します。」",
+                "requirements": "Measure developers must be able to provide precise definitions of terms used within measure descriptions and guidance to help communicate the intent of the measure.",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Measure.definition",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "markdown"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true
+            },
+            {
+                "id": "Measure.guidance",
+                "path": "Measure.guidance",
+                "short": "実施者向けの追加ガイダンス",
+                "definition": "「この評価基準の臨床現場での使用方法や種類、目的に関する追加のガイダンス」",
+                "requirements": "Measure developers must be able to provide additional guidance for implementers to understand the intent with greater specificity than that provided in the population criteria of the measure. This element provides detailed guidance, where the usage element provides a summary of the guidance.",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Measure.guidance",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "markdown"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true
+            },
+            {
+                "id": "Measure.group",
+                "path": "Measure.group",
+                "short": "人口基準グループ (Jinkou Kijun Gurupu)",
+                "definition": "\"測定のための人口基準グループ\" (Sokutei no tame no jinkou kijun gurupu)",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Measure.group",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "BackboneElement"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false
+            },
+            {
+                "id": "Measure.group.id",
+                "path": "Measure.group.id",
+                "representation": [
+                    "xmlAttr"
+                ],
+                "short": "エレメント相互参照のためのユニークID",
+                "definition": "リソース内の要素の固有ID（内部参照用）。これは、スペースを含まない任意の文字列値である可能性があります。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Element.id",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "extension": [
+                            {
+                                "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fhir-type",
+                                "valueUrl": "string"
+                            }
+                        ],
+                        "code": "http://hl7.org/fhirpath/System.String"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "Measure.group.extension",
+                "path": "Measure.group.extension",
+                "short": "実装によって定義される追加コンテンツ",
+                "definition": "「要素の基本的な定義に含まれない追加情報を表すために使用されることがあります。拡張機能の使用を安全かつ管理しやすくするために、定義および使用に適用される厳格なガバナンスのセットがあります。実装者は拡張機能を定義できますが、拡張機能の定義の一部として満たす必要のある要件のセットがあります。」",
+                "comment": "どのようなアプリケーション、プロジェクト、または標準が拡張機能を使用しているかに関わらず、拡張機能の使用には決して汚名が付くわけではありません - それらを使用または定義する機関または管轄区域に関係なく。拡張機能の使用こそが、FHIR仕様を誰にとっても簡単なコアレベルで維持することを可能にします。",
+                "alias": [
+                    "extensions",
+                    "user content"
+                ],
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Element.extension",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "Extension"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    },
+                    {
+                        "key": "ext-1",
+                        "severity": "error",
+                        "human": "「拡張機能または値[x]のいずれかが必要です。両方ではありません。」",
+                        "expression": "extension.exists() != value.exists()",
+                        "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Extension"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "Measure.group.modifierExtension",
+                "path": "Measure.group.modifierExtension",
+                "short": "「認識されなくても無視できない拡張機能」(Ninshiki sarenakutemo mushi dekinai kakuchou kinou)",
+                "definition": "「基本的な要素の定義に含まれない追加情報を表すために使用されることがあり、それによって、その要素自体または取り込んでいる要素の子孫の理解を修正する。修飾子要素は通常、否定または修飾を提供します。拡張機能の安全で管理しやすい使用を実現するために、定義および使用に厳しいガバナンスセットが適用されています。どの実装者でも拡張機能を定義できますが、拡張機能の定義の一部として満たす必要がある要件があります。リソースを処理するアプリケーションは、修飾子拡張子をチェックする必要があります。\n\n修飾子拡張機能は、リソースまたはドメインリソースの任意の要素の意味を変更してはなりません（修飾子拡張自体の意味を変更することもできません）。」",
+                "comment": "どのようなアプリケーション、プロジェクト、または標準が拡張機能を使用しているかに関わらず、拡張機能の使用には決して汚名が付くわけではありません - それらを使用または定義する機関または管轄区域に関係なく。拡張機能の使用こそが、FHIR仕様を誰にとっても簡単なコアレベルで維持することを可能にします。",
+                "requirements": "Modifier extensions allow for extensions that *cannot* be safely ignored to be clearly distinguished from the vast majority of extensions which can be safely ignored.  This promotes interoperability by eliminating the need for implementers to prohibit the presence of extensions. For further information, see the [definition of modifier extensions](extensibility.html#modifierExtension).",
+                "alias": [
+                    "extensions",
+                    "user content",
+                    "modifiers"
+                ],
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "BackboneElement.modifierExtension",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "Extension"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    },
+                    {
+                        "key": "ext-1",
+                        "severity": "error",
+                        "human": "「拡張機能または値[x]のいずれかが必要です。両方ではありません。」",
+                        "expression": "extension.exists() != value.exists()",
+                        "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Extension"
+                    }
+                ],
+                "isModifier": true,
+                "isModifierReason": "Modifier extensions are expected to modify the meaning or interpretation of the element that contains them",
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "N/A"
+                    }
+                ]
+            },
+            {
+                "id": "Measure.group.code",
+                "path": "Measure.group.code",
+                "short": "グループの意味 (Gurupu no imi)",
+                "definition": "グループの意味を示す。それは、単に一意な識別子であるか、用語から引用することで広い文脈で意味を確立することができ、複数の測定値に分けられたグループを関連付けることができる。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Measure.group.code",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "CodeableConcept"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false
+            },
+            {
+                "id": "Measure.group.description",
+                "path": "Measure.group.description",
+                "short": "「概要説明」",
+                "definition": "この人口グループの人間に読みやすい説明。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Measure.group.description",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false
+            },
+            {
+                "id": "Measure.group.population",
+                "path": "Measure.group.population",
+                "short": "人口基準 (jinkou kijun)",
+                "definition": "「対策の人口基準」",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Measure.group.population",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "BackboneElement"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false
+            },
+            {
+                "id": "Measure.group.population.id",
+                "path": "Measure.group.population.id",
+                "representation": [
+                    "xmlAttr"
+                ],
+                "short": "エレメント相互参照のためのユニークID",
+                "definition": "リソース内の要素の固有ID（内部参照用）。これは、スペースを含まない任意の文字列値である可能性があります。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Element.id",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "extension": [
+                            {
+                                "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fhir-type",
+                                "valueUrl": "string"
+                            }
+                        ],
+                        "code": "http://hl7.org/fhirpath/System.String"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "Measure.group.population.extension",
+                "path": "Measure.group.population.extension",
+                "short": "実装によって定義される追加コンテンツ",
+                "definition": "「要素の基本的な定義に含まれない追加情報を表すために使用されることがあります。拡張機能の使用を安全かつ管理しやすくするために、定義および使用に適用される厳格なガバナンスのセットがあります。実装者は拡張機能を定義できますが、拡張機能の定義の一部として満たす必要のある要件のセットがあります。」",
+                "comment": "どのようなアプリケーション、プロジェクト、または標準が拡張機能を使用しているかに関わらず、拡張機能の使用には決して汚名が付くわけではありません - それらを使用または定義する機関または管轄区域に関係なく。拡張機能の使用こそが、FHIR仕様を誰にとっても簡単なコアレベルで維持することを可能にします。",
+                "alias": [
+                    "extensions",
+                    "user content"
+                ],
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Element.extension",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "Extension"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    },
+                    {
+                        "key": "ext-1",
+                        "severity": "error",
+                        "human": "「拡張機能または値[x]のいずれかが必要です。両方ではありません。」",
+                        "expression": "extension.exists() != value.exists()",
+                        "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Extension"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "Measure.group.population.modifierExtension",
+                "path": "Measure.group.population.modifierExtension",
+                "short": "「認識されなくても無視できない拡張機能」(Ninshiki sarenakutemo mushi dekinai kakuchou kinou)",
+                "definition": "「基本的な要素の定義に含まれない追加情報を表すために使用されることがあり、それによって、その要素自体または取り込んでいる要素の子孫の理解を修正する。修飾子要素は通常、否定または修飾を提供します。拡張機能の安全で管理しやすい使用を実現するために、定義および使用に厳しいガバナンスセットが適用されています。どの実装者でも拡張機能を定義できますが、拡張機能の定義の一部として満たす必要がある要件があります。リソースを処理するアプリケーションは、修飾子拡張子をチェックする必要があります。\n\n修飾子拡張機能は、リソースまたはドメインリソースの任意の要素の意味を変更してはなりません（修飾子拡張自体の意味を変更することもできません）。」",
+                "comment": "どのようなアプリケーション、プロジェクト、または標準が拡張機能を使用しているかに関わらず、拡張機能の使用には決して汚名が付くわけではありません - それらを使用または定義する機関または管轄区域に関係なく。拡張機能の使用こそが、FHIR仕様を誰にとっても簡単なコアレベルで維持することを可能にします。",
+                "requirements": "Modifier extensions allow for extensions that *cannot* be safely ignored to be clearly distinguished from the vast majority of extensions which can be safely ignored.  This promotes interoperability by eliminating the need for implementers to prohibit the presence of extensions. For further information, see the [definition of modifier extensions](extensibility.html#modifierExtension).",
+                "alias": [
+                    "extensions",
+                    "user content",
+                    "modifiers"
+                ],
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "BackboneElement.modifierExtension",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "Extension"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    },
+                    {
+                        "key": "ext-1",
+                        "severity": "error",
+                        "human": "「拡張機能または値[x]のいずれかが必要です。両方ではありません。」",
+                        "expression": "extension.exists() != value.exists()",
+                        "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Extension"
+                    }
+                ],
+                "isModifier": true,
+                "isModifierReason": "Modifier extensions are expected to modify the meaning or interpretation of the element that contains them",
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "N/A"
+                    }
+                ]
+            },
+            {
+                "id": "Measure.group.population.code",
+                "path": "Measure.group.population.code",
+                "short": "\"initial-population | numerator | numerator-exclusion | denominator | denominator-exclusion | denominator-exception | measure-population | measure-population-exclusion | measure-observation\"\n\n初期集団 | 分子 | 分子除外 | 分母 | 分母除外 | 分母例外 | 測定集団 | 測定集団除外 | 測定観察",
+                "definition": "人口の基準のタイプ。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Measure.group.population.code",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "CodeableConcept"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "MeasurePopulationType"
+                        }
+                    ],
+                    "strength": "extensible",
+                    "description": "「人口の種類」(Jinkou no shurui)",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/measure-population"
+                }
+            },
+            {
+                "id": "Measure.group.population.description",
+                "path": "Measure.group.population.description",
+                "short": "この人口基準の可読性の高い説明。",
+                "definition": "この人口基準の説明は人が読んでも理解できるようになっています。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Measure.group.population.description",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false
+            },
+            {
+                "id": "Measure.group.population.criteria",
+                "path": "Measure.group.population.criteria",
+                "short": "「この人口を定義する基準」(Kono jinkou wo teigi suru kijun)",
+                "definition": "通常、ライブラリ内の式の名前を指定する人口の基準を示す表現。",
+                "comment": "「連続変数または比率尺度においては、個々の観測値の値を人口内の各患者またはイベントに対して計算する関数の名前がこれに該当します。これらのタイプの尺度に対して、個々の観測値は各患者の評価リソースバンドルに含まれる観測リソースとして報告されます。詳細については、MeasureReportリソースまたは品質レポーティングトピックを参照してください。」",
+                "min": 1,
+                "max": "1",
+                "base": {
+                    "path": "Measure.group.population.criteria",
+                    "min": 1,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "Expression"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false
+            },
+            {
+                "id": "Measure.group.stratifier",
+                "path": "Measure.group.stratifier",
+                "short": "「測定のための層別基準」",
+                "definition": "「計測レポートの分類基準は、参照ライブラリ内で定義された有効なCQL式の名前か、有効なFHIRリソースパスのいずれかとして指定されます。」",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Measure.group.stratifier",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "BackboneElement"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false
+            },
+            {
+                "id": "Measure.group.stratifier.id",
+                "path": "Measure.group.stratifier.id",
+                "representation": [
+                    "xmlAttr"
+                ],
+                "short": "エレメント相互参照のためのユニークID",
+                "definition": "リソース内の要素の固有ID（内部参照用）。これは、スペースを含まない任意の文字列値である可能性があります。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Element.id",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "extension": [
+                            {
+                                "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fhir-type",
+                                "valueUrl": "string"
+                            }
+                        ],
+                        "code": "http://hl7.org/fhirpath/System.String"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "Measure.group.stratifier.extension",
+                "path": "Measure.group.stratifier.extension",
+                "short": "実装によって定義される追加コンテンツ",
+                "definition": "「要素の基本的な定義に含まれない追加情報を表すために使用されることがあります。拡張機能の使用を安全かつ管理しやすくするために、定義および使用に適用される厳格なガバナンスのセットがあります。実装者は拡張機能を定義できますが、拡張機能の定義の一部として満たす必要のある要件のセットがあります。」",
+                "comment": "どのようなアプリケーション、プロジェクト、または標準が拡張機能を使用しているかに関わらず、拡張機能の使用には決して汚名が付くわけではありません - それらを使用または定義する機関または管轄区域に関係なく。拡張機能の使用こそが、FHIR仕様を誰にとっても簡単なコアレベルで維持することを可能にします。",
+                "alias": [
+                    "extensions",
+                    "user content"
+                ],
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Element.extension",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "Extension"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    },
+                    {
+                        "key": "ext-1",
+                        "severity": "error",
+                        "human": "「拡張機能または値[x]のいずれかが必要です。両方ではありません。」",
+                        "expression": "extension.exists() != value.exists()",
+                        "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Extension"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "Measure.group.stratifier.modifierExtension",
+                "path": "Measure.group.stratifier.modifierExtension",
+                "short": "「認識されなくても無視できない拡張機能」(Ninshiki sarenakutemo mushi dekinai kakuchou kinou)",
+                "definition": "「基本的な要素の定義に含まれない追加情報を表すために使用されることがあり、それによって、その要素自体または取り込んでいる要素の子孫の理解を修正する。修飾子要素は通常、否定または修飾を提供します。拡張機能の安全で管理しやすい使用を実現するために、定義および使用に厳しいガバナンスセットが適用されています。どの実装者でも拡張機能を定義できますが、拡張機能の定義の一部として満たす必要がある要件があります。リソースを処理するアプリケーションは、修飾子拡張子をチェックする必要があります。\n\n修飾子拡張機能は、リソースまたはドメインリソースの任意の要素の意味を変更してはなりません（修飾子拡張自体の意味を変更することもできません）。」",
+                "comment": "どのようなアプリケーション、プロジェクト、または標準が拡張機能を使用しているかに関わらず、拡張機能の使用には決して汚名が付くわけではありません - それらを使用または定義する機関または管轄区域に関係なく。拡張機能の使用こそが、FHIR仕様を誰にとっても簡単なコアレベルで維持することを可能にします。",
+                "requirements": "Modifier extensions allow for extensions that *cannot* be safely ignored to be clearly distinguished from the vast majority of extensions which can be safely ignored.  This promotes interoperability by eliminating the need for implementers to prohibit the presence of extensions. For further information, see the [definition of modifier extensions](extensibility.html#modifierExtension).",
+                "alias": [
+                    "extensions",
+                    "user content",
+                    "modifiers"
+                ],
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "BackboneElement.modifierExtension",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "Extension"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    },
+                    {
+                        "key": "ext-1",
+                        "severity": "error",
+                        "human": "「拡張機能または値[x]のいずれかが必要です。両方ではありません。」",
+                        "expression": "extension.exists() != value.exists()",
+                        "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Extension"
+                    }
+                ],
+                "isModifier": true,
+                "isModifierReason": "Modifier extensions are expected to modify the meaning or interpretation of the element that contains them",
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "N/A"
+                    }
+                ]
+            },
+            {
+                "id": "Measure.group.stratifier.code",
+                "path": "Measure.group.stratifier.code",
+                "short": "ストラティファイヤーの意味 (Sutoratifaiyaa no imi)",
+                "definition": "ストラタイファイヤーの意味を示します。これは、一意の識別子として単純であるか、用語から引用してより広い文脈で意味を確立し、測定間でストラタイファイヤーを関連付けることができます。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Measure.group.stratifier.code",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "CodeableConcept"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false
+            },
+            {
+                "id": "Measure.group.stratifier.description",
+                "path": "Measure.group.stratifier.description",
+                "short": "この分類装置の人間が読める説明。",
+                "definition": "この分類基準の人間が理解できる説明。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Measure.group.stratifier.description",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false
+            },
+            {
+                "id": "Measure.group.stratifier.criteria",
+                "path": "Measure.group.stratifier.criteria",
+                "short": "「計測を階層化する方法」",
+                "definition": "「層別化するための基準を指定する表現。これは通常、参照ライブラリ内で定義された表現の名前ですが、層別化要素へのパスである場合もあります。」",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Measure.group.stratifier.criteria",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "Expression"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false
+            },
+            {
+                "id": "Measure.group.stratifier.component",
+                "path": "Measure.group.stratifier.component",
+                "short": "計測に必要な層別化基準のコンポーネント。",
+                "definition": "「測定報告書の分類基準のコンポーネントであり、参照ライブラリで定義された有効なCQL式の名前または有効なFHIRリソースパスのいずれかとして指定される。」",
+                "comment": "ストラタイザーは、単一の基準または構成基準のセットとして定義されます。",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Measure.group.stratifier.component",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "BackboneElement"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false
+            },
+            {
+                "id": "Measure.group.stratifier.component.id",
+                "path": "Measure.group.stratifier.component.id",
+                "representation": [
+                    "xmlAttr"
+                ],
+                "short": "エレメント相互参照のためのユニークID",
+                "definition": "リソース内の要素の固有ID（内部参照用）。これは、スペースを含まない任意の文字列値である可能性があります。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Element.id",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "extension": [
+                            {
+                                "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fhir-type",
+                                "valueUrl": "string"
+                            }
+                        ],
+                        "code": "http://hl7.org/fhirpath/System.String"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "Measure.group.stratifier.component.extension",
+                "path": "Measure.group.stratifier.component.extension",
+                "short": "実装によって定義される追加コンテンツ",
+                "definition": "「要素の基本的な定義に含まれない追加情報を表すために使用されることがあります。拡張機能の使用を安全かつ管理しやすくするために、定義および使用に適用される厳格なガバナンスのセットがあります。実装者は拡張機能を定義できますが、拡張機能の定義の一部として満たす必要のある要件のセットがあります。」",
+                "comment": "どのようなアプリケーション、プロジェクト、または標準が拡張機能を使用しているかに関わらず、拡張機能の使用には決して汚名が付くわけではありません - それらを使用または定義する機関または管轄区域に関係なく。拡張機能の使用こそが、FHIR仕様を誰にとっても簡単なコアレベルで維持することを可能にします。",
+                "alias": [
+                    "extensions",
+                    "user content"
+                ],
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Element.extension",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "Extension"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    },
+                    {
+                        "key": "ext-1",
+                        "severity": "error",
+                        "human": "「拡張機能または値[x]のいずれかが必要です。両方ではありません。」",
+                        "expression": "extension.exists() != value.exists()",
+                        "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Extension"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "Measure.group.stratifier.component.modifierExtension",
+                "path": "Measure.group.stratifier.component.modifierExtension",
+                "short": "「認識されなくても無視できない拡張機能」(Ninshiki sarenakutemo mushi dekinai kakuchou kinou)",
+                "definition": "「基本的な要素の定義に含まれない追加情報を表すために使用されることがあり、それによって、その要素自体または取り込んでいる要素の子孫の理解を修正する。修飾子要素は通常、否定または修飾を提供します。拡張機能の安全で管理しやすい使用を実現するために、定義および使用に厳しいガバナンスセットが適用されています。どの実装者でも拡張機能を定義できますが、拡張機能の定義の一部として満たす必要がある要件があります。リソースを処理するアプリケーションは、修飾子拡張子をチェックする必要があります。\n\n修飾子拡張機能は、リソースまたはドメインリソースの任意の要素の意味を変更してはなりません（修飾子拡張自体の意味を変更することもできません）。」",
+                "comment": "どのようなアプリケーション、プロジェクト、または標準が拡張機能を使用しているかに関わらず、拡張機能の使用には決して汚名が付くわけではありません - それらを使用または定義する機関または管轄区域に関係なく。拡張機能の使用こそが、FHIR仕様を誰にとっても簡単なコアレベルで維持することを可能にします。",
+                "requirements": "Modifier extensions allow for extensions that *cannot* be safely ignored to be clearly distinguished from the vast majority of extensions which can be safely ignored.  This promotes interoperability by eliminating the need for implementers to prohibit the presence of extensions. For further information, see the [definition of modifier extensions](extensibility.html#modifierExtension).",
+                "alias": [
+                    "extensions",
+                    "user content",
+                    "modifiers"
+                ],
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "BackboneElement.modifierExtension",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "Extension"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    },
+                    {
+                        "key": "ext-1",
+                        "severity": "error",
+                        "human": "「拡張機能または値[x]のいずれかが必要です。両方ではありません。」",
+                        "expression": "extension.exists() != value.exists()",
+                        "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Extension"
+                    }
+                ],
+                "isModifier": true,
+                "isModifierReason": "Modifier extensions are expected to modify the meaning or interpretation of the element that contains them",
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "N/A"
+                    }
+                ]
+            },
+            {
+                "id": "Measure.group.stratifier.component.code",
+                "path": "Measure.group.stratifier.component.code",
+                "short": "「ストラティファイヤー要素の意味」",
+                "definition": "「ストラタイファー成分の意味を示します。これは単純に一意の識別子であるか、用語から引用しながら広い文脈で意味を確立することによって、測定間でストラタイファーを相関させることができます。」",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Measure.group.stratifier.component.code",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "CodeableConcept"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false
+            },
+            {
+                "id": "Measure.group.stratifier.component.description",
+                "path": "Measure.group.stratifier.component.description",
+                "short": "このストラタイファー コンポーネントの人間が理解できる説明。",
+                "definition": "この層別化基準コンポーネントの人間が読める記述。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Measure.group.stratifier.component.description",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false
+            },
+            {
+                "id": "Measure.group.stratifier.component.criteria",
+                "path": "Measure.group.stratifier.component.criteria",
+                "short": "「計測値を分層化する方法の構成要素」",
+                "definition": "このストラットファイアのこのコンポーネントの基準を指定する表現。通常、参照ライブラリ内で定義された式の名前ですが、ストラットファイア要素へのパスである場合もあります。",
+                "min": 1,
+                "max": "1",
+                "base": {
+                    "path": "Measure.group.stratifier.component.criteria",
+                    "min": 1,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "Expression"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false
+            },
+            {
+                "id": "Measure.supplementalData",
+                "path": "Measure.supplementalData",
+                "short": "\"測定とともに報告すべき他のデータは何ですか？\" (Sokutei to tomo ni hōkoku subeki hoka no data wa nanidesu ka?)",
+                "definition": "「測定レポートの補足データの基準は、参照されたライブラリ内の有効なCQL式の名前または有効なFHIRリソースパスとして指定されます。」",
+                "comment": "「補足データは、各患者の観察として報告され、評価されたリソースバンドルに含まれることに留意してください。詳細については、MeasureReportリソースまたはQuality Reportingトピックを参照してください。」",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Measure.supplementalData",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "BackboneElement"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false
+            },
+            {
+                "id": "Measure.supplementalData.id",
+                "path": "Measure.supplementalData.id",
+                "representation": [
+                    "xmlAttr"
+                ],
+                "short": "エレメント相互参照のためのユニークID",
+                "definition": "リソース内の要素の固有ID（内部参照用）。これは、スペースを含まない任意の文字列値である可能性があります。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Element.id",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "extension": [
+                            {
+                                "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fhir-type",
+                                "valueUrl": "string"
+                            }
+                        ],
+                        "code": "http://hl7.org/fhirpath/System.String"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "Measure.supplementalData.extension",
+                "path": "Measure.supplementalData.extension",
+                "short": "実装によって定義される追加コンテンツ",
+                "definition": "「要素の基本的な定義に含まれない追加情報を表すために使用されることがあります。拡張機能の使用を安全かつ管理しやすくするために、定義および使用に適用される厳格なガバナンスのセットがあります。実装者は拡張機能を定義できますが、拡張機能の定義の一部として満たす必要のある要件のセットがあります。」",
+                "comment": "どのようなアプリケーション、プロジェクト、または標準が拡張機能を使用しているかに関わらず、拡張機能の使用には決して汚名が付くわけではありません - それらを使用または定義する機関または管轄区域に関係なく。拡張機能の使用こそが、FHIR仕様を誰にとっても簡単なコアレベルで維持することを可能にします。",
+                "alias": [
+                    "extensions",
+                    "user content"
+                ],
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Element.extension",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "Extension"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    },
+                    {
+                        "key": "ext-1",
+                        "severity": "error",
+                        "human": "「拡張機能または値[x]のいずれかが必要です。両方ではありません。」",
+                        "expression": "extension.exists() != value.exists()",
+                        "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Extension"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "Measure.supplementalData.modifierExtension",
+                "path": "Measure.supplementalData.modifierExtension",
+                "short": "「認識されなくても無視できない拡張機能」(Ninshiki sarenakutemo mushi dekinai kakuchou kinou)",
+                "definition": "「基本的な要素の定義に含まれない追加情報を表すために使用されることがあり、それによって、その要素自体または取り込んでいる要素の子孫の理解を修正する。修飾子要素は通常、否定または修飾を提供します。拡張機能の安全で管理しやすい使用を実現するために、定義および使用に厳しいガバナンスセットが適用されています。どの実装者でも拡張機能を定義できますが、拡張機能の定義の一部として満たす必要がある要件があります。リソースを処理するアプリケーションは、修飾子拡張子をチェックする必要があります。\n\n修飾子拡張機能は、リソースまたはドメインリソースの任意の要素の意味を変更してはなりません（修飾子拡張自体の意味を変更することもできません）。」",
+                "comment": "どのようなアプリケーション、プロジェクト、または標準が拡張機能を使用しているかに関わらず、拡張機能の使用には決して汚名が付くわけではありません - それらを使用または定義する機関または管轄区域に関係なく。拡張機能の使用こそが、FHIR仕様を誰にとっても簡単なコアレベルで維持することを可能にします。",
+                "requirements": "Modifier extensions allow for extensions that *cannot* be safely ignored to be clearly distinguished from the vast majority of extensions which can be safely ignored.  This promotes interoperability by eliminating the need for implementers to prohibit the presence of extensions. For further information, see the [definition of modifier extensions](extensibility.html#modifierExtension).",
+                "alias": [
+                    "extensions",
+                    "user content",
+                    "modifiers"
+                ],
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "BackboneElement.modifierExtension",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "Extension"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    },
+                    {
+                        "key": "ext-1",
+                        "severity": "error",
+                        "human": "「拡張機能または値[x]のいずれかが必要です。両方ではありません。」",
+                        "expression": "extension.exists() != value.exists()",
+                        "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Extension"
+                    }
+                ],
+                "isModifier": true,
+                "isModifierReason": "Modifier extensions are expected to modify the meaning or interpretation of the element that contains them",
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "N/A"
+                    }
+                ]
+            },
+            {
+                "id": "Measure.supplementalData.code",
+                "path": "Measure.supplementalData.code",
+                "short": "「補足データの意味」(Hosoku dēta no imi)",
+                "definition": "補足資料の意味を示します。これはユニークな識別子だけでなく、用語から引き出された広範な文脈で意味を確立することができ、補足データを測定全体で相関させることができます。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Measure.supplementalData.code",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "CodeableConcept"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false
+            },
+            {
+                "id": "Measure.supplementalData.usage",
+                "path": "Measure.supplementalData.usage",
+                "short": "補足データ | リスク調整ファクター (hosoku data | risuku chousei fakutaa)",
+                "definition": "補足的データ要素の意図された使用を示す指標です。 補足的なデータは、尺度情報を補完するために要求される追加情報であることを示します。 リスク調整因子は、尺度計算にリスクモデルを適用する際にリスク調整因子を計算するために使用される追加情報であることを示します。",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Measure.supplementalData.usage",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "CodeableConcept"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "MeasureDataUsage"
+                        }
+                    ],
+                    "strength": "extensible",
+                    "description": "「測定における補助データ要素の想定使用方法。」(Sokutei ni okeru hojo data yoso no sotei shiyoho.)",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/measure-data-usage"
+                }
+            },
+            {
+                "id": "Measure.supplementalData.description",
+                "path": "Measure.supplementalData.description",
+                "short": "この付属データの人間が読みやすい説明。",
+                "definition": "この補足データの人間の読みやすい説明。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Measure.supplementalData.description",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false
+            },
+            {
+                "id": "Measure.supplementalData.criteria",
+                "path": "Measure.supplementalData.criteria",
+                "short": "報告すべき追加データを記述する表現",
+                "definition": "付加データの基準。通常、参照ライブラリ内で定義された有効な式の名前ですが、特定のデータ要素へのパスであることもあります。基準は、この要素に対して返されるデータを定義します。",
+                "min": 1,
+                "max": "1",
+                "base": {
+                    "path": "Measure.supplementalData.criteria",
+                    "min": 1,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "Expression"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false
+            }
+        ]
+    },
+    "differential": {
+        "element": [
+            {
+                "id": "Measure",
+                "path": "Measure",
+                "short": "品質評価の定義",
+                "definition": "「メジャー・リソース」は、品質評価基準の定義を提供します。」",
+                "min": 0,
+                "max": "*",
+                "constraint": [
+                    {
+                        "key": "mea-1",
+                        "severity": "error",
+                        "human": "Stratifierは、単一の基準または複数の基準要素のセットである必要があります。",
+                        "expression": "group.stratifier.all((code | description | criteria).exists() xor component.exists())",
+                        "xpath": "exists(f:group/stratifier/code) or exists(f:group/stratifier/component)"
+                    },
+                    {
+                        "key": "mea-0",
+                        "severity": "warning",
+                        "human": "「名前は、コード生成などの機械処理アプリケーションによるモジュールの識別子として使用できる必要があります」",
+                        "expression": "name.matches('[A-Z]([A-Za-z0-9_]){0,254}')",
+                        "xpath": "not(exists(f:name/@value)) or matches(f:name/@value, '[A-Z]([A-Za-z0-9_]){0,254}')"
+                    }
+                ],
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Definition"
+                    }
+                ]
+            },
+            {
+                "id": "Measure.url",
+                "path": "Measure.url",
+                "short": "この測定値の正準識別子は、URIとして表されます（グローバルで一意）。",
+                "definition": "この指標が仕様書、モデル、設計、インスタンスで参照される際に使用される、絶対URI；カノニカル識別子とも呼ばれます。このURIは、グローバルに一意であることがSHOULDされ、この指標の権威あるインスタンスが（またはされる）リテラルアドレスであることがSHOULDされます。このURIはカノニカル参照のターゲットになることができます。この指標は、異なるサーバに格納されてもSHALL同じままである必要があります。",
+                "comment": "\"urn:uuid:またはurn:oid:であることができますが、実際のhttp:アドレスが優先されます。異なるバージョンを有する複数のインスタンスが同じURLを共有することができます。\n\nリソース（同じURL、新しいバージョン）の新しいバージョンを作成するか新しいアーティファクトを定義するかどうかの決定は、著者に任されます。この決定を行うための考慮事項は、[Technical and Business Versions](resource.html#versions)に記載されています。\n\n一部の場合、リソースは指定されたURLで見つからなくなることがありますが、URL自体は変更できません。実装は[meta.source]要素を使用して、リソースの現在のマスターソースがどこにあるかを示すことができます。\"",
+                "requirements": "Allows the measure to be referenced by a single globally unique identifier.",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "uri"
+                    }
+                ],
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Definition.url"
+                    },
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.identifier"
+                    }
+                ]
+            },
+            {
+                "id": "Measure.identifier",
+                "path": "Measure.identifier",
+                "short": "\"測定の追加識別子\" (Sokutei no tsuika shikibetsu-shi)",
+                "definition": "「仕様書、モデル、設計、またはインスタンスで参照される場合に、この測定値を識別するために使用される正式な識別子」",
+                "comment": "「通常、これはHL7 V3 II（インスタンス識別子）データ型に入力できる識別子に使用され、論理URIを使用できないFHIR外のこの測定値を識別できます。」",
+                "requirements": "Allows externally provided and/or usable business identifiers to be easily associated with the module.",
+                "min": 0,
+                "max": "*",
+                "type": [
+                    {
+                        "code": "Identifier"
+                    }
+                ],
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Definition.identifier"
+                    },
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.identifier"
+                    },
+                    {
+                        "identity": "objimpl",
+                        "map": "no-gen-base"
+                    }
+                ]
+            },
+            {
+                "id": "Measure.version",
+                "path": "Measure.version",
+                "short": "「措置のビジネス版」(Soshi no bijinesu-ban)",
+                "definition": "この規定、モデル、設計、あるいはインスタンスで参照された場合に、この測定値のバージョンを識別するために使用される識別子。　この値は測定値の著者によって管理された任意の値であり、グローバルに一意であることは期待されていません。例えば、管理されたバージョンが存在しない場合、タイムスタンプ（例：yyyymmdd）である場合があります。　また、バージョンを辞書順に並べることが期待されているわけではありません。　Decision Support Serviceの仕様に準拠したバージョンを提供するには、Major.Minor.Revision（例：1.0.0）の形式を使用してください。　knowledge assetsをバージョン管理する方法については、Decision Support Serviceの仕様書を参照してください。非実験的なアクティブなアーティファクトにはバージョンが必要です。",
+                "comment": "同じ識別子を持つ異なる計測インスタンスが存在する可能性がありますが、バージョンが異なります。特定のビジネスバージョンの計測を参照するために、バージョンを[url]の後に追加してurlを参照に使用することができます。フォーマットは[url]|[version]です。",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ],
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Definition.version"
+                    },
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.version"
+                    }
+                ]
+            },
+            {
+                "id": "Measure.name",
+                "path": "Measure.name",
+                "short": "この対策の名前（コンピューターフレンドリー）",
+                "definition": "「測定を識別するための自然言語の名前。この名前は、コード生成などの機械処理アプリケーションによるモジュールの識別子として使用できる必要があります。」",
+                "comment": "その名前は、グローバルにユニークである必要はありません。機械処理に適していることを保証するために、単純で英数字の名前であるべきです。",
+                "requirements": "Support human navigation and code generation.",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ],
+                "condition": [
+                    "inv-0"
+                ],
+                "isSummary": true
+            },
+            {
+                "id": "Measure.title",
+                "path": "Measure.title",
+                "short": "この対策の名前（人間に優しい）",
+                "definition": "「手頃で簡潔、わかりやすいタイトル」",
+                "comment": "この名前は機械処理に適している必要はなく、句読点、空白などが含まれていても構いません。",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ],
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Definition.title"
+                    }
+                ]
+            },
+            {
+                "id": "Measure.subtitle",
+                "path": "Measure.subtitle",
+                "short": "\"措置の下位タイトル\" (Sōchi no kai tai taitoru)",
+                "definition": "内容に関する追加情報を提供する備考又は代替タイトル。",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ]
+            },
+            {
+                "id": "Measure.status",
+                "path": "Measure.status",
+                "short": "下書き | アクティブ | 引退した | 不明",
+                "definition": "この対策のステータス。コンテンツのライフサイクルを追跡することができます。",
+                "comment": "適切に使用すべきかどうかをフィルタリングすることができます。",
+                "min": 1,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "code"
+                    }
+                ],
+                "isModifier": true,
+                "isModifierReason": "This is labeled as \"Is Modifier\" because applications should not use a retired {{title}} without due consideration",
+                "isSummary": true,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "PublicationStatus"
+                        },
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-isCommonBinding",
+                            "valueBoolean": true
+                        }
+                    ],
+                    "strength": "required",
+                    "description": "「アーティファクトのライフサイクルステータス」",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/publication-status|4.0.1"
+                },
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Definition.status"
+                    },
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.status"
+                    }
+                ]
+            },
+            {
+                "id": "Measure.experimental",
+                "path": "Measure.experimental",
+                "short": "テスト目的であり、実際の使用を意図していません。",
+                "definition": "このメジャーがテスト目的（または教育/評価/マーケティング）のために作成され、本来使用することを意図されていないことを示すブール値。",
+                "comment": "適切に使用すべきかどうかをフィルタリングすることができます。",
+                "requirements": "Enables experimental content to be developed following the same lifecycle that would be used for a production-level measure.",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "boolean"
+                    }
+                ],
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Definition.experimental"
+                    },
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.class"
+                    }
+                ]
+            },
+            {
+                "id": "Measure.subject[x]",
+                "path": "Measure.subject[x]",
+                "short": "例：患者、医療従事者、関係者、組織、場所、デバイス",
+                "definition": "対象とする測定対象。この要素が提供されていない場合は、患者対象が想定されますが、測定対象は何でもできます。",
+                "comment": "「測定対象は、基準の定義を解釈する上で重要です。測定のロジックは、特定の対象に関する評価に基づいて評価されます。これは、コンパートメントの概念に大体一致し、手前味噌の関係に基づいて利用可能なコンテンツを制限するものです。CQLでは、これが文脈宣言に対応します。」",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "CodeableConcept"
+                    },
+                    {
+                        "code": "Reference",
+                        "targetProfile": [
+                            "http://hl7.org/fhir/StructureDefinition/Group"
+                        ]
+                    }
+                ],
+                "meaningWhenMissing": "Patient",
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "SubjectType"
+                        }
+                    ],
+                    "strength": "extensible",
+                    "description": "「対象となる種類の測定（例：患者、医療従事者、組織、場所など）」",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/subject-type"
+                }
+            },
+            {
+                "id": "Measure.date",
+                "path": "Measure.date",
+                "short": "最終更新日 (Saishuu koushinbi)",
+                "definition": "「施策が公表された日付（必要に応じて時刻も含む）。ビジネスバージョンが変更された場合、ステータスコードが変更された場合には必ず日付を変更する必要があります。また、施策の実質的な内容が変更された場合にも、日付を変更することが望ましいです。」",
+                "comment": "「リソースの最終変更日」と同じではないことに注意してください。なぜなら、リソースは測定の2次表現である場合があるためです。追加の特定の日付は拡張機能として追加されることがあり、また、過去のバージョンに関連する起源を参照することで見つけることができます。」",
+                "alias": [
+                    "Revision Date"
+                ],
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "dateTime"
+                    }
+                ],
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Definition.date"
+                    },
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.recorded"
+                    }
+                ]
+            },
+            {
+                "id": "Measure.publisher",
+                "path": "Measure.publisher",
+                "short": "出版社の名前（組織または個人）",
+                "definition": "「措置を発行した組織または個人の名前。」",
+                "comment": "通常は組織であるが、個人である場合もあります。尺度の発行者（または管理者）は、尺度の維持および更新に主に責任を持つ組織または個人です。これは、元のコンテンツを開発および最初に著者にした個人または組織と必ずしも同じではありません。発行者は、尺度に関する質問や問題の主な連絡先です。この項目は、文脈から情報が利用可能である場合を除き、記入する必要があります。",
+                "requirements": "Helps establish the \"authority/credibility\" of the measure.  May also allow for contact.",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ],
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Definition.publisher"
+                    },
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.witness"
+                    }
+                ]
+            },
+            {
+                "id": "Measure.contact",
+                "path": "Measure.contact",
+                "short": "出版社の連絡先詳細",
+                "definition": "ユーザーが出版者を見つけてコミュニケーションを取るのを支援するための連絡先詳細。",
+                "comment": "「ウェブサイト、メールアドレス、電話番号などかもしれません。」",
+                "min": 0,
+                "max": "*",
+                "type": [
+                    {
+                        "code": "ContactDetail"
+                    }
+                ],
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Definition.contact"
+                    }
+                ]
+            },
+            {
+                "id": "Measure.description",
+                "path": "Measure.description",
+                "short": "「対策の自然言語説明」(Taisaku no shizen gongo setsumei)",
+                "definition": "「消費者の視点からの自然言語による措置の無料テキスト説明」",
+                "comment": "この記述は、測定がなぜ作られたのか、誤用に関するコメント、臨床使用や解釈のための指示、文献参照、紙の世界からの例など、細部をキャプチャするために使用できます。これは、リソースの「テキスト」フィールドで伝えられる測定方法の表現ではありません。この項目は、情報がコンテキストから利用可能でない場合（例：測定の言語が作成場所での主流の言語であると仮定される場合など）、入力する必要があります。",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "markdown"
+                    }
+                ],
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Definition.description"
+                    }
+                ]
+            },
+            {
+                "id": "Measure.useContext",
+                "path": "Measure.useContext",
+                "short": "「コンテンツが支援することを意図した文脈」",
+                "definition": "この内容は、リストされた文脈をサポートすることを意図し、その重点を置いて開発されました。これらの文脈は一般的なカテゴリ（性別、年齢、...）である場合もあり、特定のプログラム（保険計画、調査など）への言及である場合もあります。これらは、適切な測定インスタンスの索引付けと検索に役立てることができます。",
+                "comment": "複数のuseContextが指定された場合、すべてまたはどれも適用されるという期待はありません。",
+                "requirements": "Assist in searching for appropriate content.",
+                "min": 0,
+                "max": "*",
+                "type": [
+                    {
+                        "code": "UsageContext"
+                    }
+                ],
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Definition.useContext"
+                    }
+                ]
+            },
+            {
+                "id": "Measure.jurisdiction",
+                "path": "Measure.jurisdiction",
+                "short": "「適用対象地域（該当する場合）」",
+                "definition": "「対象の措置が使用される法的または地勢的な地域」",
+                "comment": "「元々設計または意図された管轄地域以外でも、その対策が使用可能である可能性があります。」",
+                "min": 0,
+                "max": "*",
+                "type": [
+                    {
+                        "code": "CodeableConcept"
+                    }
+                ],
+                "isSummary": true,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "Jurisdiction"
+                        },
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-isCommonBinding",
+                            "valueBoolean": true
+                        }
+                    ],
+                    "strength": "extensible",
+                    "description": "このアーティファクトの使用の対象となる国や地域。",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/jurisdiction"
+                },
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Definition.jurisdiction"
+                    }
+                ]
+            },
+            {
+                "id": "Measure.purpose",
+                "path": "Measure.purpose",
+                "short": "なぜこの対策が定義されたのか。 (Naze kono taisaku ga teigi sareta no ka?)",
+                "definition": "なぜこの措置が必要であるか、なぜこのように設計されたかの説明。 (Naze kono sochi ga hitsuyōdearu ka, naze kono yō ni sekkei sareta ka no setsumei.)",
+                "comment": "この要素は、測定の使用方法を説明するものではありません。代わりに、リソースがなぜ必要であるか、またはなぜそのように定義されたかのトレーサビリティを提供します。これは、この測定構造を駆動するソース資料や仕様に指し示すために使用される可能性があります。",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "markdown"
+                    }
+                ],
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Definition.purpose"
+                    },
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.why[x]"
+                    },
+                    {
+                        "identity": "objimpl",
+                        "map": "no-gen-base"
+                    }
+                ]
+            },
+            {
+                "id": "Measure.usage",
+                "path": "Measure.usage",
+                "short": "「測定法の臨床利用を説明する」",
+                "definition": "「測定法がどのように使われているか、臨床的な観点から詳細に説明されたもの。」",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ]
+            },
+            {
+                "id": "Measure.copyright",
+                "path": "Measure.copyright",
+                "short": "「使用および/または公開制限」",
+                "definition": "「対策と/またはその内容に関する著作権声明。著作権声明は、一般的に対策の使用や出版に関する法的制限です。」",
+                "requirements": "Consumers must be able to determine any legal restrictions on the use of the measure and/or its content.",
+                "alias": [
+                    "License",
+                    "Restrictions"
+                ],
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "markdown"
+                    }
+                ],
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Definition.copyright"
+                    },
+                    {
+                        "identity": "objimpl",
+                        "map": "no-gen-base"
+                    }
+                ]
+            },
+            {
+                "id": "Measure.approvalDate",
+                "path": "Measure.approvalDate",
+                "short": "「その対策が出版社に承認された時」",
+                "definition": "リソースのコンテンツが出版者によって承認された日付。承認は、コンテンツが公式に使用許可された際に一度行われます。",
+                "comment": "「'日付' 要素は、細かい修正や編集のために承認日よりも新しい場合があります。」",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "date"
+                    }
+                ],
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Definition.approvalDate"
+                    },
+                    {
+                        "identity": "objimpl",
+                        "map": "no-gen-base"
+                    }
+                ]
+            },
+            {
+                "id": "Measure.lastReviewDate",
+                "path": "Measure.lastReviewDate",
+                "short": "「最後にその措置が見直された際に」",
+                "definition": "「リソース内容が最後にレビューされた日付。承認後に定期的にレビューが行われますが、承認日は変更されません。」",
+                "comment": "「指定された場合、この日付は元の承認日付に続きます。」",
+                "requirements": "Gives a sense of how \"current\" the content is.  Resources that have not been reviewed in a long time may have a risk of being less appropriate/relevant.",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "date"
+                    }
+                ],
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Definition.lastReviewDate"
+                    },
+                    {
+                        "identity": "objimpl",
+                        "map": "no-gen-base"
+                    }
+                ]
+            },
+            {
+                "id": "Measure.effectivePeriod",
+                "path": "Measure.effectivePeriod",
+                "short": "「その対策が使われる予定の時」",
+                "definition": "「措置内容が活用された、または活用される予定の期間。」",
+                "comment": "「対策の有効期間は、使用可能なコンテンツの時期を決定し、公表やレビュー日とは独立しています。たとえば、2016年に使用するための対策が2015年に発表されることがあります。」",
+                "requirements": "Allows establishing a transition before a resource comes into effect and also allows for a sunsetting  process when new versions of the measure are or are expected to be used instead.",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "Period"
+                    }
+                ],
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Definition.effectivePeriod"
+                    },
+                    {
+                        "identity": "objimpl",
+                        "map": "no-gen-base"
+                    }
+                ]
+            },
+            {
+                "id": "Measure.topic",
+                "path": "Measure.topic",
+                "short": "「教育、治療、評価などのような尺度のカテゴリー」",
+                "definition": "「測定内容に関係する記述的トピック。トピックは、フィルタリングや検索に役立つ測定タイプの高レベルの分類グルーピングを提供します。」",
+                "requirements": "Repositories must be able to determine how to categorize the measure so that it can be found by topical searches.",
+                "min": 0,
+                "max": "*",
+                "type": [
+                    {
+                        "code": "CodeableConcept"
+                    }
+                ],
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "DefinitionTopic"
+                        }
+                    ],
+                    "strength": "example",
+                    "description": "定義の高レベルの分類。検索、ソート、フィルタリングに使用されます。",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/definition-topic"
+                }
+            },
+            {
+                "id": "Measure.author",
+                "path": "Measure.author",
+                "short": "「誰がその内容を作成したのですか？」(dare ga sono naiyou wo sakusei shita no desu ka?)",
+                "definition": "「コンテンツの作成と維持に主に関与する個人または組織」",
+                "min": 0,
+                "max": "*",
+                "type": [
+                    {
+                        "code": "ContactDetail"
+                    }
+                ],
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": ".participation[typeCode=AUT]"
+                    }
+                ]
+            },
+            {
+                "id": "Measure.editor",
+                "path": "Measure.editor",
+                "short": "誰がコンテンツを編集しましたか？ (dare ga kontentsu o henshu shimashita ka?)",
+                "definition": "「コンテンツの内部的一貫性を主に責任を負う個人または組織。」",
+                "min": 0,
+                "max": "*",
+                "type": [
+                    {
+                        "code": "ContactDetail"
+                    }
+                ]
+            },
+            {
+                "id": "Measure.reviewer",
+                "path": "Measure.reviewer",
+                "short": "「誰がコンテンツを確認しましたか？」(dare ga kontentsu wo kakunin shimashita ka?)",
+                "definition": "「コンテンツの一部のレビューを主に担当する個人または組織」",
+                "min": 0,
+                "max": "*",
+                "type": [
+                    {
+                        "code": "ContactDetail"
+                    }
+                ],
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": ".participation[typeCode=VRF] {not clear whether VRF best corresponds to reviewer or endorser}"
+                    }
+                ]
+            },
+            {
+                "id": "Measure.endorser",
+                "path": "Measure.endorser",
+                "short": "「誰が内容を承認しましたか？」(Dare ga naiyou wo shounin shimashita ka?)",
+                "definition": "ある設定で使用するためにコンテンツを正式に承認する責任を持つ個人または組織。",
+                "min": 0,
+                "max": "*",
+                "type": [
+                    {
+                        "code": "ContactDetail"
+                    }
+                ],
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": ".participation[typeCode=VRF] {not clear whether VRF best corresponds to reviewer or endorser}"
+                    }
+                ]
+            },
+            {
+                "id": "Measure.relatedArtifact",
+                "path": "Measure.relatedArtifact",
+                "short": "追加の文書、引用など。",
+                "definition": "追加の文書、正当性、または参考文献など、関連するアーティファクト。",
+                "comment": "「各関連アーティファクトは、添付ファイルまたは他のリソースへの参照のいずれかであり、両方ではありません。」",
+                "requirements": "Measures must be able to provide enough information for consumers of the content (and/or interventions or results produced by the content) to be able to determine and understand the justification for and evidence in support of the content.",
+                "min": 0,
+                "max": "*",
+                "type": [
+                    {
+                        "code": "RelatedArtifact"
+                    }
+                ]
+            },
+            {
+                "id": "Measure.library",
+                "path": "Measure.library",
+                "short": "「採用される論理」(Saiyō sareru ronri)",
+                "definition": "「測定に使用される形式論理を含む図書館の資源の参照」",
+                "min": 0,
+                "max": "*",
+                "type": [
+                    {
+                        "code": "canonical",
+                        "targetProfile": [
+                            "http://hl7.org/fhir/StructureDefinition/Library"
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": "Measure.disclaimer",
+                "path": "Measure.disclaimer",
+                "short": "「この測定法またはその参照内容の使用に関する免責事項」",
+                "definition": "「措置で参照される知的財産（コードシステムなど）に関する使用の通知と免責事項」",
+                "requirements": "Some organizations require that notices and disclosures be included when publishing measures that reference their intellecutal property.",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "markdown"
+                    }
+                ],
+                "isSummary": true
+            },
+            {
+                "id": "Measure.scoring",
+                "path": "Measure.scoring",
+                "short": "比率 | 比 | 連続変数 | コホート",
+                "definition": "「指標の計算方法を示し、比率、比率、連続変数、およびコホートを含みます。値セットは拡張可能で、追加の測定スコアタイプを表すことができます。」",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "CodeableConcept"
+                    }
+                ],
+                "isSummary": true,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "MeasureScoring"
+                        }
+                    ],
+                    "strength": "extensible",
+                    "description": "測定の点数方式。",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/measure-scoring"
+                }
+            },
+            {
+                "id": "Measure.compositeScoring",
+                "path": "Measure.compositeScoring",
+                "short": "機会 | 全部か無かったかのうち一つ | 直線的な | 重み付けされた",
+                "definition": "もしこれが複合測定である場合は、部分的な測定を組み合わせて複合得点を決定するために使用されるスコアリング方法です。",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "CodeableConcept"
+                    }
+                ],
+                "isSummary": true,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "CompositeMeasureScoring"
+                        }
+                    ],
+                    "strength": "extensible",
+                    "description": "「評価の複合スコアリング方法。」(Hyōka no fukugō sukoringu hōhō.)",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/composite-measure-scoring"
+                }
+            },
+            {
+                "id": "Measure.type",
+                "path": "Measure.type",
+                "short": "プロセス | アウトカム | 構造 | 患者報告アウトカム | コンポジット",
+                "definition": "「その測定値がプロセスの検査、時間に伴う成果、患者報告の成果、あるいは利用率のような構造測定のどれかを表すことを示します。」",
+                "min": 0,
+                "max": "*",
+                "type": [
+                    {
+                        "code": "CodeableConcept"
+                    }
+                ],
+                "isSummary": true,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "MeasureType"
+                        }
+                    ],
+                    "strength": "extensible",
+                    "description": "「措置のタイプ（2.16.840.1.113883.1.11.20368からのコードを含む）」",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/measure-type"
+                }
+            },
+            {
+                "id": "Measure.riskAdjustment",
+                "path": "Measure.riskAdjustment",
+                "short": "この指標に対してリスク調整がどのように適用されるか。",
+                "definition": "「測定結果に影響を与えるリスク調整要因の説明と、測定結果を計算および報告する際にどのように考慮されるかについて説明します。」",
+                "comment": "「患者アウトカムの有効な比較を可能にするため、治療の開始段階で存在する臨床的重症度と条件を調整する方法を説明する。混乱要因の影響を縮小、除去、または明確化する統計プロセスが適用されるかどうかを示す。」",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ],
+                "isSummary": true
+            },
+            {
+                "id": "Measure.rateAggregation",
+                "path": "Measure.rateAggregation",
+                "short": "「この指標に対してレートの集約はどのように行われますか？」",
+                "definition": "複数の集団ごとに論理に基づいて計算された情報を組み合わせて、要約された結果を説明します。 (Fukusū no shūdan goto ni ronri ni motodzuite keisan sareta jōhō wo kumiawasete, yōyaku sareta kekka wo setsumei shimasu.)",
+                "comment": "組織や臨床家の測定率は、エンティティの集計データに基づき、一定期間（月次、四半期、年次など）にわたるエンティティのパフォーマンスをまとめたものです。集計データは、特定の測定アルゴリズムの結果から派生し、適切な場合には特定のリスク調整モデルの適用を含みます。また、eMeasureで説明されている補足データ要素に基づいてデータをリスク調整する方法を説明するためにも使用されます（例えば、肺炎の病院の測定値は、ICUと非ICUでの抗生物質選択を比較し、それらを合算する）。これは、集計コホート測定定義（例えば、CDCの州レベルでの結核の集計報告）にも適用できます。",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ],
+                "isSummary": true
+            },
+            {
+                "id": "Measure.rationale",
+                "path": "Measure.rationale",
+                "short": "「対策が存在する理由の詳細な説明」",
+                "definition": "措置の必要性の簡潔な陳述を提供します。通常、重要性基準に関する声明：影響、介護のギャップ、および証拠を含みます。",
+                "requirements": "Measure developers need to be able to provide a detailed description of the purpose of the measure. This element provides detailed rationale, where the purpose element provides a summary of the rationale.",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "markdown"
+                    }
+                ],
+                "isSummary": true
+            },
+            {
+                "id": "Measure.clinicalRecommendationStatement",
+                "path": "Measure.clinicalRecommendationStatement",
+                "short": "臨床指針の要約 (Rinshou shishin no youyaku)",
+                "definition": "測定を支持する関連臨床ガイドラインやその他の臨床推奨事項の要約を提供します。",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "markdown"
+                    }
+                ],
+                "isSummary": true
+            },
+            {
+                "id": "Measure.improvementNotation",
+                "path": "Measure.improvementNotation",
+                "short": "増加する | 減少する",
+                "definition": "スコアの増減が好ましい結果であるかどうかの情報（例えば、高いスコアが高品質を示す、または低いスコアが高品質を示す、または品質が範囲内にある）について。",
+                "requirements": "Measure consumers and implementers must be able to determine how to interpret a measure score.",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "CodeableConcept"
+                    }
+                ],
+                "isSummary": true,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "MeasureImprovementNotation"
+                        }
+                    ],
+                    "strength": "required",
+                    "description": "測定値またはスコアの変化によって測定される項目またはスコア付け問題において、改善を示す観察値。",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/measure-improvement-notation|4.0.1"
+                }
+            },
+            {
+                "id": "Measure.definition",
+                "path": "Measure.definition",
+                "short": "「対象となる用語は、測定文書に定義されます。」",
+                "definition": "「測定内で使用される個別の用語の説明を提供します。」",
+                "requirements": "Measure developers must be able to provide precise definitions of terms used within measure descriptions and guidance to help communicate the intent of the measure.",
+                "min": 0,
+                "max": "*",
+                "type": [
+                    {
+                        "code": "markdown"
+                    }
+                ],
+                "isSummary": true
+            },
+            {
+                "id": "Measure.guidance",
+                "path": "Measure.guidance",
+                "short": "実施者向けの追加ガイダンス",
+                "definition": "「この評価基準の臨床現場での使用方法や種類、目的に関する追加のガイダンス」",
+                "requirements": "Measure developers must be able to provide additional guidance for implementers to understand the intent with greater specificity than that provided in the population criteria of the measure. This element provides detailed guidance, where the usage element provides a summary of the guidance.",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "markdown"
+                    }
+                ],
+                "isSummary": true
+            },
+            {
+                "id": "Measure.group",
+                "path": "Measure.group",
+                "short": "人口基準グループ (Jinkou Kijun Gurupu)",
+                "definition": "\"測定のための人口基準グループ\" (Sokutei no tame no jinkou kijun gurupu)",
+                "min": 0,
+                "max": "*",
+                "type": [
+                    {
+                        "code": "BackboneElement"
+                    }
+                ]
+            },
+            {
+                "id": "Measure.group.code",
+                "path": "Measure.group.code",
+                "short": "グループの意味 (Gurupu no imi)",
+                "definition": "グループの意味を示す。それは、単に一意な識別子であるか、用語から引用することで広い文脈で意味を確立することができ、複数の測定値に分けられたグループを関連付けることができる。",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "CodeableConcept"
+                    }
+                ]
+            },
+            {
+                "id": "Measure.group.description",
+                "path": "Measure.group.description",
+                "short": "「概要説明」",
+                "definition": "この人口グループの人間に読みやすい説明。",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ]
+            },
+            {
+                "id": "Measure.group.population",
+                "path": "Measure.group.population",
+                "short": "人口基準 (jinkou kijun)",
+                "definition": "「対策の人口基準」",
+                "min": 0,
+                "max": "*",
+                "type": [
+                    {
+                        "code": "BackboneElement"
+                    }
+                ]
+            },
+            {
+                "id": "Measure.group.population.code",
+                "path": "Measure.group.population.code",
+                "short": "\"initial-population | numerator | numerator-exclusion | denominator | denominator-exclusion | denominator-exception | measure-population | measure-population-exclusion | measure-observation\"\n\n初期集団 | 分子 | 分子除外 | 分母 | 分母除外 | 分母例外 | 測定集団 | 測定集団除外 | 測定観察",
+                "definition": "人口の基準のタイプ。",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "CodeableConcept"
+                    }
+                ],
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "MeasurePopulationType"
+                        }
+                    ],
+                    "strength": "extensible",
+                    "description": "「人口の種類」(Jinkou no shurui)",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/measure-population"
+                }
+            },
+            {
+                "id": "Measure.group.population.description",
+                "path": "Measure.group.population.description",
+                "short": "この人口基準の可読性の高い説明。",
+                "definition": "この人口基準の説明は人が読んでも理解できるようになっています。",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ]
+            },
+            {
+                "id": "Measure.group.population.criteria",
+                "path": "Measure.group.population.criteria",
+                "short": "「この人口を定義する基準」(Kono jinkou wo teigi suru kijun)",
+                "definition": "通常、ライブラリ内の式の名前を指定する人口の基準を示す表現。",
+                "comment": "「連続変数または比率尺度においては、個々の観測値の値を人口内の各患者またはイベントに対して計算する関数の名前がこれに該当します。これらのタイプの尺度に対して、個々の観測値は各患者の評価リソースバンドルに含まれる観測リソースとして報告されます。詳細については、MeasureReportリソースまたは品質レポーティングトピックを参照してください。」",
+                "min": 1,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "Expression"
+                    }
+                ]
+            },
+            {
+                "id": "Measure.group.stratifier",
+                "path": "Measure.group.stratifier",
+                "short": "「測定のための層別基準」",
+                "definition": "「計測レポートの分類基準は、参照ライブラリ内で定義された有効なCQL式の名前か、有効なFHIRリソースパスのいずれかとして指定されます。」",
+                "min": 0,
+                "max": "*",
+                "type": [
+                    {
+                        "code": "BackboneElement"
+                    }
+                ]
+            },
+            {
+                "id": "Measure.group.stratifier.code",
+                "path": "Measure.group.stratifier.code",
+                "short": "ストラティファイヤーの意味 (Sutoratifaiyaa no imi)",
+                "definition": "ストラタイファイヤーの意味を示します。これは、一意の識別子として単純であるか、用語から引用してより広い文脈で意味を確立し、測定間でストラタイファイヤーを関連付けることができます。",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "CodeableConcept"
+                    }
+                ]
+            },
+            {
+                "id": "Measure.group.stratifier.description",
+                "path": "Measure.group.stratifier.description",
+                "short": "この分類装置の人間が読める説明。",
+                "definition": "この分類基準の人間が理解できる説明。",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ]
+            },
+            {
+                "id": "Measure.group.stratifier.criteria",
+                "path": "Measure.group.stratifier.criteria",
+                "short": "「計測を階層化する方法」",
+                "definition": "「層別化するための基準を指定する表現。これは通常、参照ライブラリ内で定義された表現の名前ですが、層別化要素へのパスである場合もあります。」",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "Expression"
+                    }
+                ]
+            },
+            {
+                "id": "Measure.group.stratifier.component",
+                "path": "Measure.group.stratifier.component",
+                "short": "計測に必要な層別化基準のコンポーネント。",
+                "definition": "「測定報告書の分類基準のコンポーネントであり、参照ライブラリで定義された有効なCQL式の名前または有効なFHIRリソースパスのいずれかとして指定される。」",
+                "comment": "ストラタイザーは、単一の基準または構成基準のセットとして定義されます。",
+                "min": 0,
+                "max": "*",
+                "type": [
+                    {
+                        "code": "BackboneElement"
+                    }
+                ]
+            },
+            {
+                "id": "Measure.group.stratifier.component.code",
+                "path": "Measure.group.stratifier.component.code",
+                "short": "「ストラティファイヤー要素の意味」",
+                "definition": "「ストラタイファー成分の意味を示します。これは単純に一意の識別子であるか、用語から引用しながら広い文脈で意味を確立することによって、測定間でストラタイファーを相関させることができます。」",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "CodeableConcept"
+                    }
+                ]
+            },
+            {
+                "id": "Measure.group.stratifier.component.description",
+                "path": "Measure.group.stratifier.component.description",
+                "short": "このストラタイファー コンポーネントの人間が理解できる説明。",
+                "definition": "この層別化基準コンポーネントの人間が読める記述。",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ]
+            },
+            {
+                "id": "Measure.group.stratifier.component.criteria",
+                "path": "Measure.group.stratifier.component.criteria",
+                "short": "「計測値を分層化する方法の構成要素」",
+                "definition": "このストラットファイアのこのコンポーネントの基準を指定する表現。通常、参照ライブラリ内で定義された式の名前ですが、ストラットファイア要素へのパスである場合もあります。",
+                "min": 1,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "Expression"
+                    }
+                ]
+            },
+            {
+                "id": "Measure.supplementalData",
+                "path": "Measure.supplementalData",
+                "short": "\"測定とともに報告すべき他のデータは何ですか？\" (Sokutei to tomo ni hōkoku subeki hoka no data wa nanidesu ka?)",
+                "definition": "「測定レポートの補足データの基準は、参照されたライブラリ内の有効なCQL式の名前または有効なFHIRリソースパスとして指定されます。」",
+                "comment": "「補足データは、各患者の観察として報告され、評価されたリソースバンドルに含まれることに留意してください。詳細については、MeasureReportリソースまたはQuality Reportingトピックを参照してください。」",
+                "min": 0,
+                "max": "*",
+                "type": [
+                    {
+                        "code": "BackboneElement"
+                    }
+                ]
+            },
+            {
+                "id": "Measure.supplementalData.code",
+                "path": "Measure.supplementalData.code",
+                "short": "「補足データの意味」(Hosoku dēta no imi)",
+                "definition": "補足資料の意味を示します。これはユニークな識別子だけでなく、用語から引き出された広範な文脈で意味を確立することができ、補足データを測定全体で相関させることができます。",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "CodeableConcept"
+                    }
+                ]
+            },
+            {
+                "id": "Measure.supplementalData.usage",
+                "path": "Measure.supplementalData.usage",
+                "short": "補足データ | リスク調整ファクター (hosoku data | risuku chousei fakutaa)",
+                "definition": "補足的データ要素の意図された使用を示す指標です。 補足的なデータは、尺度情報を補完するために要求される追加情報であることを示します。 リスク調整因子は、尺度計算にリスクモデルを適用する際にリスク調整因子を計算するために使用される追加情報であることを示します。",
+                "min": 0,
+                "max": "*",
+                "type": [
+                    {
+                        "code": "CodeableConcept"
+                    }
+                ],
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "MeasureDataUsage"
+                        }
+                    ],
+                    "strength": "extensible",
+                    "description": "「測定における補助データ要素の想定使用方法。」(Sokutei ni okeru hojo data yoso no sotei shiyoho.)",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/measure-data-usage"
+                }
+            },
+            {
+                "id": "Measure.supplementalData.description",
+                "path": "Measure.supplementalData.description",
+                "short": "この付属データの人間が読みやすい説明。",
+                "definition": "この補足データの人間の読みやすい説明。",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ]
+            },
+            {
+                "id": "Measure.supplementalData.criteria",
+                "path": "Measure.supplementalData.criteria",
+                "short": "報告すべき追加データを記述する表現",
+                "definition": "付加データの基準。通常、参照ライブラリ内で定義された有効な式の名前ですが、特定のデータ要素へのパスであることもあります。基準は、この要素に対して返されるデータを定義します。",
+                "min": 1,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "Expression"
+                    }
+                ]
+            }
+        ]
+    }
+}

@@ -1,0 +1,470 @@
+{
+    "resourceType": "StructureDefinition",
+    "id": "Count",
+    "meta": {
+        "lastUpdated": "2019-11-01T09:29:23.356+11:00"
+    },
+    "extension": [
+        {
+            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
+            "valueCode": "trial-use"
+        }
+    ],
+    "url": "http://hl7.org/fhir/StructureDefinition/Count",
+    "version": "4.0.1",
+    "name": "Count",
+    "status": "draft",
+    "date": "2019-11-01T09:29:23+11:00",
+    "publisher": "HL7 FHIR Standard",
+    "contact": [
+        {
+            "telecom": [
+                {
+                    "system": "url",
+                    "value": "http://hl7.org/fhir"
+                }
+            ]
+        }
+    ],
+    "description": "カウントタイプのベース構造定義：測定された量（または潜在的に測定可能な量）。測定された量には正確に定量化されていない量も含まれます。これには任意の単位や浮動通貨を含む量も含まれます。",
+    "purpose": "Need to able to capture all sorts of measured values, even if the measured value are not precisely quantified. Values include exact measures such as 3.51g, customary units such as 3 tablets, and currencies such as $100.32USD.",
+    "fhirVersion": "4.0.1",
+    "mapping": [
+        {
+            "identity": "v2",
+            "uri": "http://hl7.org/v2",
+            "name": "HL7 v2 Mapping"
+        },
+        {
+            "identity": "rim",
+            "uri": "http://hl7.org/v3",
+            "name": "RIM Mapping"
+        }
+    ],
+    "kind": "complex-type",
+    "abstract": false,
+    "type": "Count",
+    "baseDefinition": "http://hl7.org/fhir/StructureDefinition/Quantity",
+    "derivation": "specialization",
+    "snapshot": {
+        "element": [
+            {
+                "id": "Count",
+                "extension": [
+                    {
+                        "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
+                        "valueCode": "trial-use"
+                    }
+                ],
+                "path": "Count",
+                "short": "「測定可能な量」(Sokutei kanōna ryō)",
+                "definition": "測定可能な量（または測定される可能性がある量）。測定された量には厳密に量定義されていない量も含まれます。例えば、任意の単位や浮動通貨を含む量などがあります。",
+                "comment": "使用する文脈によって、この量が何種類の単位で測定できるか、そしてそれゆえにどの種類の量であるかがしばしば定義されます。使用する文脈はまた、比較子の値を制限する場合もあります。",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Count",
+                    "min": 0,
+                    "max": "*"
+                },
+                "constraint": [
+                    {
+                        "key": "cnt-3",
+                        "severity": "error",
+                        "human": "値がある場合、値が「1」のコードが存在することになります。 システムが存在する場合、UCUMでなければなりません。 存在する場合、その値は整数でなければなりません。",
+                        "expression": "(code.exists() or value.empty()) and (system.empty() or system = %ucum) and (code.empty() or code = '1') and (value.empty() or value.hasValue().not() or value.toString().contains('.').not())",
+                        "xpath": "(f:code or not(f:value)) and (not(exists(f:system)) or (f:system/@value='http://unitsofmeasure.org' and f:code/@value='1')) and not(contains(f:value/@value, '.'))"
+                    },
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    },
+                    {
+                        "key": "qty-3",
+                        "severity": "error",
+                        "human": "もしユニット用のコードがある場合は、システムも必ず存在しなければなりません。",
+                        "expression": "code.empty() or system.exists()",
+                        "xpath": "not(exists(f:code)) or exists(f:system)",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Quantity"
+                    }
+                ],
+                "isModifier": false,
+                "mapping": [
+                    {
+                        "identity": "v2",
+                        "map": "SN (see also Range) or CQ"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": "PQ, IVL<PQ>, MO, CO, depending on the values"
+                    }
+                ]
+            },
+            {
+                "id": "Count.id",
+                "path": "Count.id",
+                "representation": [
+                    "xmlAttr"
+                ],
+                "short": "エレメント相互参照のためのユニークID",
+                "definition": "リソース内の要素の固有ID（内部参照用）。これは、スペースを含まない任意の文字列値である可能性があります。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Element.id",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "extension": [
+                            {
+                                "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fhir-type",
+                                "valueUrl": "string"
+                            }
+                        ],
+                        "code": "http://hl7.org/fhirpath/System.String"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "Count.extension",
+                "path": "Count.extension",
+                "slicing": {
+                    "discriminator": [
+                        {
+                            "type": "value",
+                            "path": "url"
+                        }
+                    ],
+                    "description": "拡張子は常にURLで切り片にされます。",
+                    "rules": "open"
+                },
+                "short": "実装によって定義される追加コンテンツ",
+                "definition": "「要素の基本的な定義に含まれない追加情報を表すために使用されることがあります。拡張機能の使用を安全かつ管理しやすくするために、定義および使用に適用される厳格なガバナンスのセットがあります。実装者は拡張機能を定義できますが、拡張機能の定義の一部として満たす必要のある要件のセットがあります。」",
+                "comment": "どのようなアプリケーション、プロジェクト、または標準が拡張機能を使用しているかに関わらず、拡張機能の使用には決して汚名が付くわけではありません - それらを使用または定義する機関または管轄区域に関係なく。拡張機能の使用こそが、FHIR仕様を誰にとっても簡単なコアレベルで維持することを可能にします。",
+                "alias": [
+                    "extensions",
+                    "user content"
+                ],
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Element.extension",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "Extension"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    },
+                    {
+                        "key": "ext-1",
+                        "severity": "error",
+                        "human": "「拡張機能または値[x]のいずれかが必要です。両方ではありません。」",
+                        "expression": "extension.exists() != value.exists()",
+                        "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Extension"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "Count.value",
+                "path": "Count.value",
+                "short": "「数値（暗黙の精度を伴う）」",
+                "definition": "測定された量の価値。その価値には、価値の表現における暗黙の精度が含まれます。",
+                "comment": "値の暗黙の精度は常に尊重されるべきです。金銭的価値には精度を扱う独自のルールがあります（標準的な会計テキストを参照）。",
+                "requirements": "Precision is handled implicitly in almost all cases of measurement.",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Quantity.value",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "decimal"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "v2",
+                        "map": "SN.2  / CQ - N/A"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": "PQ.value, CO.value, MO.value, IVL.high or IVL.low depending on the value"
+                    }
+                ]
+            },
+            {
+                "id": "Count.comparator",
+                "path": "Count.comparator",
+                "short": "\"< | <= | >= | > - 値の理解の仕方\"",
+                "definition": "「値がどのように理解され、表現されるべきか - 測定上の問題により、実際の値が表示された値より大きいか小さいか。例えば、比較器が「<」であれば、真の値は表示された値より小さい。」",
+                "requirements": "Need a framework for handling measures where the value is <5ug/L or >400mg/L due to the limitations of measuring methodology.",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Quantity.comparator",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "code"
+                    }
+                ],
+                "meaningWhenMissing": "If there is no comparator, then there is no modification of the value",
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": true,
+                "isModifierReason": "This is labeled as \"Is Modifier\" because the comparator modifies the interpretation of the value significantly. If there is no comparator, then there is no modification of the value",
+                "isSummary": true,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "QuantityComparator"
+                        }
+                    ],
+                    "strength": "required",
+                    "description": "「数量がどのように理解され、表現されるべきか。」",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/quantity-comparator|4.0.1"
+                },
+                "mapping": [
+                    {
+                        "identity": "v2",
+                        "map": "SN.1  / CQ.1"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": "IVL properties"
+                    }
+                ]
+            },
+            {
+                "id": "Count.unit",
+                "extension": [
+                    {
+                        "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-translatable",
+                        "valueBoolean": true
+                    }
+                ],
+                "path": "Count.unit",
+                "short": "単位表現 (Tangi hyōgen)",
+                "definition": "単位の人間が読める形式。 (Tanni no ningen ga yomeru keishiki.)",
+                "requirements": "There are many representations for units of measure and in many contexts, particular representations are fixed and required. I.e. mcg for micrograms.",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Quantity.unit",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "v2",
+                        "map": "(see OBX.6 etc.) / CQ.2"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": "PQ.unit"
+                    }
+                ]
+            },
+            {
+                "id": "Count.system",
+                "path": "Count.system",
+                "short": "「符号化された単位形式を定義するシステム」",
+                "definition": "「単位の符号化された形式を提供するシステムの特定」",
+                "requirements": "Need to know the system that defines the coded form of the unit.",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Quantity.system",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "uri"
+                    }
+                ],
+                "condition": [
+                    "qty-3"
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "v2",
+                        "map": "(see OBX.6 etc.) / CQ.2"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": "CO.codeSystem, PQ.translation.codeSystem"
+                    }
+                ]
+            },
+            {
+                "id": "Count.code",
+                "path": "Count.code",
+                "short": "\"ユニットのコード化された形式\" (Yunitto no kōdo-ka sareta keitai)",
+                "definition": "「ユニット表現システムにおける、ユニットのコンピュータ処理可能な形式。」",
+                "comment": "優先されるシステムはUCUMですが、SNOMED CT（通常の単位の場合）またはISO 4217（通貨の場合）も使用できます。使用する文脈によっては、特定のシステムからのコードが必要になる場合もあります。",
+                "requirements": "Need a computable form of the unit that is fixed across all forms. UCUM provides this for quantities, but SNOMED CT provides many units of interest.",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Quantity.code",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "code"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "v2",
+                        "map": "(see OBX.6 etc.) / CQ.2"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": "PQ.code, MO.currency, PQ.translation.code"
+                    }
+                ]
+            }
+        ]
+    },
+    "differential": {
+        "element": [
+            {
+                "id": "Count",
+                "extension": [
+                    {
+                        "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
+                        "valueCode": "trial-use"
+                    }
+                ],
+                "path": "Count",
+                "short": "「測定可能な量」(Sokutei kanōna ryō)",
+                "definition": "測定可能な量（または測定される可能性がある量）。測定された量には厳密に量定義されていない量も含まれます。例えば、任意の単位や浮動通貨を含む量などがあります。",
+                "comment": "使用する文脈によって、この量が何種類の単位で測定できるか、そしてそれゆえにどの種類の量であるかがしばしば定義されます。使用する文脈はまた、比較子の値を制限する場合もあります。",
+                "min": 0,
+                "max": "*",
+                "constraint": [
+                    {
+                        "key": "cnt-3",
+                        "severity": "error",
+                        "human": "値がある場合、値が「1」のコードが存在することになります。 システムが存在する場合、UCUMでなければなりません。 存在する場合、その値は整数でなければなりません。",
+                        "expression": "(code.exists() or value.empty()) and (system.empty() or system = %ucum) and (code.empty() or code = '1') and (value.empty() or value.hasValue().not() or value.toString().contains('.').not())",
+                        "xpath": "(f:code or not(f:value)) and (not(exists(f:system)) or (f:system/@value='http://unitsofmeasure.org' and f:code/@value='1')) and not(contains(f:value/@value, '.'))"
+                    }
+                ],
+                "mapping": [
+                    {
+                        "identity": "v2",
+                        "map": "SN (see also Range) or CQ"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": "PQ, IVL<PQ>, MO, CO, depending on the values"
+                    }
+                ]
+            }
+        ]
+    }
+}

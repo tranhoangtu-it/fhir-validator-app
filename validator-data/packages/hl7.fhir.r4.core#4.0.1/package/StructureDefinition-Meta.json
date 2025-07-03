@@ -1,0 +1,554 @@
+{
+    "resourceType": "StructureDefinition",
+    "id": "Meta",
+    "meta": {
+        "lastUpdated": "2019-11-01T09:29:23.356+11:00"
+    },
+    "extension": [
+        {
+            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
+            "valueCode": "normative"
+        },
+        {
+            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version",
+            "valueCode": "4.0.0"
+        }
+    ],
+    "url": "http://hl7.org/fhir/StructureDefinition/Meta",
+    "version": "4.0.1",
+    "name": "Meta",
+    "status": "active",
+    "date": "2019-11-01T09:29:23+11:00",
+    "publisher": "HL7 FHIR Standard",
+    "contact": [
+        {
+            "telecom": [
+                {
+                    "system": "url",
+                    "value": "http://hl7.org/fhir"
+                }
+            ]
+        }
+    ],
+    "description": "「メタタイプのベース構造定義：リソースに関するメタデータ。これは、インフラストラクチャによって維持されるリソース内のコンテンツです。コンテンツの変更は、リソースのバージョン変更と常に関連付けられているわけではありません。」",
+    "fhirVersion": "4.0.1",
+    "mapping": [
+        {
+            "identity": "rim",
+            "uri": "http://hl7.org/v3",
+            "name": "RIM Mapping"
+        }
+    ],
+    "kind": "complex-type",
+    "abstract": false,
+    "type": "Meta",
+    "baseDefinition": "http://hl7.org/fhir/StructureDefinition/Element",
+    "derivation": "specialization",
+    "snapshot": {
+        "element": [
+            {
+                "id": "Meta",
+                "extension": [
+                    {
+                        "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
+                        "valueCode": "normative"
+                    },
+                    {
+                        "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version",
+                        "valueCode": "4.0.0"
+                    }
+                ],
+                "path": "Meta",
+                "short": "リソースに関するメタデータ",
+                "definition": "リソースに関するメタデータです。これは、インフラストラクチャによって維持されるリソース内のコンテンツです。コンテンツの変更がリソースのバージョンの変更と常に関連するわけではありません。",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Meta",
+                    "min": 0,
+                    "max": "*"
+                },
+                "condition": [
+                    "ele-1"
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "n/a"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": "N/A"
+                    }
+                ]
+            },
+            {
+                "id": "Meta.id",
+                "path": "Meta.id",
+                "representation": [
+                    "xmlAttr"
+                ],
+                "short": "エレメント相互参照のためのユニークID",
+                "definition": "リソース内の要素の固有ID（内部参照用）。これは、スペースを含まない任意の文字列値である可能性があります。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Element.id",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "extension": [
+                            {
+                                "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fhir-type",
+                                "valueUrl": "string"
+                            }
+                        ],
+                        "code": "http://hl7.org/fhirpath/System.String"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "Meta.extension",
+                "path": "Meta.extension",
+                "slicing": {
+                    "discriminator": [
+                        {
+                            "type": "value",
+                            "path": "url"
+                        }
+                    ],
+                    "description": "拡張子は常にURLで切り片にされます。",
+                    "rules": "open"
+                },
+                "short": "実装によって定義される追加コンテンツ",
+                "definition": "「要素の基本的な定義に含まれない追加情報を表すために使用されることがあります。拡張機能の使用を安全かつ管理しやすくするために、定義および使用に適用される厳格なガバナンスのセットがあります。実装者は拡張機能を定義できますが、拡張機能の定義の一部として満たす必要のある要件のセットがあります。」",
+                "comment": "どのようなアプリケーション、プロジェクト、または標準が拡張機能を使用しているかに関わらず、拡張機能の使用には決して汚名が付くわけではありません - それらを使用または定義する機関または管轄区域に関係なく。拡張機能の使用こそが、FHIR仕様を誰にとっても簡単なコアレベルで維持することを可能にします。",
+                "alias": [
+                    "extensions",
+                    "user content"
+                ],
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Element.extension",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "Extension"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    },
+                    {
+                        "key": "ext-1",
+                        "severity": "error",
+                        "human": "「拡張機能または値[x]のいずれかが必要です。両方ではありません。」",
+                        "expression": "extension.exists() != value.exists()",
+                        "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Extension"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "Meta.versionId",
+                "path": "Meta.versionId",
+                "short": "バージョン固有の識別子 (Baajon koyū no shikibetsu-shi)",
+                "definition": "URLのバージョン部分に表示されるバージョン固有の識別子。この値は、リソースが作成、更新、または削除された場合に変更されます。",
+                "comment": "サーバーがこの値を割り当て、クライアントが指定した値を無視する。ただし、サーバーが更新/削除時にバージョンの整合性を強制する場合を除く。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Meta.versionId",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "id"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true
+            },
+            {
+                "id": "Meta.lastUpdated",
+                "path": "Meta.lastUpdated",
+                "short": "「リソースのバージョンが最後に変更されたとき」",
+                "definition": "リソースが最後に変更されたとき - 例えば、バージョンが変更されたとき。",
+                "comment": "この値はリソースが初めて作成される場合を除いて常に設定されています。サーバー/リソースマネージャーがこの値を設定します。クライアントが提供する値は関係ありません。これはHTTP Last-Modifiedに相当し、[read](http.html#read)のインタラクションで同じ値を持つべきです。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Meta.lastUpdated",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "instant"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true
+            },
+            {
+                "id": "Meta.source",
+                "path": "Meta.source",
+                "short": "「リソースがどこから来たかを特定する」(Risōsu ga doko kara kita ka o tokutei suru)",
+                "definition": "リソースのソースシステムを識別するURI。これにより、リソース内の情報のソースをトラックまたは区別するために使用できる最小限の[プロビナンス]（provenance.html＃）情報が提供されます。ソースは、別のFHIRサーバー、ドキュメント、メッセージ、データベースなどを識別できます。",
+                "comment": "「プロバナンスのリソースにおいて、これはProvenance.entity.what[x]に対応します。ソースの正確な使用方法（および含意されるProvenance.entity.role）は実装者の判断に委ねられます。指定されたソースは1つだけです。追加のプロバナンスの詳細が必要な場合は、完全なプロバナンスリソースを使用するべきです。\n\nこの要素は、正規のURLでホストされていないリソースの現在のマスターソースがどこにあるかを示すために使用できます。」",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Meta.source",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "uri"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true
+            },
+            {
+                "id": "Meta.profile",
+                "path": "Meta.profile",
+                "short": "このリソースが適合を主張するプロファイル",
+                "definition": "このリソースが準拠すると主張する [StructureDefinition](structuredefinition.html#) リソースに関するプロファイルのリストです。URL は [StructureDefinition.url](structuredefinition-definitions.html#StructureDefinition.url) への参照です。",
+                "comment": "これらの主張が時間の経過に伴って検証または更新される方法と、それらを決定するサーバーや他の基盤に任されます。プロファイルURLのリストは1セットです。",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Meta.profile",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "canonical",
+                        "targetProfile": [
+                            "http://hl7.org/fhir/StructureDefinition/StructureDefinition"
+                        ]
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true
+            },
+            {
+                "id": "Meta.security",
+                "path": "Meta.security",
+                "short": "このリソースに適用されたセキュリティラベル",
+                "definition": "このリソースにはセキュリティラベルが適用されています。これらのタグにより、特定のリソースが全体的なセキュリティポリシーやインフラストラクチャに関連付けられます。",
+                "comment": "セキュリティラベルは変更せずにリソースのバージョンを更新可能です。セキュリティラベルのリストはセットであり、一意性はシステム/コードに基づき、バージョンと表示は無視されます。",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Meta.security",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "Coding"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "SecurityLabels"
+                        },
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-isCommonBinding",
+                            "valueBoolean": true
+                        }
+                    ],
+                    "strength": "extensible",
+                    "description": "医療プライバシーおよびセキュリティ分類システムからのセキュリティラベル。",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/security-labels"
+                }
+            },
+            {
+                "id": "Meta.tag",
+                "path": "Meta.tag",
+                "short": "このリソースに適用されたタグ",
+                "definition": "このリソースに適用されるタグです。タグは、リソースをプロセスやワークフローに識別し、関連付けるために使用することが意図されており、アプリケーションはリソースの意味を解釈する際にタグを考慮する必要はありません。",
+                "comment": "リソースの表示バージョンを変更することなく、タグを更新できます。タグのリストは集合です。ユニーク性はシステム/コードに基づき、バージョンと表示は無視されます。",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Meta.tag",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "Coding"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "Tags"
+                        }
+                    ],
+                    "strength": "example",
+                    "description": "「様々なタグを表すコードで、一般的にはワークフローに関連しています。",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/common-tags"
+                }
+            }
+        ]
+    },
+    "differential": {
+        "element": [
+            {
+                "id": "Meta",
+                "extension": [
+                    {
+                        "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
+                        "valueCode": "normative"
+                    },
+                    {
+                        "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version",
+                        "valueCode": "4.0.0"
+                    }
+                ],
+                "path": "Meta",
+                "short": "リソースに関するメタデータ",
+                "definition": "リソースに関するメタデータです。これは、インフラストラクチャによって維持されるリソース内のコンテンツです。コンテンツの変更がリソースのバージョンの変更と常に関連するわけではありません。",
+                "min": 0,
+                "max": "*",
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "N/A"
+                    }
+                ]
+            },
+            {
+                "id": "Meta.versionId",
+                "path": "Meta.versionId",
+                "short": "バージョン固有の識別子 (Baajon koyū no shikibetsu-shi)",
+                "definition": "URLのバージョン部分に表示されるバージョン固有の識別子。この値は、リソースが作成、更新、または削除された場合に変更されます。",
+                "comment": "サーバーがこの値を割り当て、クライアントが指定した値を無視する。ただし、サーバーが更新/削除時にバージョンの整合性を強制する場合を除く。",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "id"
+                    }
+                ],
+                "isSummary": true
+            },
+            {
+                "id": "Meta.lastUpdated",
+                "path": "Meta.lastUpdated",
+                "short": "「リソースのバージョンが最後に変更されたとき」",
+                "definition": "リソースが最後に変更されたとき - 例えば、バージョンが変更されたとき。",
+                "comment": "この値はリソースが初めて作成される場合を除いて常に設定されています。サーバー/リソースマネージャーがこの値を設定します。クライアントが提供する値は関係ありません。これはHTTP Last-Modifiedに相当し、[read](http.html#read)のインタラクションで同じ値を持つべきです。",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "instant"
+                    }
+                ],
+                "isSummary": true
+            },
+            {
+                "id": "Meta.source",
+                "path": "Meta.source",
+                "short": "「リソースがどこから来たかを特定する」(Risōsu ga doko kara kita ka o tokutei suru)",
+                "definition": "リソースのソースシステムを識別するURI。これにより、リソース内の情報のソースをトラックまたは区別するために使用できる最小限の[プロビナンス]（provenance.html＃）情報が提供されます。ソースは、別のFHIRサーバー、ドキュメント、メッセージ、データベースなどを識別できます。",
+                "comment": "「プロバナンスのリソースにおいて、これはProvenance.entity.what[x]に対応します。ソースの正確な使用方法（および含意されるProvenance.entity.role）は実装者の判断に委ねられます。指定されたソースは1つだけです。追加のプロバナンスの詳細が必要な場合は、完全なプロバナンスリソースを使用するべきです。\n\nこの要素は、正規のURLでホストされていないリソースの現在のマスターソースがどこにあるかを示すために使用できます。」",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "uri"
+                    }
+                ],
+                "isSummary": true
+            },
+            {
+                "id": "Meta.profile",
+                "path": "Meta.profile",
+                "short": "このリソースが適合を主張するプロファイル",
+                "definition": "このリソースが準拠すると主張する [StructureDefinition](structuredefinition.html#) リソースに関するプロファイルのリストです。URL は [StructureDefinition.url](structuredefinition-definitions.html#StructureDefinition.url) への参照です。",
+                "comment": "これらの主張が時間の経過に伴って検証または更新される方法と、それらを決定するサーバーや他の基盤に任されます。プロファイルURLのリストは1セットです。",
+                "min": 0,
+                "max": "*",
+                "type": [
+                    {
+                        "code": "canonical",
+                        "targetProfile": [
+                            "http://hl7.org/fhir/StructureDefinition/StructureDefinition"
+                        ]
+                    }
+                ],
+                "isSummary": true
+            },
+            {
+                "id": "Meta.security",
+                "path": "Meta.security",
+                "short": "このリソースに適用されたセキュリティラベル",
+                "definition": "このリソースにはセキュリティラベルが適用されています。これらのタグにより、特定のリソースが全体的なセキュリティポリシーやインフラストラクチャに関連付けられます。",
+                "comment": "セキュリティラベルは変更せずにリソースのバージョンを更新可能です。セキュリティラベルのリストはセットであり、一意性はシステム/コードに基づき、バージョンと表示は無視されます。",
+                "min": 0,
+                "max": "*",
+                "type": [
+                    {
+                        "code": "Coding"
+                    }
+                ],
+                "isSummary": true,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "SecurityLabels"
+                        },
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-isCommonBinding",
+                            "valueBoolean": true
+                        }
+                    ],
+                    "strength": "extensible",
+                    "description": "医療プライバシーおよびセキュリティ分類システムからのセキュリティラベル。",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/security-labels"
+                }
+            },
+            {
+                "id": "Meta.tag",
+                "path": "Meta.tag",
+                "short": "このリソースに適用されたタグ",
+                "definition": "このリソースに適用されるタグです。タグは、リソースをプロセスやワークフローに識別し、関連付けるために使用することが意図されており、アプリケーションはリソースの意味を解釈する際にタグを考慮する必要はありません。",
+                "comment": "リソースの表示バージョンを変更することなく、タグを更新できます。タグのリストは集合です。ユニーク性はシステム/コードに基づき、バージョンと表示は無視されます。",
+                "min": 0,
+                "max": "*",
+                "type": [
+                    {
+                        "code": "Coding"
+                    }
+                ],
+                "isSummary": true,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "Tags"
+                        }
+                    ],
+                    "strength": "example",
+                    "description": "「様々なタグを表すコードで、一般的にはワークフローに関連しています。",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/common-tags"
+                }
+            }
+        ]
+    }
+}

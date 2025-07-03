@@ -1,0 +1,214 @@
+{
+    "resourceType": "StructureDefinition",
+    "id": "id",
+    "meta": {
+        "lastUpdated": "2019-11-01T09:29:23.356+11:00"
+    },
+    "extension": [
+        {
+            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
+            "valueCode": "normative"
+        },
+        {
+            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version",
+            "valueCode": "4.0.0"
+        }
+    ],
+    "url": "http://hl7.org/fhir/StructureDefinition/id",
+    "version": "4.0.1",
+    "name": "id",
+    "status": "active",
+    "date": "2019-11-01T09:29:23+11:00",
+    "publisher": "HL7 FHIR Standard",
+    "contact": [
+        {
+            "telecom": [
+                {
+                    "system": "url",
+                    "value": "http://hl7.org/fhir"
+                }
+            ]
+        }
+    ],
+    "description": "「id」型の基本構造定義：文字、数字、\"-\"、\".\"のいずれかの組み合わせで、長さ制限64文字以内。 （これは整数、プレフィックスのないOID、UUID、またはこれらの制約を満たす他の識別子パターンである可能性があります。）Idは大文字小文字を区別しません。",
+    "fhirVersion": "4.0.1",
+    "kind": "primitive-type",
+    "abstract": false,
+    "type": "id",
+    "baseDefinition": "http://hl7.org/fhir/StructureDefinition/string",
+    "derivation": "specialization",
+    "snapshot": {
+        "element": [
+            {
+                "id": "id",
+                "path": "id",
+                "short": "\"プリミティブタイプのID\"",
+                "definition": "「文字、数字、\"-\"\".\"のいずれかの組み合わせで、文字数は最大64文字まで。この場合、整数、プレフィックスのないOID、UUID、またはこれらの制約を満たす他の識別子パターンが含まれる可能性があります。IDは大文字小文字を区別しません。」",
+                "comment": "\"RFC 4122\"は日本語に「RFC 4122」と同じで、翻訳する必要はありません。",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "id",
+                    "min": 0,
+                    "max": "*"
+                },
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false
+            },
+            {
+                "id": "id.id",
+                "path": "id.id",
+                "representation": [
+                    "xmlAttr"
+                ],
+                "short": "xml:id（またはJSONで同等のもの）",
+                "definition": "リソース内の要素に対するユニークID（内部参照用）",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Element.id",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "extension": [
+                            {
+                                "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fhir-type",
+                                "valueUrl": "string"
+                            }
+                        ],
+                        "code": "http://hl7.org/fhirpath/System.String"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false
+            },
+            {
+                "id": "id.extension",
+                "path": "id.extension",
+                "short": "実装によって定義される追加コンテンツ",
+                "definition": "「リソースの基本的な定義の一部ではない追加情報を表すために使用することができます。拡張機能の使用を安全かつ管理可能にするために、定義と使用の一定のガバナンスが適用されます。実装者はどんな拡張機能でも定義できますが、拡張機能の定義の一部として満たす必要がある要件があります」",
+                "comment": "どのようなアプリケーション、プロジェクト、または標準が拡張機能を使用しているかに関わらず、拡張機能の使用には決して汚名が付くわけではありません - それらを使用または定義する機関または管轄区域に関係なく。拡張機能の使用こそが、FHIR仕様を誰にとっても簡単なコアレベルで維持することを可能にします。",
+                "alias": [
+                    "extensions",
+                    "user content"
+                ],
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Element.extension",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "Extension"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    },
+                    {
+                        "key": "ext-1",
+                        "severity": "error",
+                        "human": "「拡張機能または値[x]のいずれかが必要です。両方ではありません。」",
+                        "expression": "extension.exists() != value.exists()",
+                        "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), 'value')])",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Extension"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false
+            },
+            {
+                "id": "id.value",
+                "path": "id.value",
+                "representation": [
+                    "xmlAttr"
+                ],
+                "short": "\"idの初期値\" (id no shokichi)",
+                "definition": "\"idの初期値\" (id no shokichi)",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "string.value",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "extension": [
+                            {
+                                "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fhir-type",
+                                "valueUrl": "string"
+                            },
+                            {
+                                "url": "http://hl7.org/fhir/StructureDefinition/regex",
+                                "valueString": "[A-Za-z0-9\\-\\.]{1,64}"
+                            }
+                        ],
+                        "code": "http://hl7.org/fhirpath/System.String"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false
+            }
+        ]
+    },
+    "differential": {
+        "element": [
+            {
+                "id": "id",
+                "path": "id",
+                "short": "\"プリミティブタイプのID\"",
+                "definition": "「文字、数字、\"-\"\".\"のいずれかの組み合わせで、文字数は最大64文字まで。この場合、整数、プレフィックスのないOID、UUID、またはこれらの制約を満たす他の識別子パターンが含まれる可能性があります。IDは大文字小文字を区別しません。」",
+                "comment": "\"RFC 4122\"は日本語に「RFC 4122」と同じで、翻訳する必要はありません。",
+                "min": 0,
+                "max": "*"
+            },
+            {
+                "id": "id.value",
+                "path": "id.value",
+                "representation": [
+                    "xmlAttr"
+                ],
+                "short": "\"idの初期値\" (id no shokichi)",
+                "definition": "\"idの初期値\" (id no shokichi)",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "extension": [
+                            {
+                                "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fhir-type",
+                                "valueUrl": "id"
+                            },
+                            {
+                                "url": "http://hl7.org/fhir/StructureDefinition/regex",
+                                "valueString": "[A-Za-z0-9\\-\\.]{1,64}"
+                            }
+                        ],
+                        "code": "http://hl7.org/fhirpath/System.String"
+                    }
+                ]
+            }
+        ]
+    }
+}

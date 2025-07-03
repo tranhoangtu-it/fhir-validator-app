@@ -1,0 +1,678 @@
+{
+    "resourceType": "StructureDefinition",
+    "id": "ContactPoint",
+    "meta": {
+        "lastUpdated": "2019-11-01T09:29:23.356+11:00"
+    },
+    "extension": [
+        {
+            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
+            "valueCode": "normative"
+        },
+        {
+            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version",
+            "valueCode": "4.0.0"
+        }
+    ],
+    "url": "http://hl7.org/fhir/StructureDefinition/ContactPoint",
+    "version": "4.0.1",
+    "name": "ContactPoint",
+    "status": "active",
+    "date": "2019-11-01T09:29:23+11:00",
+    "publisher": "HL7 FHIR Standard",
+    "contact": [
+        {
+            "telecom": [
+                {
+                    "system": "url",
+                    "value": "http://hl7.org/fhir"
+                }
+            ]
+        }
+    ],
+    "description": "「コンタクトポイントの種類に対する基本的な構造定義：電話、メールなど、個人や組織のあらゆる種類のテクノロジー仲介型コンタクトポイントの詳細について」",
+    "purpose": "Need to track phone, fax, mobile, sms numbers, email addresses, twitter tags, etc.",
+    "fhirVersion": "4.0.1",
+    "mapping": [
+        {
+            "identity": "v2",
+            "uri": "http://hl7.org/v2",
+            "name": "HL7 v2 Mapping"
+        },
+        {
+            "identity": "rim",
+            "uri": "http://hl7.org/v3",
+            "name": "RIM Mapping"
+        },
+        {
+            "identity": "servd",
+            "uri": "http://www.omg.org/spec/ServD/1.0/",
+            "name": "ServD"
+        }
+    ],
+    "kind": "complex-type",
+    "abstract": false,
+    "type": "ContactPoint",
+    "baseDefinition": "http://hl7.org/fhir/StructureDefinition/Element",
+    "derivation": "specialization",
+    "snapshot": {
+        "element": [
+            {
+                "id": "ContactPoint",
+                "extension": [
+                    {
+                        "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
+                        "valueCode": "normative"
+                    },
+                    {
+                        "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version",
+                        "valueCode": "4.0.0"
+                    }
+                ],
+                "path": "ContactPoint",
+                "short": "「テクノロジーを利用して接点（電話、ファックス、メールなど）の詳細」",
+                "definition": "個人または組織のための、電話、メール、その他のあらゆる種類のテクノロジー媒体による連絡先の詳細。",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "ContactPoint",
+                    "min": 0,
+                    "max": "*"
+                },
+                "condition": [
+                    "ele-1"
+                ],
+                "constraint": [
+                    {
+                        "key": "cpt-2",
+                        "severity": "error",
+                        "human": "値が提供される場合はシステムが必要です。",
+                        "expression": "value.empty() or system.exists()",
+                        "xpath": "not(exists(f:value)) or exists(f:system)"
+                    },
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "n/a"
+                    },
+                    {
+                        "identity": "v2",
+                        "map": "XTN"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": "TEL"
+                    },
+                    {
+                        "identity": "servd",
+                        "map": "ContactPoint"
+                    }
+                ]
+            },
+            {
+                "id": "ContactPoint.id",
+                "path": "ContactPoint.id",
+                "representation": [
+                    "xmlAttr"
+                ],
+                "short": "エレメント相互参照のためのユニークID",
+                "definition": "リソース内の要素の固有ID（内部参照用）。これは、スペースを含まない任意の文字列値である可能性があります。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Element.id",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "extension": [
+                            {
+                                "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fhir-type",
+                                "valueUrl": "string"
+                            }
+                        ],
+                        "code": "http://hl7.org/fhirpath/System.String"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "ContactPoint.extension",
+                "path": "ContactPoint.extension",
+                "slicing": {
+                    "discriminator": [
+                        {
+                            "type": "value",
+                            "path": "url"
+                        }
+                    ],
+                    "description": "拡張子は常にURLで切り片にされます。",
+                    "rules": "open"
+                },
+                "short": "実装によって定義される追加コンテンツ",
+                "definition": "「要素の基本的な定義に含まれない追加情報を表すために使用されることがあります。拡張機能の使用を安全かつ管理しやすくするために、定義および使用に適用される厳格なガバナンスのセットがあります。実装者は拡張機能を定義できますが、拡張機能の定義の一部として満たす必要のある要件のセットがあります。」",
+                "comment": "どのようなアプリケーション、プロジェクト、または標準が拡張機能を使用しているかに関わらず、拡張機能の使用には決して汚名が付くわけではありません - それらを使用または定義する機関または管轄区域に関係なく。拡張機能の使用こそが、FHIR仕様を誰にとっても簡単なコアレベルで維持することを可能にします。",
+                "alias": [
+                    "extensions",
+                    "user content"
+                ],
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Element.extension",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "Extension"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    },
+                    {
+                        "key": "ext-1",
+                        "severity": "error",
+                        "human": "「拡張機能または値[x]のいずれかが必要です。両方ではありません。」",
+                        "expression": "extension.exists() != value.exists()",
+                        "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Extension"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "ContactPoint.system",
+                "path": "ContactPoint.system",
+                "short": "電話 | ファックス | メール | ページャー | URL | SMS | その他",
+                "definition": "連絡先用通信フォーム - どの通信システムを使用するには接点が必要ですか。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "ContactPoint.system",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "code"
+                    }
+                ],
+                "condition": [
+                    "cpt-2"
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "ContactPointSystem"
+                        }
+                    ],
+                    "strength": "required",
+                    "description": "「連絡先のための通信フォーム。」",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/contact-point-system|4.0.1"
+                },
+                "mapping": [
+                    {
+                        "identity": "v2",
+                        "map": "XTN.3"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": "./scheme"
+                    },
+                    {
+                        "identity": "servd",
+                        "map": "./ContactPointType"
+                    }
+                ]
+            },
+            {
+                "id": "ContactPoint.value",
+                "path": "ContactPoint.value",
+                "short": "実際の連絡先の詳細",
+                "definition": "指定されたコミュニケーションシステムに意味がある形式での実際の連絡先の詳細（電話番号または電子メールアドレス）を提供してください。",
+                "comment": "\"電話番号の内線や、その連絡先の使用に関するメモなど、追加のテキストデータが値に含まれる場合があります。\"",
+                "requirements": "Need to support legacy numbers that are not in a tightly controlled format.",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "ContactPoint.value",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "v2",
+                        "map": "XTN.1 (or XTN.12)"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": "./url"
+                    },
+                    {
+                        "identity": "servd",
+                        "map": "./Value"
+                    }
+                ]
+            },
+            {
+                "id": "ContactPoint.use",
+                "path": "ContactPoint.use",
+                "short": "「家 | 仕事 | 一時的 | 古い | 携帯電話 - この連絡先の目的」(Ie | Shigoto | Ichijiteki | Furui | Keitaidenwa - Kono renrakusaki no mokuteki)",
+                "definition": "「接点の目的を特定する。」(Setten no mokuteki wo tokutei suru.)",
+                "comment": "「アプリケーションは、一時的なものまたは古いものであると明示しない限り、連絡先が最新であると想定できます。」",
+                "requirements": "Need to track the way a person uses this contact, so a user can choose which is appropriate for their purpose.",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "ContactPoint.use",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "code"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": true,
+                "isModifierReason": "This is labeled as \"Is Modifier\" because applications should not mistake a temporary or old contact etc.for a current/permanent one",
+                "isSummary": true,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "ContactPointUse"
+                        }
+                    ],
+                    "strength": "required",
+                    "description": "「接点の使用。」(Setten no shiyō.)",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/contact-point-use|4.0.1"
+                },
+                "mapping": [
+                    {
+                        "identity": "v2",
+                        "map": "XTN.2 - but often indicated by field"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": "unique(./use)"
+                    },
+                    {
+                        "identity": "servd",
+                        "map": "./ContactPointPurpose"
+                    }
+                ]
+            },
+            {
+                "id": "ContactPoint.rank",
+                "path": "ContactPoint.rank",
+                "short": "「使用の優先順位を指定してください（1が最も優先度が高い）」",
+                "definition": "「一連のコンタクトを使う上で好ましい順序を指定します。ランク値が低いContactPointsの方が、ランク値が高いものよりも優先されます。」",
+                "comment": "「ランクは、インスタンス内で連絡先が表示される順序に必ずしも従わないことに注意してください。」",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "ContactPoint.rank",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "positiveInt"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "v2",
+                        "map": "n/a"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "ContactPoint.period",
+                "path": "ContactPoint.period",
+                "short": "「コンタクトポイントが使用されている時間帯」",
+                "definition": "「接点が使用されていた/現在使用中である時間期間」",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "ContactPoint.period",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "Period"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "v2",
+                        "map": "N/A"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": "./usablePeriod[type=\"IVL<TS>\"]"
+                    },
+                    {
+                        "identity": "servd",
+                        "map": "./StartDate and ./EndDate"
+                    }
+                ]
+            }
+        ]
+    },
+    "differential": {
+        "element": [
+            {
+                "id": "ContactPoint",
+                "extension": [
+                    {
+                        "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
+                        "valueCode": "normative"
+                    },
+                    {
+                        "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version",
+                        "valueCode": "4.0.0"
+                    }
+                ],
+                "path": "ContactPoint",
+                "short": "「テクノロジーを利用して接点（電話、ファックス、メールなど）の詳細」",
+                "definition": "個人または組織のための、電話、メール、その他のあらゆる種類のテクノロジー媒体による連絡先の詳細。",
+                "min": 0,
+                "max": "*",
+                "constraint": [
+                    {
+                        "key": "cpt-2",
+                        "severity": "error",
+                        "human": "値が提供される場合はシステムが必要です。",
+                        "expression": "value.empty() or system.exists()",
+                        "xpath": "not(exists(f:value)) or exists(f:system)"
+                    }
+                ],
+                "mapping": [
+                    {
+                        "identity": "v2",
+                        "map": "XTN"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": "TEL"
+                    },
+                    {
+                        "identity": "servd",
+                        "map": "ContactPoint"
+                    }
+                ]
+            },
+            {
+                "id": "ContactPoint.system",
+                "path": "ContactPoint.system",
+                "short": "電話 | ファックス | メール | ページャー | URL | SMS | その他",
+                "definition": "連絡先用通信フォーム - どの通信システムを使用するには接点が必要ですか。",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "code"
+                    }
+                ],
+                "condition": [
+                    "cpt-2"
+                ],
+                "isSummary": true,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "ContactPointSystem"
+                        }
+                    ],
+                    "strength": "required",
+                    "description": "「連絡先のための通信フォーム。」",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/contact-point-system|4.0.1"
+                },
+                "mapping": [
+                    {
+                        "identity": "v2",
+                        "map": "XTN.3"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": "./scheme"
+                    },
+                    {
+                        "identity": "servd",
+                        "map": "./ContactPointType"
+                    }
+                ]
+            },
+            {
+                "id": "ContactPoint.value",
+                "path": "ContactPoint.value",
+                "short": "実際の連絡先の詳細",
+                "definition": "指定されたコミュニケーションシステムに意味がある形式での実際の連絡先の詳細（電話番号または電子メールアドレス）を提供してください。",
+                "comment": "\"電話番号の内線や、その連絡先の使用に関するメモなど、追加のテキストデータが値に含まれる場合があります。\"",
+                "requirements": "Need to support legacy numbers that are not in a tightly controlled format.",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ],
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "v2",
+                        "map": "XTN.1 (or XTN.12)"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": "./url"
+                    },
+                    {
+                        "identity": "servd",
+                        "map": "./Value"
+                    }
+                ]
+            },
+            {
+                "id": "ContactPoint.use",
+                "path": "ContactPoint.use",
+                "short": "「家 | 仕事 | 一時的 | 古い | 携帯電話 - この連絡先の目的」(Ie | Shigoto | Ichijiteki | Furui | Keitaidenwa - Kono renrakusaki no mokuteki)",
+                "definition": "「接点の目的を特定する。」(Setten no mokuteki wo tokutei suru.)",
+                "comment": "「アプリケーションは、一時的なものまたは古いものであると明示しない限り、連絡先が最新であると想定できます。」",
+                "requirements": "Need to track the way a person uses this contact, so a user can choose which is appropriate for their purpose.",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "code"
+                    }
+                ],
+                "isModifier": true,
+                "isModifierReason": "This is labeled as \"Is Modifier\" because applications should not mistake a temporary or old contact etc.for a current/permanent one",
+                "isSummary": true,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "ContactPointUse"
+                        }
+                    ],
+                    "strength": "required",
+                    "description": "「接点の使用。」(Setten no shiyō.)",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/contact-point-use|4.0.1"
+                },
+                "mapping": [
+                    {
+                        "identity": "v2",
+                        "map": "XTN.2 - but often indicated by field"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": "unique(./use)"
+                    },
+                    {
+                        "identity": "servd",
+                        "map": "./ContactPointPurpose"
+                    }
+                ]
+            },
+            {
+                "id": "ContactPoint.rank",
+                "path": "ContactPoint.rank",
+                "short": "「使用の優先順位を指定してください（1が最も優先度が高い）」",
+                "definition": "「一連のコンタクトを使う上で好ましい順序を指定します。ランク値が低いContactPointsの方が、ランク値が高いものよりも優先されます。」",
+                "comment": "「ランクは、インスタンス内で連絡先が表示される順序に必ずしも従わないことに注意してください。」",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "positiveInt"
+                    }
+                ],
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "v2",
+                        "map": "n/a"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "ContactPoint.period",
+                "path": "ContactPoint.period",
+                "short": "「コンタクトポイントが使用されている時間帯」",
+                "definition": "「接点が使用されていた/現在使用中である時間期間」",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "Period"
+                    }
+                ],
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "v2",
+                        "map": "N/A"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": "./usablePeriod[type=\"IVL<TS>\"]"
+                    },
+                    {
+                        "identity": "servd",
+                        "map": "./StartDate and ./EndDate"
+                    }
+                ]
+            }
+        ]
+    }
+}

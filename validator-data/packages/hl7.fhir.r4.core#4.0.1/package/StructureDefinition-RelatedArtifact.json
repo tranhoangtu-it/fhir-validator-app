@@ -1,0 +1,543 @@
+{
+    "resourceType": "StructureDefinition",
+    "id": "RelatedArtifact",
+    "meta": {
+        "lastUpdated": "2019-11-01T09:29:23.356+11:00"
+    },
+    "extension": [
+        {
+            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
+            "valueCode": "trial-use"
+        }
+    ],
+    "url": "http://hl7.org/fhir/StructureDefinition/RelatedArtifact",
+    "version": "4.0.1",
+    "name": "RelatedArtifact",
+    "status": "draft",
+    "date": "2019-11-01T09:29:23+11:00",
+    "publisher": "HL7 FHIR Standard",
+    "contact": [
+        {
+            "telecom": [
+                {
+                    "system": "url",
+                    "value": "http://hl7.org/fhir"
+                }
+            ]
+        }
+    ],
+    "description": "関連アーティファクトタイプのベース構造定義：追加文書、正当化、または参考文献などの関連アーティファクト。",
+    "purpose": "Knowledge resources must be able to provide enough information for consumers of the content (and/or interventions or results produced by the content) to be able to determine and understand the justification for and evidence in support of the content.",
+    "fhirVersion": "4.0.1",
+    "mapping": [
+        {
+            "identity": "rim",
+            "uri": "http://hl7.org/v3",
+            "name": "RIM Mapping"
+        }
+    ],
+    "kind": "complex-type",
+    "abstract": false,
+    "type": "RelatedArtifact",
+    "baseDefinition": "http://hl7.org/fhir/StructureDefinition/Element",
+    "derivation": "specialization",
+    "snapshot": {
+        "element": [
+            {
+                "id": "RelatedArtifact",
+                "extension": [
+                    {
+                        "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
+                        "valueCode": "trial-use"
+                    }
+                ],
+                "path": "RelatedArtifact",
+                "short": "「知識リソースに関連するアーティファクト」",
+                "definition": "追加の文書、正当性、または参考文献など、関連するアーティファクト。",
+                "comment": "関連するアーティファクトは、添付ファイルであるか、別の知識リソースへの参照であるかのいずれかであり、両方であるわけではありません。 (Kanren suru ātifakuto wa, tenpu fairu de aru ka, betsu no chishiki risōsu e no sanshō de aru ka no izureka de ari, ryōhō dearimasen.)",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "RelatedArtifact",
+                    "min": 0,
+                    "max": "*"
+                },
+                "condition": [
+                    "ele-1"
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "RelatedArtifact.id",
+                "path": "RelatedArtifact.id",
+                "representation": [
+                    "xmlAttr"
+                ],
+                "short": "エレメント相互参照のためのユニークID",
+                "definition": "リソース内の要素の固有ID（内部参照用）。これは、スペースを含まない任意の文字列値である可能性があります。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Element.id",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "extension": [
+                            {
+                                "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fhir-type",
+                                "valueUrl": "string"
+                            }
+                        ],
+                        "code": "http://hl7.org/fhirpath/System.String"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "RelatedArtifact.extension",
+                "path": "RelatedArtifact.extension",
+                "slicing": {
+                    "discriminator": [
+                        {
+                            "type": "value",
+                            "path": "url"
+                        }
+                    ],
+                    "description": "拡張子は常にURLで切り片にされます。",
+                    "rules": "open"
+                },
+                "short": "実装によって定義される追加コンテンツ",
+                "definition": "「要素の基本的な定義に含まれない追加情報を表すために使用されることがあります。拡張機能の使用を安全かつ管理しやすくするために、定義および使用に適用される厳格なガバナンスのセットがあります。実装者は拡張機能を定義できますが、拡張機能の定義の一部として満たす必要のある要件のセットがあります。」",
+                "comment": "どのようなアプリケーション、プロジェクト、または標準が拡張機能を使用しているかに関わらず、拡張機能の使用には決して汚名が付くわけではありません - それらを使用または定義する機関または管轄区域に関係なく。拡張機能の使用こそが、FHIR仕様を誰にとっても簡単なコアレベルで維持することを可能にします。",
+                "alias": [
+                    "extensions",
+                    "user content"
+                ],
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Element.extension",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "Extension"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    },
+                    {
+                        "key": "ext-1",
+                        "severity": "error",
+                        "human": "「拡張機能または値[x]のいずれかが必要です。両方ではありません。」",
+                        "expression": "extension.exists() != value.exists()",
+                        "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Extension"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "RelatedArtifact.type",
+                "path": "RelatedArtifact.type",
+                "short": "ドキュメンテーション | 正当化 | 引用 | 前任者 | 後継者 | 派生元 | 依存する | 構成されています",
+                "definition": "関連するアーティファクトとの関係の種類。",
+                "min": 1,
+                "max": "1",
+                "base": {
+                    "path": "RelatedArtifact.type",
+                    "min": 1,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "code"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "RelatedArtifactType"
+                        }
+                    ],
+                    "strength": "required",
+                    "description": "関連するアーティファクトとの関係の種類。",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/related-artifact-type|4.0.1"
+                }
+            },
+            {
+                "id": "RelatedArtifact.label",
+                "path": "RelatedArtifact.label",
+                "short": "「短いラベル」(Mijikai rabelu)",
+                "definition": "\"注釈インデックスなどの含まれるアーティファクトの他の場所で引用するために使用できる短いラベル。\"",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "RelatedArtifact.label",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true
+            },
+            {
+                "id": "RelatedArtifact.display",
+                "path": "RelatedArtifact.display",
+                "short": "関連するアーティファクトの簡単な説明",
+                "definition": "「参照されている文書や知識リソースの簡単な説明で、消費者に表示するために適しています。」",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "RelatedArtifact.display",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true
+            },
+            {
+                "id": "RelatedArtifact.citation",
+                "path": "RelatedArtifact.citation",
+                "short": "アーティファクトの書誌引用文献",
+                "definition": "関連する作品の参考文献引用を示します。このテキストは、受け入れられた引用フォーマットに従ってフォーマットする必要があります。",
+                "comment": "引用に関する追加の構造化情報は、拡張機能としてキャプチャする必要があります。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "RelatedArtifact.citation",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "markdown"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true
+            },
+            {
+                "id": "RelatedArtifact.url",
+                "path": "RelatedArtifact.url",
+                "short": "「アーティファクトにアクセスできる場所」",
+                "definition": "実際のコンテンツにアクセスするためにフォローできるアーティファクトのURL。",
+                "comment": "「もしドキュメントまたはリソース要素が存在する場合、この要素は提供しないでください（アタッチメントまたはリソース参照のURLまたは参照を使用してください）。」",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "RelatedArtifact.url",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "url"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true
+            },
+            {
+                "id": "RelatedArtifact.document",
+                "path": "RelatedArtifact.document",
+                "short": "「どの文書が参照されているのか」",
+                "definition": "参照されている文書は添付ファイルとして表されます。これはリソース要素と排他的です。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "RelatedArtifact.document",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "Attachment"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true
+            },
+            {
+                "id": "RelatedArtifact.resource",
+                "path": "RelatedArtifact.resource",
+                "short": "「どのリソースが参照されているのか」",
+                "definition": "関連するリソース、例えば図書館、値のセット、プロファイル、その他の知識リソース。 (Kanren suru risōsu, tatoeba toshokan, atai no setto, purofairu, sono hoka no chishiki risōsu.)",
+                "comment": "タイプが前任者の場合、これは後続する知識リソースへの参照です。タイプが後継者の場合、これは前の知識リソースへの参照です。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "RelatedArtifact.resource",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "canonical",
+                        "targetProfile": [
+                            "http://hl7.org/fhir/StructureDefinition/Resource"
+                        ]
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true
+            }
+        ]
+    },
+    "differential": {
+        "element": [
+            {
+                "id": "RelatedArtifact",
+                "extension": [
+                    {
+                        "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
+                        "valueCode": "trial-use"
+                    }
+                ],
+                "path": "RelatedArtifact",
+                "short": "「知識リソースに関連するアーティファクト」",
+                "definition": "追加の文書、正当性、または参考文献など、関連するアーティファクト。",
+                "comment": "関連するアーティファクトは、添付ファイルであるか、別の知識リソースへの参照であるかのいずれかであり、両方であるわけではありません。 (Kanren suru ātifakuto wa, tenpu fairu de aru ka, betsu no chishiki risōsu e no sanshō de aru ka no izureka de ari, ryōhō dearimasen.)",
+                "min": 0,
+                "max": "*"
+            },
+            {
+                "id": "RelatedArtifact.type",
+                "path": "RelatedArtifact.type",
+                "short": "ドキュメンテーション | 正当化 | 引用 | 前任者 | 後継者 | 派生元 | 依存する | 構成されています",
+                "definition": "関連するアーティファクトとの関係の種類。",
+                "min": 1,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "code"
+                    }
+                ],
+                "isSummary": true,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "RelatedArtifactType"
+                        }
+                    ],
+                    "strength": "required",
+                    "description": "関連するアーティファクトとの関係の種類。",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/related-artifact-type|4.0.1"
+                }
+            },
+            {
+                "id": "RelatedArtifact.label",
+                "path": "RelatedArtifact.label",
+                "short": "「短いラベル」(Mijikai rabelu)",
+                "definition": "\"注釈インデックスなどの含まれるアーティファクトの他の場所で引用するために使用できる短いラベル。\"",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ],
+                "isSummary": true
+            },
+            {
+                "id": "RelatedArtifact.display",
+                "path": "RelatedArtifact.display",
+                "short": "関連するアーティファクトの簡単な説明",
+                "definition": "「参照されている文書や知識リソースの簡単な説明で、消費者に表示するために適しています。」",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ],
+                "isSummary": true
+            },
+            {
+                "id": "RelatedArtifact.citation",
+                "path": "RelatedArtifact.citation",
+                "short": "アーティファクトの書誌引用文献",
+                "definition": "関連する作品の参考文献引用を示します。このテキストは、受け入れられた引用フォーマットに従ってフォーマットする必要があります。",
+                "comment": "引用に関する追加の構造化情報は、拡張機能としてキャプチャする必要があります。",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "markdown"
+                    }
+                ],
+                "isSummary": true
+            },
+            {
+                "id": "RelatedArtifact.url",
+                "path": "RelatedArtifact.url",
+                "short": "「アーティファクトにアクセスできる場所」",
+                "definition": "実際のコンテンツにアクセスするためにフォローできるアーティファクトのURL。",
+                "comment": "「もしドキュメントまたはリソース要素が存在する場合、この要素は提供しないでください（アタッチメントまたはリソース参照のURLまたは参照を使用してください）。」",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "url"
+                    }
+                ],
+                "isSummary": true
+            },
+            {
+                "id": "RelatedArtifact.document",
+                "path": "RelatedArtifact.document",
+                "short": "「どの文書が参照されているのか」",
+                "definition": "参照されている文書は添付ファイルとして表されます。これはリソース要素と排他的です。",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "Attachment"
+                    }
+                ],
+                "isSummary": true
+            },
+            {
+                "id": "RelatedArtifact.resource",
+                "path": "RelatedArtifact.resource",
+                "short": "「どのリソースが参照されているのか」",
+                "definition": "関連するリソース、例えば図書館、値のセット、プロファイル、その他の知識リソース。 (Kanren suru risōsu, tatoeba toshokan, atai no setto, purofairu, sono hoka no chishiki risōsu.)",
+                "comment": "タイプが前任者の場合、これは後続する知識リソースへの参照です。タイプが後継者の場合、これは前の知識リソースへの参照です。",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "canonical",
+                        "targetProfile": [
+                            "http://hl7.org/fhir/StructureDefinition/Resource"
+                        ]
+                    }
+                ],
+                "isSummary": true
+            }
+        ]
+    }
+}

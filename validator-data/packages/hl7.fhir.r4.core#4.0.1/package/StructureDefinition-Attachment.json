@@ -1,0 +1,875 @@
+{
+    "resourceType": "StructureDefinition",
+    "id": "Attachment",
+    "meta": {
+        "lastUpdated": "2019-11-01T09:29:23.356+11:00"
+    },
+    "extension": [
+        {
+            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
+            "valueCode": "normative"
+        },
+        {
+            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version",
+            "valueCode": "4.0.0"
+        }
+    ],
+    "url": "http://hl7.org/fhir/StructureDefinition/Attachment",
+    "version": "4.0.1",
+    "name": "Attachment",
+    "status": "active",
+    "date": "2019-11-01T09:29:23+11:00",
+    "publisher": "HL7 FHIR Standard",
+    "contact": [
+        {
+            "telecom": [
+                {
+                    "system": "url",
+                    "value": "http://hl7.org/fhir"
+                }
+            ]
+        }
+    ],
+    "description": "\"添付タイプの基本構造定義：他の形式で定義されたデータコンテンツを参照するために使用する。\"",
+    "purpose": "Many models need to include data defined in other specifications that is complex and opaque to the healthcare model. This includes documents, media recordings, structured data, etc.",
+    "fhirVersion": "4.0.1",
+    "mapping": [
+        {
+            "identity": "v2",
+            "uri": "http://hl7.org/v2",
+            "name": "HL7 v2 Mapping"
+        },
+        {
+            "identity": "rim",
+            "uri": "http://hl7.org/v3",
+            "name": "RIM Mapping"
+        }
+    ],
+    "kind": "complex-type",
+    "abstract": false,
+    "type": "Attachment",
+    "baseDefinition": "http://hl7.org/fhir/StructureDefinition/Element",
+    "derivation": "specialization",
+    "snapshot": {
+        "element": [
+            {
+                "id": "Attachment",
+                "extension": [
+                    {
+                        "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
+                        "valueCode": "normative"
+                    },
+                    {
+                        "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version",
+                        "valueCode": "4.0.0"
+                    }
+                ],
+                "path": "Attachment",
+                "short": "他の場所で定義された形式でのコンテンツ (Hoka no basho de teigi sareta keishiki de no content)",
+                "definition": "他のフォーマットで定義されたデータ内容を参照するために。",
+                "comment": "観察値[x]などの要約ビューを提供する場合、添付ファイルは「署名された手順に同意する」などの簡潔な表示テキストとして表現する必要があります。",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Attachment",
+                    "min": 0,
+                    "max": "*"
+                },
+                "condition": [
+                    "ele-1"
+                ],
+                "constraint": [
+                    {
+                        "key": "att-1",
+                        "severity": "error",
+                        "human": "「アタッチメントにデータがある場合は、必ず contentType がある必要があります。」",
+                        "expression": "data.empty() or contentType.exists()",
+                        "xpath": "not(exists(f:data)) or exists(f:contentType)"
+                    },
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "n/a"
+                    },
+                    {
+                        "identity": "v2",
+                        "map": "ED/RP"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": "ED"
+                    }
+                ]
+            },
+            {
+                "id": "Attachment.id",
+                "path": "Attachment.id",
+                "representation": [
+                    "xmlAttr"
+                ],
+                "short": "エレメント相互参照のためのユニークID",
+                "definition": "リソース内の要素の固有ID（内部参照用）。これは、スペースを含まない任意の文字列値である可能性があります。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Element.id",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "extension": [
+                            {
+                                "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fhir-type",
+                                "valueUrl": "string"
+                            }
+                        ],
+                        "code": "http://hl7.org/fhirpath/System.String"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "Attachment.extension",
+                "path": "Attachment.extension",
+                "slicing": {
+                    "discriminator": [
+                        {
+                            "type": "value",
+                            "path": "url"
+                        }
+                    ],
+                    "description": "拡張子は常にURLで切り片にされます。",
+                    "rules": "open"
+                },
+                "short": "実装によって定義される追加コンテンツ",
+                "definition": "「要素の基本的な定義に含まれない追加情報を表すために使用されることがあります。拡張機能の使用を安全かつ管理しやすくするために、定義および使用に適用される厳格なガバナンスのセットがあります。実装者は拡張機能を定義できますが、拡張機能の定義の一部として満たす必要のある要件のセットがあります。」",
+                "comment": "どのようなアプリケーション、プロジェクト、または標準が拡張機能を使用しているかに関わらず、拡張機能の使用には決して汚名が付くわけではありません - それらを使用または定義する機関または管轄区域に関係なく。拡張機能の使用こそが、FHIR仕様を誰にとっても簡単なコアレベルで維持することを可能にします。",
+                "alias": [
+                    "extensions",
+                    "user content"
+                ],
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Element.extension",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "Extension"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    },
+                    {
+                        "key": "ext-1",
+                        "severity": "error",
+                        "human": "「拡張機能または値[x]のいずれかが必要です。両方ではありません。」",
+                        "expression": "extension.exists() != value.exists()",
+                        "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Extension"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "Attachment.contentType",
+                "path": "Attachment.contentType",
+                "short": "コンテンツのMIMEタイプ、文字セットなど。",
+                "definition": "添付ファイルに含まれるデータの種類を識別し、データを解釈またはレンダリングするための方法を選択できるようにします。必要に応じて、文字セットなどのMIMEタイプパラメータが含まれます。",
+                "requirements": "Processors of the data need to be able to know how to interpret the data.",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Attachment.contentType",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "code"
+                    }
+                ],
+                "example": [
+                    {
+                        "label": "General",
+                        "valueCode": "text/plain; charset=UTF-8, image/png"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "MimeType"
+                        },
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-isCommonBinding",
+                            "valueBoolean": true
+                        }
+                    ],
+                    "strength": "required",
+                    "description": "添付ファイルのMIMEタイプ。有効なMIMEタイプはすべて許可されています。",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/mimetypes|4.0.1"
+                },
+                "mapping": [
+                    {
+                        "identity": "v2",
+                        "map": "ED.2+ED.3/RP.2+RP.3. Note conversion may be needed if old style values are being used"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": "./mediaType, ./charset"
+                    }
+                ]
+            },
+            {
+                "id": "Attachment.language",
+                "path": "Attachment.language",
+                "short": "コンテンツの人間の言語（BCP-47）",
+                "definition": "「コンテンツの人間の言語。値はBCP 47に従って有効な値であることができます。」",
+                "requirements": "Users need to be able to choose between the languages in a set of attachments.",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Attachment.language",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "code"
+                    }
+                ],
+                "example": [
+                    {
+                        "label": "General",
+                        "valueCode": "en-AU"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-maxValueSet",
+                            "valueCanonical": "http://hl7.org/fhir/ValueSet/all-languages"
+                        },
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "Language"
+                        },
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-isCommonBinding",
+                            "valueBoolean": true
+                        }
+                    ],
+                    "strength": "preferred",
+                    "description": "「人間の言語。」(Ningen no gengo.)",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/languages"
+                },
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "./language"
+                    }
+                ]
+            },
+            {
+                "id": "Attachment.data",
+                "path": "Attachment.data",
+                "short": "データインライン、Base64化された",
+                "definition": "「添付ファイルの実際のデータ-バイト列、Base64でエンコードされたもの。」",
+                "comment": "「base64エンコードされたデータは、ベースリソースのXMLまたはJSONと同じ文字セットで表現されるものとします。」",
+                "requirements": "The data needs to able to be transmitted inline.",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Attachment.data",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "base64Binary"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "v2",
+                        "map": "ED.5"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": "./data"
+                    }
+                ]
+            },
+            {
+                "id": "Attachment.url",
+                "path": "Attachment.url",
+                "short": "データが見つかる場所の売り手 (Data ga mitsukaru basho no urite)",
+                "definition": "データにアクセスできる場所。 (Deeta ni akusesu dekiru basho.)",
+                "comment": "「データとURLの両方が提供されたら、URLはデータが含む内容と同じコンテンツを指す必要があります。URLは相対参照またはcid:を使用した包装エンベロープなどの一時的な場所を参照する場合がありますが、これには署名の使用に関する影響があります。相対URLはリソース自体に対してではなく、サービスURLに対してリソース参照のように解釈されます。URLが提供された場合、実際のデータに解決する必要があります。」",
+                "requirements": "The data needs to be transmitted by reference.",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Attachment.url",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "url"
+                    }
+                ],
+                "example": [
+                    {
+                        "label": "General",
+                        "valueUrl": "http://www.acme.com/logo-small.png"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "v2",
+                        "map": "RP.1+RP.2 - if they refer to a URL (see v2.6)"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": "./reference/literal"
+                    }
+                ]
+            },
+            {
+                "id": "Attachment.size",
+                "path": "Attachment.size",
+                "short": "「コンテンツのバイト数（URLが提供された場合）」",
+                "definition": "「この添付ファイルのデータサイズ（Base64エンコードがされる前のバイト数）」",
+                "comment": "データがbase64binaryとして提供される場合、バイト数は冗長であり、url参照として提供される場合に有用です。",
+                "requirements": "Representing the size allows applications to determine whether they should fetch the content automatically in advance, or refuse to fetch it at all.",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Attachment.size",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "unsignedInt"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "N/A (needs data type R3 proposal)"
+                    }
+                ]
+            },
+            {
+                "id": "Attachment.hash",
+                "path": "Attachment.hash",
+                "short": "データのハッシュ（sha-1、base64化）",
+                "definition": "データのSHA-1によるハッシュ値を計算します。base64形式で表記されます。",
+                "comment": "データがbase64でエンコードされている場合は、ハッシュはbase64エンコード前のデータに基づいて計算されます。ハッシュはデジタル署名をサポートすることを意図していません。悪意のある脅威からの保護にはデジタル署名が考慮される必要があります。[Provenance.signature](provenance-definitions.html#Provenance.signature)を参照して、デジタル署名でリソースを保護するための仕組みを確認してください。",
+                "requirements": "Included so that applications can verify that the contents of a location have not changed due to technical failures (e.g., storage rot, transport glitch, incorrect version).",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Attachment.hash",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "base64Binary"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": ".integrityCheck[parent::ED/integrityCheckAlgorithm=\"SHA-1\"]"
+                    }
+                ]
+            },
+            {
+                "id": "Attachment.title",
+                "extension": [
+                    {
+                        "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-translatable",
+                        "valueBoolean": true
+                    }
+                ],
+                "path": "Attachment.title",
+                "short": "「データの代わりに表示するラベル」",
+                "definition": "データの代わりに表示するラベルやテキストのセット。",
+                "requirements": "Applications need a label to display to a human user in place of the actual data if the data cannot be rendered or perceived by the viewer.",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Attachment.title",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ],
+                "example": [
+                    {
+                        "label": "General",
+                        "valueString": "Official Corporate Logo"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "./title/data"
+                    }
+                ]
+            },
+            {
+                "id": "Attachment.creation",
+                "path": "Attachment.creation",
+                "short": "「日付の添付ファイルが最初に作成された」",
+                "definition": "「添付ファイルが最初に作成された日付」",
+                "requirements": "This is often tracked as an integrity issue for use of the attachment.",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Attachment.creation",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "dateTime"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "N/A (needs data type R3 proposal)"
+                    }
+                ]
+            }
+        ]
+    },
+    "differential": {
+        "element": [
+            {
+                "id": "Attachment",
+                "extension": [
+                    {
+                        "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
+                        "valueCode": "normative"
+                    },
+                    {
+                        "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version",
+                        "valueCode": "4.0.0"
+                    }
+                ],
+                "path": "Attachment",
+                "short": "他の場所で定義された形式でのコンテンツ (Hoka no basho de teigi sareta keishiki de no content)",
+                "definition": "他のフォーマットで定義されたデータ内容を参照するために。",
+                "comment": "観察値[x]などの要約ビューを提供する場合、添付ファイルは「署名された手順に同意する」などの簡潔な表示テキストとして表現する必要があります。",
+                "min": 0,
+                "max": "*",
+                "constraint": [
+                    {
+                        "key": "att-1",
+                        "severity": "error",
+                        "human": "「アタッチメントにデータがある場合は、必ず contentType がある必要があります。」",
+                        "expression": "data.empty() or contentType.exists()",
+                        "xpath": "not(exists(f:data)) or exists(f:contentType)"
+                    }
+                ],
+                "mapping": [
+                    {
+                        "identity": "v2",
+                        "map": "ED/RP"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": "ED"
+                    }
+                ]
+            },
+            {
+                "id": "Attachment.contentType",
+                "path": "Attachment.contentType",
+                "short": "コンテンツのMIMEタイプ、文字セットなど。",
+                "definition": "添付ファイルに含まれるデータの種類を識別し、データを解釈またはレンダリングするための方法を選択できるようにします。必要に応じて、文字セットなどのMIMEタイプパラメータが含まれます。",
+                "requirements": "Processors of the data need to be able to know how to interpret the data.",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "code"
+                    }
+                ],
+                "example": [
+                    {
+                        "label": "General",
+                        "valueCode": "text/plain; charset=UTF-8, image/png"
+                    }
+                ],
+                "isSummary": true,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "MimeType"
+                        },
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-isCommonBinding",
+                            "valueBoolean": true
+                        }
+                    ],
+                    "strength": "required",
+                    "description": "添付ファイルのMIMEタイプ。有効なMIMEタイプはすべて許可されています。",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/mimetypes|4.0.1"
+                },
+                "mapping": [
+                    {
+                        "identity": "v2",
+                        "map": "ED.2+ED.3/RP.2+RP.3. Note conversion may be needed if old style values are being used"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": "./mediaType, ./charset"
+                    }
+                ]
+            },
+            {
+                "id": "Attachment.language",
+                "path": "Attachment.language",
+                "short": "コンテンツの人間の言語（BCP-47）",
+                "definition": "「コンテンツの人間の言語。値はBCP 47に従って有効な値であることができます。」",
+                "requirements": "Users need to be able to choose between the languages in a set of attachments.",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "code"
+                    }
+                ],
+                "example": [
+                    {
+                        "label": "General",
+                        "valueCode": "en-AU"
+                    }
+                ],
+                "isSummary": true,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-maxValueSet",
+                            "valueCanonical": "http://hl7.org/fhir/ValueSet/all-languages"
+                        },
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "Language"
+                        },
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-isCommonBinding",
+                            "valueBoolean": true
+                        }
+                    ],
+                    "strength": "preferred",
+                    "description": "「人間の言語。」(Ningen no gengo.)",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/languages"
+                },
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "./language"
+                    }
+                ]
+            },
+            {
+                "id": "Attachment.data",
+                "path": "Attachment.data",
+                "short": "データインライン、Base64化された",
+                "definition": "「添付ファイルの実際のデータ-バイト列、Base64でエンコードされたもの。」",
+                "comment": "「base64エンコードされたデータは、ベースリソースのXMLまたはJSONと同じ文字セットで表現されるものとします。」",
+                "requirements": "The data needs to able to be transmitted inline.",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "base64Binary"
+                    }
+                ],
+                "mapping": [
+                    {
+                        "identity": "v2",
+                        "map": "ED.5"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": "./data"
+                    }
+                ]
+            },
+            {
+                "id": "Attachment.url",
+                "path": "Attachment.url",
+                "short": "データが見つかる場所の売り手 (Data ga mitsukaru basho no urite)",
+                "definition": "データにアクセスできる場所。 (Deeta ni akusesu dekiru basho.)",
+                "comment": "「データとURLの両方が提供されたら、URLはデータが含む内容と同じコンテンツを指す必要があります。URLは相対参照またはcid:を使用した包装エンベロープなどの一時的な場所を参照する場合がありますが、これには署名の使用に関する影響があります。相対URLはリソース自体に対してではなく、サービスURLに対してリソース参照のように解釈されます。URLが提供された場合、実際のデータに解決する必要があります。」",
+                "requirements": "The data needs to be transmitted by reference.",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "url"
+                    }
+                ],
+                "example": [
+                    {
+                        "label": "General",
+                        "valueUrl": "http://www.acme.com/logo-small.png"
+                    }
+                ],
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "v2",
+                        "map": "RP.1+RP.2 - if they refer to a URL (see v2.6)"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": "./reference/literal"
+                    }
+                ]
+            },
+            {
+                "id": "Attachment.size",
+                "path": "Attachment.size",
+                "short": "「コンテンツのバイト数（URLが提供された場合）」",
+                "definition": "「この添付ファイルのデータサイズ（Base64エンコードがされる前のバイト数）」",
+                "comment": "データがbase64binaryとして提供される場合、バイト数は冗長であり、url参照として提供される場合に有用です。",
+                "requirements": "Representing the size allows applications to determine whether they should fetch the content automatically in advance, or refuse to fetch it at all.",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "unsignedInt"
+                    }
+                ],
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "N/A (needs data type R3 proposal)"
+                    }
+                ]
+            },
+            {
+                "id": "Attachment.hash",
+                "path": "Attachment.hash",
+                "short": "データのハッシュ（sha-1、base64化）",
+                "definition": "データのSHA-1によるハッシュ値を計算します。base64形式で表記されます。",
+                "comment": "データがbase64でエンコードされている場合は、ハッシュはbase64エンコード前のデータに基づいて計算されます。ハッシュはデジタル署名をサポートすることを意図していません。悪意のある脅威からの保護にはデジタル署名が考慮される必要があります。[Provenance.signature](provenance-definitions.html#Provenance.signature)を参照して、デジタル署名でリソースを保護するための仕組みを確認してください。",
+                "requirements": "Included so that applications can verify that the contents of a location have not changed due to technical failures (e.g., storage rot, transport glitch, incorrect version).",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "base64Binary"
+                    }
+                ],
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": ".integrityCheck[parent::ED/integrityCheckAlgorithm=\"SHA-1\"]"
+                    }
+                ]
+            },
+            {
+                "id": "Attachment.title",
+                "extension": [
+                    {
+                        "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-translatable",
+                        "valueBoolean": true
+                    }
+                ],
+                "path": "Attachment.title",
+                "short": "「データの代わりに表示するラベル」",
+                "definition": "データの代わりに表示するラベルやテキストのセット。",
+                "requirements": "Applications need a label to display to a human user in place of the actual data if the data cannot be rendered or perceived by the viewer.",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ],
+                "example": [
+                    {
+                        "label": "General",
+                        "valueString": "Official Corporate Logo"
+                    }
+                ],
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "./title/data"
+                    }
+                ]
+            },
+            {
+                "id": "Attachment.creation",
+                "path": "Attachment.creation",
+                "short": "「日付の添付ファイルが最初に作成された」",
+                "definition": "「添付ファイルが最初に作成された日付」",
+                "requirements": "This is often tracked as an integrity issue for use of the attachment.",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "dateTime"
+                    }
+                ],
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "N/A (needs data type R3 proposal)"
+                    }
+                ]
+            }
+        ]
+    }
+}

@@ -1,0 +1,1769 @@
+{
+    "resourceType": "StructureDefinition",
+    "id": "Organization",
+    "meta": {
+        "lastUpdated": "2019-11-01T09:29:23.356+11:00"
+    },
+    "extension": [
+        {
+            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-category",
+            "valueString": "Base.Entities"
+        },
+        {
+            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
+            "valueCode": "trial-use"
+        },
+        {
+            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fmm",
+            "valueInteger": 3
+        },
+        {
+            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-security-category",
+            "valueCode": "business"
+        },
+        {
+            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-wg",
+            "valueCode": "pa"
+        }
+    ],
+    "url": "http://hl7.org/fhir/StructureDefinition/Organization",
+    "version": "4.0.1",
+    "name": "Organization",
+    "status": "draft",
+    "date": "2019-11-01T09:29:23+11:00",
+    "publisher": "Health Level Seven International (Patient Administration)",
+    "contact": [
+        {
+            "telecom": [
+                {
+                    "system": "url",
+                    "value": "http://hl7.org/fhir"
+                }
+            ]
+        },
+        {
+            "telecom": [
+                {
+                    "system": "url",
+                    "value": "http://www.hl7.org/Special/committees/pafm/index.cfm"
+                }
+            ]
+        }
+    ],
+    "description": "「集合的な行動を達成するために形式的または非形式的に認識された人々または組織のグループのことで、企業、機関、法人、部門、コミュニティグループ、医療実践グループ、支払者/保険会社などが含まれます。」",
+    "fhirVersion": "4.0.1",
+    "mapping": [
+        {
+            "identity": "v2",
+            "uri": "http://hl7.org/v2",
+            "name": "HL7 v2 Mapping"
+        },
+        {
+            "identity": "rim",
+            "uri": "http://hl7.org/v3",
+            "name": "RIM Mapping"
+        },
+        {
+            "identity": "servd",
+            "uri": "http://www.omg.org/spec/ServD/1.0/",
+            "name": "ServD"
+        },
+        {
+            "identity": "w5",
+            "uri": "http://hl7.org/fhir/fivews",
+            "name": "FiveWs Pattern Mapping"
+        }
+    ],
+    "kind": "resource",
+    "abstract": false,
+    "type": "Organization",
+    "baseDefinition": "http://hl7.org/fhir/StructureDefinition/DomainResource",
+    "derivation": "specialization",
+    "snapshot": {
+        "element": [
+            {
+                "id": "Organization",
+                "path": "Organization",
+                "short": "共通の目的を持つ人々または組織のグループ化",
+                "definition": "「集合的な行動を達成するために形式的または非形式的に認識された人々または組織のグループのことで、企業、機関、法人、部門、コミュニティグループ、医療実践グループ、支払者/保険会社などが含まれます。」",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Organization",
+                    "min": 0,
+                    "max": "*"
+                },
+                "constraint": [
+                    {
+                        "key": "dom-2",
+                        "severity": "error",
+                        "human": "もしリソースが他のリソースに含まれている場合、そのリソースにはネストされたリソースを含めてはなりません (moshi risōsu ga hoka no risōsu ni fukumarete iru baai, sono risōsu ni wa nesuto sareta risōsu o fukumete wa narimasen).",
+                        "expression": "contained.contained.empty()",
+                        "xpath": "not(parent::f:contained and f:contained)",
+                        "source": "http://hl7.org/fhir/StructureDefinition/DomainResource"
+                    },
+                    {
+                        "key": "dom-3",
+                        "severity": "error",
+                        "human": "もしリソースが他のリソースに含まれている場合、それはリソースの他の場所から参照されるか、含まれるリソースに参照されるべきです。",
+                        "expression": "contained.where((('#'+id in (%resource.descendants().reference | %resource.descendants().as(canonical) | %resource.descendants().as(uri) | %resource.descendants().as(url))) or descendants().where(reference = '#').exists() or descendants().where(as(canonical) = '#').exists() or descendants().where(as(canonical) = '#').exists()).not()).trace('unmatched', id).empty()",
+                        "xpath": "not(exists(for $id in f:contained/*/f:id/@value return $contained[not(parent::*/descendant::f:reference/@value=concat('#', $contained/*/id/@value) or descendant::f:reference[@value='#'])]))",
+                        "source": "http://hl7.org/fhir/StructureDefinition/DomainResource"
+                    },
+                    {
+                        "key": "dom-4",
+                        "severity": "error",
+                        "human": "もしリソースが別のリソースの中に含まれる場合、meta.versionIdまたはmeta.lastUpdatedを持つべきではありません。",
+                        "expression": "contained.meta.versionId.empty() and contained.meta.lastUpdated.empty()",
+                        "xpath": "not(exists(f:contained/*/f:meta/f:versionId)) and not(exists(f:contained/*/f:meta/f:lastUpdated))",
+                        "source": "http://hl7.org/fhir/StructureDefinition/DomainResource"
+                    },
+                    {
+                        "key": "dom-5",
+                        "severity": "error",
+                        "human": "「もしリソースが他のリソースに含まれている場合、セキュリティラベルを持つべきではありません。」",
+                        "expression": "contained.meta.security.empty()",
+                        "xpath": "not(exists(f:contained/*/f:meta/f:security))",
+                        "source": "http://hl7.org/fhir/StructureDefinition/DomainResource"
+                    },
+                    {
+                        "extension": [
+                            {
+                                "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bestpractice",
+                                "valueBoolean": true
+                            },
+                            {
+                                "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bestpractice-explanation",
+                                "valueMarkdown": "When a resource has no narrative, only systems that fully understand the data can display the resource to a human safely. Including a human readable representation in the resource makes for a much more robust eco-system and cheaper handling of resources by intermediary systems. Some ecosystems restrict distribution of resources to only those systems that do fully understand the resources, and as a consequence implementers may believe that the narrative is superfluous. However experience shows that such eco-systems often open up to new participants over time."
+                            }
+                        ],
+                        "key": "dom-6",
+                        "severity": "warning",
+                        "human": "「資源は堅牢な管理のために物語を持つべきである。」",
+                        "expression": "text.`div`.exists()",
+                        "xpath": "exists(f:text/h:div)",
+                        "source": "http://hl7.org/fhir/StructureDefinition/DomainResource"
+                    },
+                    {
+                        "key": "org-1",
+                        "severity": "error",
+                        "human": "「組織は少なくとも名前または識別子を持つ必要があり、おそらく1つ以上のものもあるかもしれません」",
+                        "expression": "(identifier.count() + name.count()) > 0",
+                        "xpath": "count(f:identifier | f:name) > 0"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "Entity. Role, or Act"
+                    },
+                    {
+                        "identity": "v2",
+                        "map": "(also see master files messages)"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": "Organization(classCode=ORG, determinerCode=INST)"
+                    },
+                    {
+                        "identity": "servd",
+                        "map": "Organization"
+                    }
+                ]
+            },
+            {
+                "id": "Organization.id",
+                "path": "Organization.id",
+                "short": "このアーティファクトの論理ID",
+                "definition": "「リソースのURLで使用される論理ID。一度割り当てられたら、この値は変更されません。」",
+                "comment": "「リソースにIDがないのは、作成操作を使用してサーバーに送信されているときだけです。」",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Resource.id",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "extension": [
+                            {
+                                "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fhir-type",
+                                "valueUrl": "string"
+                            }
+                        ],
+                        "code": "http://hl7.org/fhirpath/System.String"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true
+            },
+            {
+                "id": "Organization.meta",
+                "path": "Organization.meta",
+                "short": "「リソースに関するメタデータ」",
+                "definition": "リソースに関するメタデータ。これはインフラストラクチャによって維持されるコンテンツです。 コンテンツの変更は、リソースのバージョン変更と常に関連しているわけではありません。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Resource.meta",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "Meta"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true
+            },
+            {
+                "id": "Organization.implicitRules",
+                "path": "Organization.implicitRules",
+                "short": "このコンテンツが作成されたルールセット",
+                "definition": "「リソース構築時に遵守された一連のルールを指すものであり、コンテンツを処理する際に理解する必要があります。しばしば、特別なルールを定義する実装ガイドとその他のプロファイルなどを含むものです。」",
+                "comment": "このルールセットを主張することで、取引先の限られた集団にしか内容を理解させることができず、長期的にはデータの有用性が制限されます。しかしながら、現存するヘルスエコシステムは高度に分断化しており、一般的に計算可能な形式でデータを定義、収集、交換する準備が整っていません。できる限り、実装者および/または仕様ライターはこの要素の使用を避けるべきです。使用する場合、URLは、そのナラティブとともに他のプロファイル、値セットなどを含む実装ガイドを定義する参照となります。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Resource.implicitRules",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "uri"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": true,
+                "isModifierReason": "This element is labeled as a modifier because the implicit rules may provide additional knowledge about the resource that modifies it's meaning or interpretation",
+                "isSummary": true
+            },
+            {
+                "id": "Organization.language",
+                "path": "Organization.language",
+                "short": "「リソースコンテンツの言語」(Risōsukontentsu no gengo)",
+                "definition": "「リソースが書かれている基本言語。」",
+                "comment": "言語はインデックスとアクセシビリティをサポートするために提供されます（通常、テキスト読み上げなどのサービスは言語タグを使用します）。物語のHTML言語タグは、物語に適用されます。リソース上の言語タグは、リソース内のデータから生成される他のプレゼンテーションの言語を指定するために使用できます。すべてのコンテンツが基本言語である必要はありません。Resource.languageは自動的に物語に適用されたと想定してはいけません。言語が指定されている場合、HTMLのdiv要素にも指定する必要があります（xml：langとhtml lang属性の関係に関する情報はHTML5の規則を参照）。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Resource.language",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "code"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-maxValueSet",
+                            "valueCanonical": "http://hl7.org/fhir/ValueSet/all-languages"
+                        },
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "Language"
+                        },
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-isCommonBinding",
+                            "valueBoolean": true
+                        }
+                    ],
+                    "strength": "preferred",
+                    "description": "「人間の言語。」(Ningen no gengo.)",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/languages"
+                }
+            },
+            {
+                "id": "Organization.text",
+                "path": "Organization.text",
+                "short": "「人間の解釈のためのリソースのテキスト要約」",
+                "definition": "「リソースの要約を含む人が読めるナビゲーションであり、リソースの内容を人に表現するために使用できます。ナビゲーションはすべての構造化されたデータをエンコードする必要はありませんが、人間がナビゲーションを読むだけで「臨床的に安全」であるために十分な詳細を含む必要があります。リソース定義には、臨床的な安全性を確保するためにナビゲーションで表現する必要があるコンテンツが定義される場合があります。」",
+                "comment": "含まれるリソースには説明がありません。含まれないリソースには説明が必要です。場合によっては、リソースが少量のデータしか含まず、テキストだけで表現されることがあります（minOccurs = 1要素がすべて満たされている限り）。これは、情報が「テキストの塊」としてキャプチャされるレガシーシステムからのデータや、テキストが生またはナレーションされて符号化された情報が後で追加される場合に必要な場合があります。",
+                "alias": [
+                    "narrative",
+                    "html",
+                    "xhtml",
+                    "display"
+                ],
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "DomainResource.text",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "Narrative"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "Act.text?"
+                    }
+                ]
+            },
+            {
+                "id": "Organization.contained",
+                "path": "Organization.contained",
+                "short": "「含まれている、インラインのリソース」(Fukuma rete iru, inrain no risōsu)",
+                "definition": "「これらのリソースは、それらを含むリソースから独立した存在を持ちません。それらは独立して識別することはできず、独自の独立したトランザクション範囲を持つこともできません。」",
+                "comment": "「コンテンツが適切に識別できる場合には、これを行うべきではありません。識別が失われると、再び復元することは非常に困難であり（文脈に依存します）、メタ要素にプロファイルとタグを持つことができますが、セキュリティのラベルを持っていてはいけません。」",
+                "alias": [
+                    "inline resources",
+                    "anonymous resources",
+                    "contained resources"
+                ],
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "DomainResource.contained",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "Resource"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "N/A"
+                    }
+                ]
+            },
+            {
+                "id": "Organization.extension",
+                "path": "Organization.extension",
+                "short": "実装によって定義される追加コンテンツ",
+                "definition": "「リソースの基本的な定義の一部ではない追加情報を表すために使用することができます。拡張機能の使用を安全かつ管理可能にするために、定義と使用の一定のガバナンスが適用されます。実装者はどんな拡張機能でも定義できますが、拡張機能の定義の一部として満たす必要がある要件があります」",
+                "comment": "どのようなアプリケーション、プロジェクト、または標準が拡張機能を使用しているかに関わらず、拡張機能の使用には決して汚名が付くわけではありません - それらを使用または定義する機関または管轄区域に関係なく。拡張機能の使用こそが、FHIR仕様を誰にとっても簡単なコアレベルで維持することを可能にします。",
+                "alias": [
+                    "extensions",
+                    "user content"
+                ],
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "DomainResource.extension",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "Extension"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    },
+                    {
+                        "key": "ext-1",
+                        "severity": "error",
+                        "human": "「拡張機能または値[x]のいずれかが必要です。両方ではありません。」",
+                        "expression": "extension.exists() != value.exists()",
+                        "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Extension"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "N/A"
+                    }
+                ]
+            },
+            {
+                "id": "Organization.modifierExtension",
+                "path": "Organization.modifierExtension",
+                "short": "無視できない拡張機能 (Mushi dekinai kakuchou kinou)",
+                "definition": "「リソースの基本的な定義に含まれない、要素の理解や、それを含む要素の子孫の理解を修正する追加情報を表すためにも使用されることがあります。通常、修飾要素は否定や修飾を提供します。拡張機能の使用を安全で管理しやすくするために、拡張機能の定義と使用に対して厳格な統治が適用されます。実装者は拡張機能を定義することが許可されていますが、拡張機能の定義の一部として満たす必要がある要件があります。リソースを処理するアプリケーションは、修飾子拡張をチェックする必要があります。修飾子拡張は、リソースまたはドメインリソースの任意の要素の意味を変更してはなりません（修飾子拡張自体の意味も変更できません）。」",
+                "comment": "どのようなアプリケーション、プロジェクト、または標準が拡張機能を使用しているかに関わらず、拡張機能の使用には決して汚名が付くわけではありません - それらを使用または定義する機関または管轄区域に関係なく。拡張機能の使用こそが、FHIR仕様を誰にとっても簡単なコアレベルで維持することを可能にします。",
+                "requirements": "Modifier extensions allow for extensions that *cannot* be safely ignored to be clearly distinguished from the vast majority of extensions which can be safely ignored.  This promotes interoperability by eliminating the need for implementers to prohibit the presence of extensions. For further information, see the [definition of modifier extensions](extensibility.html#modifierExtension).",
+                "alias": [
+                    "extensions",
+                    "user content"
+                ],
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "DomainResource.modifierExtension",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "Extension"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    },
+                    {
+                        "key": "ext-1",
+                        "severity": "error",
+                        "human": "「拡張機能または値[x]のいずれかが必要です。両方ではありません。」",
+                        "expression": "extension.exists() != value.exists()",
+                        "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Extension"
+                    }
+                ],
+                "isModifier": true,
+                "isModifierReason": "Modifier extensions are expected to modify the meaning or interpretation of the resource that contains them",
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "N/A"
+                    }
+                ]
+            },
+            {
+                "id": "Organization.identifier",
+                "path": "Organization.identifier",
+                "short": "「この組織を複数のシステムで識別する」",
+                "definition": "「異なる複数のシステム上で組織を識別するために使用される組織の識別子」",
+                "requirements": "Organizations are known by a variety of ids. Some institutions maintain several, and most collect identifiers for exchange with other organizations concerning the organization.",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Organization.identifier",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "Identifier"
+                    }
+                ],
+                "condition": [
+                    "org-1"
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.identifier"
+                    },
+                    {
+                        "identity": "v2",
+                        "map": "XON.10 / XON.3"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": ".scopes[Role](classCode=IDENT)"
+                    },
+                    {
+                        "identity": "servd",
+                        "map": "./Identifiers"
+                    }
+                ]
+            },
+            {
+                "id": "Organization.active",
+                "path": "Organization.active",
+                "short": "「その組織の記録がまだ活発に使用されているかどうか」",
+                "definition": "「その組織の記録がまだ活用されているかどうか。」",
+                "comment": "このアクティブなフラグは、組織を一時的に閉鎖したり、建設中のマークとして使用するために意図されていません。代わりに、組織内の場所に中断ステータスを設定する必要があります。中断の理由の詳細が必要な場合は、この要素の拡張機能を使用する必要があります。\n\nこの要素は修飾子としてラベル付けされています。これは、リソースが誤って作成されたことを示すために使用できるためです。",
+                "requirements": "Need a flag to indicate a record is no longer to be used and should generally be hidden for the user in the UI.",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Organization.active",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "boolean"
+                    }
+                ],
+                "meaningWhenMissing": "This resource is generally assumed to be active if no value is provided for the active element",
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": true,
+                "isModifierReason": "This element is labelled as a modifier because it is a status element that can indicate that a record should not be treated as valid",
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.status"
+                    },
+                    {
+                        "identity": "v2",
+                        "map": "No equivalent in HL7 v2"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": ".status"
+                    },
+                    {
+                        "identity": "servd",
+                        "map": "./Status (however this concept in ServD more covers why the organization is active or not, could be delisted, deregistered, not operational yet) this could alternatively be derived from ./StartDate and ./EndDate and given a context date."
+                    }
+                ]
+            },
+            {
+                "id": "Organization.type",
+                "path": "Organization.type",
+                "short": "「組織の種類」",
+                "definition": "これがどのような組織であるか。",
+                "comment": "組織には、法人、区、部門、クリニカルチーム、政府省庁などがあります。 コードは一般的に組織のタイプの分類子であることに注意してください。 多くのアプリケーションでは、コードが特定の組織（例えば、区）を識別するために使用されます。同じタイプの他の組織と区別するための識別子であることに注意してください。\n\n複数のタイプが適切かどうかを考慮するときは、子組織を概念のより適切な使用として評価する必要があります。異なるタイプはおそらく組織の異なるサブエリアにあります。これは、宗教的、学術的、医療センターなど、直交的な値を持つタイプ値がある場合に最もよく使用されます。\n\nこのオプションをシングルカーディナリティにプロファイルするものがいくつかの管轄権に存在することを期待しています。",
+                "requirements": "Need to be able to track the kind of organization that this is - different organization types have different uses.",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Organization.type",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "CodeableConcept"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "OrganizationType"
+                        }
+                    ],
+                    "strength": "example",
+                    "description": "「組織を分類するために使用されます。」",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/organization-type"
+                },
+                "mapping": [
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.class"
+                    },
+                    {
+                        "identity": "v2",
+                        "map": "No equivalent in v2"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": ".code"
+                    },
+                    {
+                        "identity": "servd",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "Organization.name",
+                "path": "Organization.name",
+                "short": "「組織で使用される名前」(Soshiki de shiyou sareru namae)",
+                "definition": "組織に関連する名前。",
+                "comment": "「もし団体の名前が変更された場合、検索によってまだ見つけられるように、旧名をエイリアス欄に入れることを検討してください。」",
+                "requirements": "Need to use the name as the label of the organization.",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Organization.name",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ],
+                "condition": [
+                    "org-1"
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "v2",
+                        "map": "XON.1"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": ".name"
+                    },
+                    {
+                        "identity": "servd",
+                        "map": ".PreferredName/Name"
+                    }
+                ]
+            },
+            {
+                "id": "Organization.alias",
+                "path": "Organization.alias",
+                "short": "組織が以前に知られていた、または今でも知られている代替名のリスト。",
+                "definition": "「その団体が過去に知られていた、または今でも知られている別名のリスト。」",
+                "comment": "エイリアス/歴史的な名前に関連付けられた日付はありません。これは、名前がいつ使用されたかを追跡するためではなく、古い名前でも組織を特定できるように検索を支援するためのものです。",
+                "requirements": "Over time locations and organizations go through many changes and can be known by different names.\n\nFor searching knowing previous names that the organization was known by can be very useful.",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Organization.alias",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": ".name"
+                    }
+                ]
+            },
+            {
+                "id": "Organization.telecom",
+                "path": "Organization.telecom",
+                "short": "組織の連絡先詳細 (Soshiki no renrakusaki shousai)",
+                "definition": "組織の連絡先詳細。",
+                "comment": "「‘home’という利用コードは使用しないでください。これらの連絡先は、組織に雇用または代表されている人々の連絡先ではなく、組織自体の公式連絡先であることに注意してください。」",
+                "requirements": "Human contact for the organization.",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Organization.telecom",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "ContactPoint"
+                    }
+                ],
+                "condition": [
+                    "org-3"
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    },
+                    {
+                        "key": "org-3",
+                        "severity": "error",
+                        "human": "組織のテレコムは、家庭で使用することはできません。",
+                        "expression": "where(use = 'home').empty()",
+                        "xpath": "count(f:use[@value='home']) = 0"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "v2",
+                        "map": "ORC-22?"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": ".telecom"
+                    },
+                    {
+                        "identity": "servd",
+                        "map": "./ContactPoints"
+                    }
+                ]
+            },
+            {
+                "id": "Organization.address",
+                "path": "Organization.address",
+                "short": "「組織の住所」",
+                "definition": "組織の住所。",
+                "comment": "組織は複数の住所を持つ場合があり、異なる用途や有効期間があります。使用コード 'home' は使用しないでください。",
+                "requirements": "May need to keep track of the organization's addresses for contacting, billing or reporting requirements.",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Organization.address",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "Address"
+                    }
+                ],
+                "condition": [
+                    "org-2"
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    },
+                    {
+                        "key": "org-2",
+                        "severity": "error",
+                        "human": "組織の住所は「家」として使用することはできません。 (Soshiki no juusho wa \"ie\" to shite shiyō suru koto wa dekimasen.)",
+                        "expression": "where(use = 'home').empty()",
+                        "xpath": "count(f:use[@value='home']) = 0"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "v2",
+                        "map": "ORC-23?"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": ".address"
+                    },
+                    {
+                        "identity": "servd",
+                        "map": "./PrimaryAddress and ./OtherAddresses"
+                    }
+                ]
+            },
+            {
+                "id": "Organization.partOf",
+                "path": "Organization.partOf",
+                "short": "「この組織が一部を形成する組織」",
+                "definition": "この組織が一部である組織。",
+                "requirements": "Need to be able to track the hierarchy of organizations within an organization.",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Organization.partOf",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "extension": [
+                            {
+                                "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-hierarchy",
+                                "valueBoolean": true
+                            }
+                        ],
+                        "code": "Reference",
+                        "targetProfile": [
+                            "http://hl7.org/fhir/StructureDefinition/Organization"
+                        ]
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "v2",
+                        "map": "No equivalent in HL7 v2"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": ".playedBy[classCode=Part].scoper"
+                    },
+                    {
+                        "identity": "servd",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "Organization.contact",
+                "path": "Organization.contact",
+                "short": "特定の目的のための組織への連絡",
+                "definition": "特定の目的のための組織への連絡。",
+                "comment": "同じ目的の複数の連絡先が提供される場合、優先的に使用する連絡先を特定するために使用できる標準拡張があります。",
+                "requirements": "Need to keep track of assigned contact points within bigger organization.",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Organization.contact",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "BackboneElement"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": ".contactParty"
+                    }
+                ]
+            },
+            {
+                "id": "Organization.contact.id",
+                "path": "Organization.contact.id",
+                "representation": [
+                    "xmlAttr"
+                ],
+                "short": "エレメント相互参照のためのユニークID",
+                "definition": "リソース内の要素の固有ID（内部参照用）。これは、スペースを含まない任意の文字列値である可能性があります。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Element.id",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "extension": [
+                            {
+                                "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fhir-type",
+                                "valueUrl": "string"
+                            }
+                        ],
+                        "code": "http://hl7.org/fhirpath/System.String"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "Organization.contact.extension",
+                "path": "Organization.contact.extension",
+                "short": "実装によって定義される追加コンテンツ",
+                "definition": "「要素の基本的な定義に含まれない追加情報を表すために使用されることがあります。拡張機能の使用を安全かつ管理しやすくするために、定義および使用に適用される厳格なガバナンスのセットがあります。実装者は拡張機能を定義できますが、拡張機能の定義の一部として満たす必要のある要件のセットがあります。」",
+                "comment": "どのようなアプリケーション、プロジェクト、または標準が拡張機能を使用しているかに関わらず、拡張機能の使用には決して汚名が付くわけではありません - それらを使用または定義する機関または管轄区域に関係なく。拡張機能の使用こそが、FHIR仕様を誰にとっても簡単なコアレベルで維持することを可能にします。",
+                "alias": [
+                    "extensions",
+                    "user content"
+                ],
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Element.extension",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "Extension"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    },
+                    {
+                        "key": "ext-1",
+                        "severity": "error",
+                        "human": "「拡張機能または値[x]のいずれかが必要です。両方ではありません。」",
+                        "expression": "extension.exists() != value.exists()",
+                        "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Extension"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "Organization.contact.modifierExtension",
+                "path": "Organization.contact.modifierExtension",
+                "short": "「認識されなくても無視できない拡張機能」(Ninshiki sarenakutemo mushi dekinai kakuchou kinou)",
+                "definition": "「基本的な要素の定義に含まれない追加情報を表すために使用されることがあり、それによって、その要素自体または取り込んでいる要素の子孫の理解を修正する。修飾子要素は通常、否定または修飾を提供します。拡張機能の安全で管理しやすい使用を実現するために、定義および使用に厳しいガバナンスセットが適用されています。どの実装者でも拡張機能を定義できますが、拡張機能の定義の一部として満たす必要がある要件があります。リソースを処理するアプリケーションは、修飾子拡張子をチェックする必要があります。\n\n修飾子拡張機能は、リソースまたはドメインリソースの任意の要素の意味を変更してはなりません（修飾子拡張自体の意味を変更することもできません）。」",
+                "comment": "どのようなアプリケーション、プロジェクト、または標準が拡張機能を使用しているかに関わらず、拡張機能の使用には決して汚名が付くわけではありません - それらを使用または定義する機関または管轄区域に関係なく。拡張機能の使用こそが、FHIR仕様を誰にとっても簡単なコアレベルで維持することを可能にします。",
+                "requirements": "Modifier extensions allow for extensions that *cannot* be safely ignored to be clearly distinguished from the vast majority of extensions which can be safely ignored.  This promotes interoperability by eliminating the need for implementers to prohibit the presence of extensions. For further information, see the [definition of modifier extensions](extensibility.html#modifierExtension).",
+                "alias": [
+                    "extensions",
+                    "user content",
+                    "modifiers"
+                ],
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "BackboneElement.modifierExtension",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "Extension"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    },
+                    {
+                        "key": "ext-1",
+                        "severity": "error",
+                        "human": "「拡張機能または値[x]のいずれかが必要です。両方ではありません。」",
+                        "expression": "extension.exists() != value.exists()",
+                        "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Extension"
+                    }
+                ],
+                "isModifier": true,
+                "isModifierReason": "Modifier extensions are expected to modify the meaning or interpretation of the element that contains them",
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "N/A"
+                    }
+                ]
+            },
+            {
+                "id": "Organization.contact.purpose",
+                "path": "Organization.contact.purpose",
+                "short": "\"接触の種類\" (Sesshoku no shurui)",
+                "definition": "「連絡先に到達できる目的を示しています。」",
+                "requirements": "Need to distinguish between multiple contact persons.",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Organization.contact.purpose",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "CodeableConcept"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "ContactPartyType"
+                        }
+                    ],
+                    "strength": "extensible",
+                    "description": "「連絡を取りたい目的のための連絡先」となります。",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/contactentity-type"
+                },
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "./type"
+                    }
+                ]
+            },
+            {
+                "id": "Organization.contact.name",
+                "path": "Organization.contact.name",
+                "short": "\"コンタクトに関連する名前\" (Kontakuto ni kanren suru namae)",
+                "definition": "「連絡関係にある名前」",
+                "requirements": "Need to be able to track the person by name.",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Organization.contact.name",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "HumanName"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "v2",
+                        "map": "PID-5, PID-9"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": "./name"
+                    }
+                ]
+            },
+            {
+                "id": "Organization.contact.telecom",
+                "path": "Organization.contact.telecom",
+                "short": "「連絡先詳細（電話、メールなど）連絡先のため」",
+                "definition": "当該のパーティーと連絡を取るための連絡先情報（例：電話番号やメールアドレス）",
+                "requirements": "People have (primary) ways to contact them in some way such as phone, email.",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Organization.contact.telecom",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "ContactPoint"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "v2",
+                        "map": "PID-13, PID-14"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": "./telecom"
+                    }
+                ]
+            },
+            {
+                "id": "Organization.contact.address",
+                "path": "Organization.contact.address",
+                "short": "「連絡のための訪問先または郵送先の住所」",
+                "definition": "「連絡先の訪問または郵便送付先」",
+                "requirements": "May need to keep track of a contact party's address for contacting, billing or reporting requirements.",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Organization.contact.address",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "Address"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "v2",
+                        "map": "PID-11"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": "./addr"
+                    }
+                ]
+            },
+            {
+                "id": "Organization.endpoint",
+                "path": "Organization.endpoint",
+                "short": "「組織が運営するサービスへのアクセスを提供する技術エンドポイント」という意味です。",
+                "definition": "組織が運営するサービスへのアクセスを提供する技術的なエンドポイント。",
+                "requirements": "Organizations have multiple systems that provide various services and need to be able to define the technical connection details for how to connect to them, and for what purpose.",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Organization.endpoint",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "Reference",
+                        "targetProfile": [
+                            "http://hl7.org/fhir/StructureDefinition/Endpoint"
+                        ]
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "n/a"
+                    }
+                ]
+            }
+        ]
+    },
+    "differential": {
+        "element": [
+            {
+                "id": "Organization",
+                "path": "Organization",
+                "short": "共通の目的を持つ人々または組織のグループ化",
+                "definition": "「集合的な行動を達成するために形式的または非形式的に認識された人々または組織のグループのことで、企業、機関、法人、部門、コミュニティグループ、医療実践グループ、支払者/保険会社などが含まれます。」",
+                "min": 0,
+                "max": "*",
+                "constraint": [
+                    {
+                        "key": "org-1",
+                        "severity": "error",
+                        "human": "「組織は少なくとも名前または識別子を持つ必要があり、おそらく1つ以上のものもあるかもしれません」",
+                        "expression": "(identifier.count() + name.count()) > 0",
+                        "xpath": "count(f:identifier | f:name) > 0"
+                    }
+                ],
+                "mapping": [
+                    {
+                        "identity": "v2",
+                        "map": "(also see master files messages)"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": "Organization(classCode=ORG, determinerCode=INST)"
+                    },
+                    {
+                        "identity": "servd",
+                        "map": "Organization"
+                    }
+                ]
+            },
+            {
+                "id": "Organization.identifier",
+                "path": "Organization.identifier",
+                "short": "「この組織を複数のシステムで識別する」",
+                "definition": "「異なる複数のシステム上で組織を識別するために使用される組織の識別子」",
+                "requirements": "Organizations are known by a variety of ids. Some institutions maintain several, and most collect identifiers for exchange with other organizations concerning the organization.",
+                "min": 0,
+                "max": "*",
+                "type": [
+                    {
+                        "code": "Identifier"
+                    }
+                ],
+                "condition": [
+                    "org-1"
+                ],
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.identifier"
+                    },
+                    {
+                        "identity": "v2",
+                        "map": "XON.10 / XON.3"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": ".scopes[Role](classCode=IDENT)"
+                    },
+                    {
+                        "identity": "servd",
+                        "map": "./Identifiers"
+                    }
+                ]
+            },
+            {
+                "id": "Organization.active",
+                "path": "Organization.active",
+                "short": "「その組織の記録がまだ活発に使用されているかどうか」",
+                "definition": "「その組織の記録がまだ活用されているかどうか。」",
+                "comment": "このアクティブなフラグは、組織を一時的に閉鎖したり、建設中のマークとして使用するために意図されていません。代わりに、組織内の場所に中断ステータスを設定する必要があります。中断の理由の詳細が必要な場合は、この要素の拡張機能を使用する必要があります。\n\nこの要素は修飾子としてラベル付けされています。これは、リソースが誤って作成されたことを示すために使用できるためです。",
+                "requirements": "Need a flag to indicate a record is no longer to be used and should generally be hidden for the user in the UI.",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "boolean"
+                    }
+                ],
+                "meaningWhenMissing": "This resource is generally assumed to be active if no value is provided for the active element",
+                "isModifier": true,
+                "isModifierReason": "This element is labelled as a modifier because it is a status element that can indicate that a record should not be treated as valid",
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.status"
+                    },
+                    {
+                        "identity": "v2",
+                        "map": "No equivalent in HL7 v2"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": ".status"
+                    },
+                    {
+                        "identity": "servd",
+                        "map": "./Status (however this concept in ServD more covers why the organization is active or not, could be delisted, deregistered, not operational yet) this could alternatively be derived from ./StartDate and ./EndDate and given a context date."
+                    }
+                ]
+            },
+            {
+                "id": "Organization.type",
+                "path": "Organization.type",
+                "short": "「組織の種類」",
+                "definition": "これがどのような組織であるか。",
+                "comment": "組織には、法人、区、部門、クリニカルチーム、政府省庁などがあります。 コードは一般的に組織のタイプの分類子であることに注意してください。 多くのアプリケーションでは、コードが特定の組織（例えば、区）を識別するために使用されます。同じタイプの他の組織と区別するための識別子であることに注意してください。\n\n複数のタイプが適切かどうかを考慮するときは、子組織を概念のより適切な使用として評価する必要があります。異なるタイプはおそらく組織の異なるサブエリアにあります。これは、宗教的、学術的、医療センターなど、直交的な値を持つタイプ値がある場合に最もよく使用されます。\n\nこのオプションをシングルカーディナリティにプロファイルするものがいくつかの管轄権に存在することを期待しています。",
+                "requirements": "Need to be able to track the kind of organization that this is - different organization types have different uses.",
+                "min": 0,
+                "max": "*",
+                "type": [
+                    {
+                        "code": "CodeableConcept"
+                    }
+                ],
+                "isSummary": true,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "OrganizationType"
+                        }
+                    ],
+                    "strength": "example",
+                    "description": "「組織を分類するために使用されます。」",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/organization-type"
+                },
+                "mapping": [
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.class"
+                    },
+                    {
+                        "identity": "v2",
+                        "map": "No equivalent in v2"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": ".code"
+                    },
+                    {
+                        "identity": "servd",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "Organization.name",
+                "path": "Organization.name",
+                "short": "「組織で使用される名前」(Soshiki de shiyou sareru namae)",
+                "definition": "組織に関連する名前。",
+                "comment": "「もし団体の名前が変更された場合、検索によってまだ見つけられるように、旧名をエイリアス欄に入れることを検討してください。」",
+                "requirements": "Need to use the name as the label of the organization.",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ],
+                "condition": [
+                    "org-1"
+                ],
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "v2",
+                        "map": "XON.1"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": ".name"
+                    },
+                    {
+                        "identity": "servd",
+                        "map": ".PreferredName/Name"
+                    }
+                ]
+            },
+            {
+                "id": "Organization.alias",
+                "path": "Organization.alias",
+                "short": "組織が以前に知られていた、または今でも知られている代替名のリスト。",
+                "definition": "「その団体が過去に知られていた、または今でも知られている別名のリスト。」",
+                "comment": "エイリアス/歴史的な名前に関連付けられた日付はありません。これは、名前がいつ使用されたかを追跡するためではなく、古い名前でも組織を特定できるように検索を支援するためのものです。",
+                "requirements": "Over time locations and organizations go through many changes and can be known by different names.\n\nFor searching knowing previous names that the organization was known by can be very useful.",
+                "min": 0,
+                "max": "*",
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ],
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": ".name"
+                    }
+                ]
+            },
+            {
+                "id": "Organization.telecom",
+                "path": "Organization.telecom",
+                "short": "組織の連絡先詳細 (Soshiki no renrakusaki shousai)",
+                "definition": "組織の連絡先詳細。",
+                "comment": "「‘home’という利用コードは使用しないでください。これらの連絡先は、組織に雇用または代表されている人々の連絡先ではなく、組織自体の公式連絡先であることに注意してください。」",
+                "requirements": "Human contact for the organization.",
+                "min": 0,
+                "max": "*",
+                "type": [
+                    {
+                        "code": "ContactPoint"
+                    }
+                ],
+                "condition": [
+                    "org-3"
+                ],
+                "constraint": [
+                    {
+                        "key": "org-3",
+                        "severity": "error",
+                        "human": "組織のテレコムは、家庭で使用することはできません。",
+                        "expression": "where(use = 'home').empty()",
+                        "xpath": "count(f:use[@value='home']) = 0"
+                    }
+                ],
+                "mapping": [
+                    {
+                        "identity": "v2",
+                        "map": "ORC-22?"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": ".telecom"
+                    },
+                    {
+                        "identity": "servd",
+                        "map": "./ContactPoints"
+                    }
+                ]
+            },
+            {
+                "id": "Organization.address",
+                "path": "Organization.address",
+                "short": "「組織の住所」",
+                "definition": "組織の住所。",
+                "comment": "組織は複数の住所を持つ場合があり、異なる用途や有効期間があります。使用コード 'home' は使用しないでください。",
+                "requirements": "May need to keep track of the organization's addresses for contacting, billing or reporting requirements.",
+                "min": 0,
+                "max": "*",
+                "type": [
+                    {
+                        "code": "Address"
+                    }
+                ],
+                "condition": [
+                    "org-2"
+                ],
+                "constraint": [
+                    {
+                        "key": "org-2",
+                        "severity": "error",
+                        "human": "組織の住所は「家」として使用することはできません。 (Soshiki no juusho wa \"ie\" to shite shiyō suru koto wa dekimasen.)",
+                        "expression": "where(use = 'home').empty()",
+                        "xpath": "count(f:use[@value='home']) = 0"
+                    }
+                ],
+                "mapping": [
+                    {
+                        "identity": "v2",
+                        "map": "ORC-23?"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": ".address"
+                    },
+                    {
+                        "identity": "servd",
+                        "map": "./PrimaryAddress and ./OtherAddresses"
+                    }
+                ]
+            },
+            {
+                "id": "Organization.partOf",
+                "path": "Organization.partOf",
+                "short": "「この組織が一部を形成する組織」",
+                "definition": "この組織が一部である組織。",
+                "requirements": "Need to be able to track the hierarchy of organizations within an organization.",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "extension": [
+                            {
+                                "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-hierarchy",
+                                "valueBoolean": true
+                            }
+                        ],
+                        "code": "Reference",
+                        "targetProfile": [
+                            "http://hl7.org/fhir/StructureDefinition/Organization"
+                        ]
+                    }
+                ],
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "v2",
+                        "map": "No equivalent in HL7 v2"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": ".playedBy[classCode=Part].scoper"
+                    },
+                    {
+                        "identity": "servd",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "Organization.contact",
+                "path": "Organization.contact",
+                "short": "特定の目的のための組織への連絡",
+                "definition": "特定の目的のための組織への連絡。",
+                "comment": "同じ目的の複数の連絡先が提供される場合、優先的に使用する連絡先を特定するために使用できる標準拡張があります。",
+                "requirements": "Need to keep track of assigned contact points within bigger organization.",
+                "min": 0,
+                "max": "*",
+                "type": [
+                    {
+                        "code": "BackboneElement"
+                    }
+                ],
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": ".contactParty"
+                    }
+                ]
+            },
+            {
+                "id": "Organization.contact.purpose",
+                "path": "Organization.contact.purpose",
+                "short": "\"接触の種類\" (Sesshoku no shurui)",
+                "definition": "「連絡先に到達できる目的を示しています。」",
+                "requirements": "Need to distinguish between multiple contact persons.",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "CodeableConcept"
+                    }
+                ],
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "ContactPartyType"
+                        }
+                    ],
+                    "strength": "extensible",
+                    "description": "「連絡を取りたい目的のための連絡先」となります。",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/contactentity-type"
+                },
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "./type"
+                    }
+                ]
+            },
+            {
+                "id": "Organization.contact.name",
+                "path": "Organization.contact.name",
+                "short": "\"コンタクトに関連する名前\" (Kontakuto ni kanren suru namae)",
+                "definition": "「連絡関係にある名前」",
+                "requirements": "Need to be able to track the person by name.",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "HumanName"
+                    }
+                ],
+                "mapping": [
+                    {
+                        "identity": "v2",
+                        "map": "PID-5, PID-9"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": "./name"
+                    }
+                ]
+            },
+            {
+                "id": "Organization.contact.telecom",
+                "path": "Organization.contact.telecom",
+                "short": "「連絡先詳細（電話、メールなど）連絡先のため」",
+                "definition": "当該のパーティーと連絡を取るための連絡先情報（例：電話番号やメールアドレス）",
+                "requirements": "People have (primary) ways to contact them in some way such as phone, email.",
+                "min": 0,
+                "max": "*",
+                "type": [
+                    {
+                        "code": "ContactPoint"
+                    }
+                ],
+                "mapping": [
+                    {
+                        "identity": "v2",
+                        "map": "PID-13, PID-14"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": "./telecom"
+                    }
+                ]
+            },
+            {
+                "id": "Organization.contact.address",
+                "path": "Organization.contact.address",
+                "short": "「連絡のための訪問先または郵送先の住所」",
+                "definition": "「連絡先の訪問または郵便送付先」",
+                "requirements": "May need to keep track of a contact party's address for contacting, billing or reporting requirements.",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "Address"
+                    }
+                ],
+                "mapping": [
+                    {
+                        "identity": "v2",
+                        "map": "PID-11"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": "./addr"
+                    }
+                ]
+            },
+            {
+                "id": "Organization.endpoint",
+                "path": "Organization.endpoint",
+                "short": "「組織が運営するサービスへのアクセスを提供する技術エンドポイント」という意味です。",
+                "definition": "組織が運営するサービスへのアクセスを提供する技術的なエンドポイント。",
+                "requirements": "Organizations have multiple systems that provide various services and need to be able to define the technical connection details for how to connect to them, and for what purpose.",
+                "min": 0,
+                "max": "*",
+                "type": [
+                    {
+                        "code": "Reference",
+                        "targetProfile": [
+                            "http://hl7.org/fhir/StructureDefinition/Endpoint"
+                        ]
+                    }
+                ],
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "n/a"
+                    }
+                ]
+            }
+        ]
+    }
+}

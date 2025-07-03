@@ -1,0 +1,2302 @@
+{
+    "resourceType": "StructureDefinition",
+    "id": "EventDefinition",
+    "meta": {
+        "lastUpdated": "2019-11-01T09:29:23.356+11:00"
+    },
+    "extension": [
+        {
+            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-category",
+            "valueString": "Specialized.Definitional Artifacts"
+        },
+        {
+            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
+            "valueCode": "trial-use"
+        },
+        {
+            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fmm",
+            "valueInteger": 0
+        },
+        {
+            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-security-category",
+            "valueCode": "anonymous"
+        },
+        {
+            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-wg",
+            "valueCode": "cds"
+        }
+    ],
+    "url": "http://hl7.org/fhir/StructureDefinition/EventDefinition",
+    "version": "4.0.1",
+    "name": "EventDefinition",
+    "status": "draft",
+    "date": "2019-11-01T09:29:23+11:00",
+    "publisher": "Health Level Seven International (Clinical Decision Support)",
+    "contact": [
+        {
+            "telecom": [
+                {
+                    "system": "url",
+                    "value": "http://hl7.org/fhir"
+                }
+            ]
+        },
+        {
+            "telecom": [
+                {
+                    "system": "url",
+                    "value": "http://www.hl7.org/Special/committees/dss/index.cfm"
+                }
+            ]
+        }
+    ],
+    "description": "EventDefinitionリソースは、特定のイベントがいつ発生するかを再利用可能な説明を提供します。",
+    "fhirVersion": "4.0.1",
+    "mapping": [
+        {
+            "identity": "workflow",
+            "uri": "http://hl7.org/fhir/workflow",
+            "name": "Workflow Pattern"
+        },
+        {
+            "identity": "w5",
+            "uri": "http://hl7.org/fhir/fivews",
+            "name": "FiveWs Pattern Mapping"
+        },
+        {
+            "identity": "objimpl",
+            "uri": "http://hl7.org/fhir/object-implementation",
+            "name": "Object Implementation Information"
+        },
+        {
+            "identity": "rim",
+            "uri": "http://hl7.org/v3",
+            "name": "RIM Mapping"
+        }
+    ],
+    "kind": "resource",
+    "abstract": false,
+    "type": "EventDefinition",
+    "baseDefinition": "http://hl7.org/fhir/StructureDefinition/DomainResource",
+    "_baseDefinition": {
+        "extension": [
+            {
+                "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-codegen-super",
+                "valueString": "MetadataResource"
+            }
+        ]
+    },
+    "derivation": "specialization",
+    "snapshot": {
+        "element": [
+            {
+                "id": "EventDefinition",
+                "path": "EventDefinition",
+                "short": "イベントが発生するときの説明",
+                "definition": "EventDefinitionリソースは、特定のイベントがいつ発生するかを再利用可能な説明を提供します。",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "EventDefinition",
+                    "min": 0,
+                    "max": "*"
+                },
+                "constraint": [
+                    {
+                        "key": "dom-2",
+                        "severity": "error",
+                        "human": "もしリソースが他のリソースに含まれている場合、そのリソースにはネストされたリソースを含めてはなりません (moshi risōsu ga hoka no risōsu ni fukumarete iru baai, sono risōsu ni wa nesuto sareta risōsu o fukumete wa narimasen).",
+                        "expression": "contained.contained.empty()",
+                        "xpath": "not(parent::f:contained and f:contained)",
+                        "source": "http://hl7.org/fhir/StructureDefinition/DomainResource"
+                    },
+                    {
+                        "key": "dom-3",
+                        "severity": "error",
+                        "human": "もしリソースが他のリソースに含まれている場合、それはリソースの他の場所から参照されるか、含まれるリソースに参照されるべきです。",
+                        "expression": "contained.where((('#'+id in (%resource.descendants().reference | %resource.descendants().as(canonical) | %resource.descendants().as(uri) | %resource.descendants().as(url))) or descendants().where(reference = '#').exists() or descendants().where(as(canonical) = '#').exists() or descendants().where(as(canonical) = '#').exists()).not()).trace('unmatched', id).empty()",
+                        "xpath": "not(exists(for $id in f:contained/*/f:id/@value return $contained[not(parent::*/descendant::f:reference/@value=concat('#', $contained/*/id/@value) or descendant::f:reference[@value='#'])]))",
+                        "source": "http://hl7.org/fhir/StructureDefinition/DomainResource"
+                    },
+                    {
+                        "key": "dom-4",
+                        "severity": "error",
+                        "human": "もしリソースが別のリソースの中に含まれる場合、meta.versionIdまたはmeta.lastUpdatedを持つべきではありません。",
+                        "expression": "contained.meta.versionId.empty() and contained.meta.lastUpdated.empty()",
+                        "xpath": "not(exists(f:contained/*/f:meta/f:versionId)) and not(exists(f:contained/*/f:meta/f:lastUpdated))",
+                        "source": "http://hl7.org/fhir/StructureDefinition/DomainResource"
+                    },
+                    {
+                        "key": "dom-5",
+                        "severity": "error",
+                        "human": "「もしリソースが他のリソースに含まれている場合、セキュリティラベルを持つべきではありません。」",
+                        "expression": "contained.meta.security.empty()",
+                        "xpath": "not(exists(f:contained/*/f:meta/f:security))",
+                        "source": "http://hl7.org/fhir/StructureDefinition/DomainResource"
+                    },
+                    {
+                        "extension": [
+                            {
+                                "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bestpractice",
+                                "valueBoolean": true
+                            },
+                            {
+                                "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bestpractice-explanation",
+                                "valueMarkdown": "When a resource has no narrative, only systems that fully understand the data can display the resource to a human safely. Including a human readable representation in the resource makes for a much more robust eco-system and cheaper handling of resources by intermediary systems. Some ecosystems restrict distribution of resources to only those systems that do fully understand the resources, and as a consequence implementers may believe that the narrative is superfluous. However experience shows that such eco-systems often open up to new participants over time."
+                            }
+                        ],
+                        "key": "dom-6",
+                        "severity": "warning",
+                        "human": "「資源は堅牢な管理のために物語を持つべきである。」",
+                        "expression": "text.`div`.exists()",
+                        "xpath": "exists(f:text/h:div)",
+                        "source": "http://hl7.org/fhir/StructureDefinition/DomainResource"
+                    },
+                    {
+                        "key": "evd-0",
+                        "severity": "warning",
+                        "human": "「名前は、コード生成などの機械処理アプリケーションによるモジュールの識別子として使用できる必要があります」",
+                        "expression": "name.matches('[A-Z]([A-Za-z0-9_]){0,254}')",
+                        "xpath": "not(exists(f:name/@value)) or matches(f:name/@value, '[A-Z]([A-Za-z0-9_]){0,254}')"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "Entity. Role, or Act"
+                    },
+                    {
+                        "identity": "workflow",
+                        "map": "Definition"
+                    }
+                ]
+            },
+            {
+                "id": "EventDefinition.id",
+                "path": "EventDefinition.id",
+                "short": "このアーティファクトの論理ID",
+                "definition": "「リソースのURLで使用される論理ID。一度割り当てられたら、この値は変更されません。」",
+                "comment": "「リソースにIDがないのは、作成操作を使用してサーバーに送信されているときだけです。」",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Resource.id",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "extension": [
+                            {
+                                "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fhir-type",
+                                "valueUrl": "string"
+                            }
+                        ],
+                        "code": "http://hl7.org/fhirpath/System.String"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true
+            },
+            {
+                "id": "EventDefinition.meta",
+                "path": "EventDefinition.meta",
+                "short": "「リソースに関するメタデータ」",
+                "definition": "リソースに関するメタデータ。これはインフラストラクチャによって維持されるコンテンツです。 コンテンツの変更は、リソースのバージョン変更と常に関連しているわけではありません。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Resource.meta",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "Meta"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true
+            },
+            {
+                "id": "EventDefinition.implicitRules",
+                "path": "EventDefinition.implicitRules",
+                "short": "このコンテンツが作成されたルールセット",
+                "definition": "「リソース構築時に遵守された一連のルールを指すものであり、コンテンツを処理する際に理解する必要があります。しばしば、特別なルールを定義する実装ガイドとその他のプロファイルなどを含むものです。」",
+                "comment": "このルールセットを主張することで、取引先の限られた集団にしか内容を理解させることができず、長期的にはデータの有用性が制限されます。しかしながら、現存するヘルスエコシステムは高度に分断化しており、一般的に計算可能な形式でデータを定義、収集、交換する準備が整っていません。できる限り、実装者および/または仕様ライターはこの要素の使用を避けるべきです。使用する場合、URLは、そのナラティブとともに他のプロファイル、値セットなどを含む実装ガイドを定義する参照となります。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Resource.implicitRules",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "uri"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": true,
+                "isModifierReason": "This element is labeled as a modifier because the implicit rules may provide additional knowledge about the resource that modifies it's meaning or interpretation",
+                "isSummary": true
+            },
+            {
+                "id": "EventDefinition.language",
+                "path": "EventDefinition.language",
+                "short": "「リソースコンテンツの言語」(Risōsukontentsu no gengo)",
+                "definition": "「リソースが書かれている基本言語。」",
+                "comment": "言語はインデックスとアクセシビリティをサポートするために提供されます（通常、テキスト読み上げなどのサービスは言語タグを使用します）。物語のHTML言語タグは、物語に適用されます。リソース上の言語タグは、リソース内のデータから生成される他のプレゼンテーションの言語を指定するために使用できます。すべてのコンテンツが基本言語である必要はありません。Resource.languageは自動的に物語に適用されたと想定してはいけません。言語が指定されている場合、HTMLのdiv要素にも指定する必要があります（xml：langとhtml lang属性の関係に関する情報はHTML5の規則を参照）。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Resource.language",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "code"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-maxValueSet",
+                            "valueCanonical": "http://hl7.org/fhir/ValueSet/all-languages"
+                        },
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "Language"
+                        },
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-isCommonBinding",
+                            "valueBoolean": true
+                        }
+                    ],
+                    "strength": "preferred",
+                    "description": "「人間の言語。」(Ningen no gengo.)",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/languages"
+                }
+            },
+            {
+                "id": "EventDefinition.text",
+                "path": "EventDefinition.text",
+                "short": "「人間の解釈のためのリソースのテキスト要約」",
+                "definition": "「リソースの要約を含む人が読めるナビゲーションであり、リソースの内容を人に表現するために使用できます。ナビゲーションはすべての構造化されたデータをエンコードする必要はありませんが、人間がナビゲーションを読むだけで「臨床的に安全」であるために十分な詳細を含む必要があります。リソース定義には、臨床的な安全性を確保するためにナビゲーションで表現する必要があるコンテンツが定義される場合があります。」",
+                "comment": "含まれるリソースには説明がありません。含まれないリソースには説明が必要です。場合によっては、リソースが少量のデータしか含まず、テキストだけで表現されることがあります（minOccurs = 1要素がすべて満たされている限り）。これは、情報が「テキストの塊」としてキャプチャされるレガシーシステムからのデータや、テキストが生またはナレーションされて符号化された情報が後で追加される場合に必要な場合があります。",
+                "alias": [
+                    "narrative",
+                    "html",
+                    "xhtml",
+                    "display"
+                ],
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "DomainResource.text",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "Narrative"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "Act.text?"
+                    }
+                ]
+            },
+            {
+                "id": "EventDefinition.contained",
+                "path": "EventDefinition.contained",
+                "short": "「含まれている、インラインのリソース」(Fukuma rete iru, inrain no risōsu)",
+                "definition": "「これらのリソースは、それらを含むリソースから独立した存在を持ちません。それらは独立して識別することはできず、独自の独立したトランザクション範囲を持つこともできません。」",
+                "comment": "「コンテンツが適切に識別できる場合には、これを行うべきではありません。識別が失われると、再び復元することは非常に困難であり（文脈に依存します）、メタ要素にプロファイルとタグを持つことができますが、セキュリティのラベルを持っていてはいけません。」",
+                "alias": [
+                    "inline resources",
+                    "anonymous resources",
+                    "contained resources"
+                ],
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "DomainResource.contained",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "Resource"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "N/A"
+                    }
+                ]
+            },
+            {
+                "id": "EventDefinition.extension",
+                "path": "EventDefinition.extension",
+                "short": "実装によって定義される追加コンテンツ",
+                "definition": "「リソースの基本的な定義の一部ではない追加情報を表すために使用することができます。拡張機能の使用を安全かつ管理可能にするために、定義と使用の一定のガバナンスが適用されます。実装者はどんな拡張機能でも定義できますが、拡張機能の定義の一部として満たす必要がある要件があります」",
+                "comment": "どのようなアプリケーション、プロジェクト、または標準が拡張機能を使用しているかに関わらず、拡張機能の使用には決して汚名が付くわけではありません - それらを使用または定義する機関または管轄区域に関係なく。拡張機能の使用こそが、FHIR仕様を誰にとっても簡単なコアレベルで維持することを可能にします。",
+                "alias": [
+                    "extensions",
+                    "user content"
+                ],
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "DomainResource.extension",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "Extension"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    },
+                    {
+                        "key": "ext-1",
+                        "severity": "error",
+                        "human": "「拡張機能または値[x]のいずれかが必要です。両方ではありません。」",
+                        "expression": "extension.exists() != value.exists()",
+                        "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Extension"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "N/A"
+                    }
+                ]
+            },
+            {
+                "id": "EventDefinition.modifierExtension",
+                "path": "EventDefinition.modifierExtension",
+                "short": "無視できない拡張機能 (Mushi dekinai kakuchou kinou)",
+                "definition": "「リソースの基本的な定義に含まれない、要素の理解や、それを含む要素の子孫の理解を修正する追加情報を表すためにも使用されることがあります。通常、修飾要素は否定や修飾を提供します。拡張機能の使用を安全で管理しやすくするために、拡張機能の定義と使用に対して厳格な統治が適用されます。実装者は拡張機能を定義することが許可されていますが、拡張機能の定義の一部として満たす必要がある要件があります。リソースを処理するアプリケーションは、修飾子拡張をチェックする必要があります。修飾子拡張は、リソースまたはドメインリソースの任意の要素の意味を変更してはなりません（修飾子拡張自体の意味も変更できません）。」",
+                "comment": "どのようなアプリケーション、プロジェクト、または標準が拡張機能を使用しているかに関わらず、拡張機能の使用には決して汚名が付くわけではありません - それらを使用または定義する機関または管轄区域に関係なく。拡張機能の使用こそが、FHIR仕様を誰にとっても簡単なコアレベルで維持することを可能にします。",
+                "requirements": "Modifier extensions allow for extensions that *cannot* be safely ignored to be clearly distinguished from the vast majority of extensions which can be safely ignored.  This promotes interoperability by eliminating the need for implementers to prohibit the presence of extensions. For further information, see the [definition of modifier extensions](extensibility.html#modifierExtension).",
+                "alias": [
+                    "extensions",
+                    "user content"
+                ],
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "DomainResource.modifierExtension",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "Extension"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    },
+                    {
+                        "key": "ext-1",
+                        "severity": "error",
+                        "human": "「拡張機能または値[x]のいずれかが必要です。両方ではありません。」",
+                        "expression": "extension.exists() != value.exists()",
+                        "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Extension"
+                    }
+                ],
+                "isModifier": true,
+                "isModifierReason": "Modifier extensions are expected to modify the meaning or interpretation of the resource that contains them",
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "N/A"
+                    }
+                ]
+            },
+            {
+                "id": "EventDefinition.url",
+                "path": "EventDefinition.url",
+                "short": "このイベント定義のための正準識別子は、URIとして表され、グローバルに一意です。",
+                "definition": "「仕様、モデル、デザイン、またはインスタンスで参照されるときにこのイベント定義を識別するために使用される絶対URI、または正規の識別子とも呼ばれます。これはグローバルに一意である必要があり、このイベント定義の権威あるインスタンスが（またはされる）公開されるリテラルアドレスである必要があります。このURLは正規の参照のターゲットになります。イベント定義が異なるサーバーに保存されているとき、これは同じままである必要があります。」",
+                "comment": "\"urn:uuid:またはurn:oid:であることができますが、実際のhttp:アドレスが優先されます。異なるバージョンを有する複数のインスタンスが同じURLを共有することができます。\n\nリソース（同じURL、新しいバージョン）の新しいバージョンを作成するか新しいアーティファクトを定義するかどうかの決定は、著者に任されます。この決定を行うための考慮事項は、[Technical and Business Versions](resource.html#versions)に記載されています。\n\n一部の場合、リソースは指定されたURLで見つからなくなることがありますが、URL自体は変更できません。実装は[meta.source]要素を使用して、リソースの現在のマスターソースがどこにあるかを示すことができます。\"",
+                "requirements": "Allows the event definition to be referenced by a single globally unique identifier.",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "EventDefinition.url",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "uri"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Definition.url"
+                    },
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.identifier"
+                    }
+                ]
+            },
+            {
+                "id": "EventDefinition.identifier",
+                "path": "EventDefinition.identifier",
+                "short": "イベント定義の追加識別子",
+                "definition": "「このイベント定義を他の形式で表現したり、仕様書、モデル、設計、またはインスタンスで参照する際に使用される形式的な識別子」",
+                "comment": "通常、これはHL7 V3 II（インスタンス識別子）データ型に入れることができる識別子に使用され、論理URIが使用できないFHIR外のこのイベント定義を識別することができます。",
+                "requirements": "Allows externally provided and/or usable business identifiers to be easily associated with the module.",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "EventDefinition.identifier",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "Identifier"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Definition.identifier"
+                    },
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.identifier"
+                    },
+                    {
+                        "identity": "objimpl",
+                        "map": "no-gen-base"
+                    }
+                ]
+            },
+            {
+                "id": "EventDefinition.version",
+                "path": "EventDefinition.version",
+                "short": "「イベント定義のビジネス版」",
+                "definition": "仕様、モデル、デザイン、またはインスタンスで参照されるイベント定義のバージョンを識別するために使用される識別子です。これは、イベント定義の作成者によって管理される任意の値であり、グローバルに一意である必要はありません。たとえば、管理されたバージョンが利用できない場合、タイムスタンプ（yyyymmddなど）である可能性があります。また、バージョンを辞書的な順序に配置する必要もありません。",
+                "comment": "同じ識別子を持ちながらも異なるバージョンを持つイベント定義インスタンスが存在する可能性があります。バージョンは、フォーマット[url] | [version]を使用して、特定のビジネスバージョンのイベント定義を参照するためにURLに追加することができます。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "EventDefinition.version",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Definition.version"
+                    },
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.version"
+                    }
+                ]
+            },
+            {
+                "id": "EventDefinition.name",
+                "path": "EventDefinition.name",
+                "short": "このイベントの定義の名称（コンピューターに対応）",
+                "definition": "「イベント定義を識別する自然言語の名前。この名前は、コード生成などの機械処理アプリケーションによるモジュールの識別子として使用可能である必要があります。」",
+                "comment": "その名前は、グローバルにユニークである必要はありません。機械処理に適していることを保証するために、単純で英数字の名前であるべきです。",
+                "requirements": "Support human navigation and code generation.",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "EventDefinition.name",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ],
+                "condition": [
+                    "inv-0"
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true
+            },
+            {
+                "id": "EventDefinition.title",
+                "path": "EventDefinition.title",
+                "short": "「このイベントの定義についての名前（ユーザーフレンドリー）」",
+                "definition": "イベント定義に適した、短くて説明的で使いやすいタイトル。",
+                "comment": "この名前は機械処理に適している必要はなく、句読点、空白などが含まれていても構いません。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "EventDefinition.title",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Definition.title"
+                    }
+                ]
+            },
+            {
+                "id": "EventDefinition.subtitle",
+                "path": "EventDefinition.subtitle",
+                "short": "イベント定義の下位タイトル",
+                "definition": "\"イベントの定義に対する説明または代替タイトルで、内容に関する追加情報を提供するもの。\"",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "EventDefinition.subtitle",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false
+            },
+            {
+                "id": "EventDefinition.status",
+                "path": "EventDefinition.status",
+                "short": "下書き | アクティブ | 引退した | 不明",
+                "definition": "このイベントの定義の状況。コンテンツのライフサイクルの追跡を可能にします。",
+                "comment": "「使用可能なイベントの定義を選択できます。」",
+                "min": 1,
+                "max": "1",
+                "base": {
+                    "path": "EventDefinition.status",
+                    "min": 1,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "code"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": true,
+                "isModifierReason": "This is labeled as \"Is Modifier\" because applications should not use a retired {{title}} without due consideration",
+                "isSummary": true,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "PublicationStatus"
+                        },
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-isCommonBinding",
+                            "valueBoolean": true
+                        }
+                    ],
+                    "strength": "required",
+                    "description": "「アーティファクトのライフサイクルステータス」",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/publication-status|4.0.1"
+                },
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Definition.status"
+                    },
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.status"
+                    }
+                ]
+            },
+            {
+                "id": "EventDefinition.experimental",
+                "path": "EventDefinition.experimental",
+                "short": "テスト目的であり、実際の使用を意図していません。",
+                "definition": "このイベント定義がテスト目的（または教育/評価/マーケティング）のために作成されたもので、本番使用には使用しないことを示すブール値。",
+                "comment": "「使用可能なイベントの定義を選択できます。」",
+                "requirements": "Enables experimental content to be developed following the same lifecycle that would be used for a production-level event definition.",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "EventDefinition.experimental",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "boolean"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Definition.experimental"
+                    },
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.class"
+                    }
+                ]
+            },
+            {
+                "id": "EventDefinition.subject[x]",
+                "path": "EventDefinition.subject[x]",
+                "short": "「イベント定義が焦点とする個人のタイプ」",
+                "definition": "「イベント定義の意図する対象を説明するコードまたはグループの定義」",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "EventDefinition.subject[x]",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "CodeableConcept"
+                    },
+                    {
+                        "code": "Reference",
+                        "targetProfile": [
+                            "http://hl7.org/fhir/StructureDefinition/Group"
+                        ]
+                    }
+                ],
+                "meaningWhenMissing": "Patient",
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "SubjectType"
+                        }
+                    ],
+                    "strength": "extensible",
+                    "description": "可能なイベントの被験者の種類（例：患者、医師、組織、場所など）。",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/subject-type"
+                },
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Definition.subject"
+                    }
+                ]
+            },
+            {
+                "id": "EventDefinition.date",
+                "path": "EventDefinition.date",
+                "short": "最終更新日 (Saishuu koushinbi)",
+                "definition": "「イベント定義が公開された日付(時間はオプション)。ビジネスバージョンが変更された場合、また状態コードが変更された場合には、日付を変更する必要があります。加えて、イベント定義の実質的な内容が変更された場合にも日付を変更するべきです。」",
+                "comment": "「この日付はイベントの定義の最終更新日付とは異なることに注意してください。リソースがイベント定義の代替表現である可能性があるためです。追加の特定日付は拡張として追加される場合があります。または過去のリソースバージョンに関連する起源を参照することで見つけることができます。」",
+                "alias": [
+                    "Revision Date"
+                ],
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "EventDefinition.date",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "dateTime"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Definition.date"
+                    },
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.recorded"
+                    }
+                ]
+            },
+            {
+                "id": "EventDefinition.publisher",
+                "path": "EventDefinition.publisher",
+                "short": "出版社の名前（組織または個人）",
+                "definition": "イベント定義を公開した団体または個人の名前。",
+                "comment": "通常は組織であるが、個人も可能である。イベント定義の発行者（または管理者）は、イベント定義の維持と保守に主に責任を持つ組織または個人である。これは、コンテンツを最初に執筆した個人または組織と必ずしも同じではない。発行者は、イベント定義に関する質問や問題の主要な連絡先である。この項目は、情報が文脈から利用可能でない限り、必ず入力する必要がある。",
+                "requirements": "Helps establish the \"authority/credibility\" of the event definition.  May also allow for contact.",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "EventDefinition.publisher",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Definition.publisher"
+                    },
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.witness"
+                    }
+                ]
+            },
+            {
+                "id": "EventDefinition.contact",
+                "path": "EventDefinition.contact",
+                "short": "出版社の連絡先詳細",
+                "definition": "ユーザーが出版者を見つけてコミュニケーションを取るのを支援するための連絡先詳細。",
+                "comment": "「ウェブサイト、メールアドレス、電話番号などかもしれません。」",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "EventDefinition.contact",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "ContactDetail"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Definition.contact"
+                    }
+                ]
+            },
+            {
+                "id": "EventDefinition.description",
+                "path": "EventDefinition.description",
+                "short": "イベント定義の自然言語形式による説明",
+                "definition": "「消費者の観点からのイベント定義の自然言語説明」の自由なテキスト。」",
+                "comment": "「この説明は、なぜこのイベント定義が作成されたか、誤用に関するコメント、臨床的使用や解釈のための指示、文献参照、紙面からの例など、詳細を捉えるために使用できます。これは、リソース自体の「テキスト」フィールドで伝えられるイベント定義の描写ではありません。このアイテムは、イベント定義の言語が作成された場所で優勢な言語であると推定される場合を除き、埋める必要があります。」",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "EventDefinition.description",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "markdown"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Definition.description"
+                    }
+                ]
+            },
+            {
+                "id": "EventDefinition.useContext",
+                "path": "EventDefinition.useContext",
+                "short": "「コンテンツが支援することを意図した文脈」",
+                "definition": "このコンテンツは、掲載されているコンテキストをサポートする意図と焦点を持って開発されました。これらのコンテキストは、一般的なカテゴリ（性別、年齢など）である場合や、特定のプログラム（保険プラン、研究など）への参照である場合があり、適切なイベント定義インスタンスの索引付けや検索の支援に使用できます。",
+                "comment": "複数のuseContextが指定された場合、すべてまたはどれも適用されるという期待はありません。",
+                "requirements": "Assist in searching for appropriate content.",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "EventDefinition.useContext",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "UsageContext"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Definition.useContext"
+                    }
+                ]
+            },
+            {
+                "id": "EventDefinition.jurisdiction",
+                "path": "EventDefinition.jurisdiction",
+                "short": "\"適用される場合のイベント定義の意図された管轄地\"",
+                "definition": "\"事象定義の使用が意図されている法的または地理的地域。\"",
+                "comment": "「イベント定義が、元々設計されたまたは意図された範囲以外の管轄区域でも利用可能である可能性があります。」",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "EventDefinition.jurisdiction",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "CodeableConcept"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "Jurisdiction"
+                        },
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-isCommonBinding",
+                            "valueBoolean": true
+                        }
+                    ],
+                    "strength": "extensible",
+                    "description": "このアーティファクトの使用の対象となる国や地域。",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/jurisdiction"
+                },
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Definition.jurisdiction"
+                    }
+                ]
+            },
+            {
+                "id": "EventDefinition.purpose",
+                "path": "EventDefinition.purpose",
+                "short": "なぜこのイベントの定義がされたのか？(Naze kono ibento no teigi ga sareta no ka?)",
+                "definition": "このイベント定義が必要とされている理由と、なぜそのように設計されたかの説明。",
+                "comment": "この要素は、イベントの定義の使用方法を説明するものではなく、「なぜ」リソースが必要であるか、または「なぜ」それが定義されたかを追跡するためのものです。これは、イベント定義の構造を推進するソース資料や仕様に指向するために使用することができます。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "EventDefinition.purpose",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "markdown"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Definition.purpose"
+                    },
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.why[x]"
+                    },
+                    {
+                        "identity": "objimpl",
+                        "map": "no-gen-base"
+                    }
+                ]
+            },
+            {
+                "id": "EventDefinition.usage",
+                "path": "EventDefinition.usage",
+                "short": "「イベント定義の臨床的使用方法を説明します」",
+                "definition": "「臨床的観点からイベント定義がどのように使用されるかの詳細な説明」",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "EventDefinition.usage",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false
+            },
+            {
+                "id": "EventDefinition.copyright",
+                "path": "EventDefinition.copyright",
+                "short": "「使用および/または公開制限」",
+                "definition": "イベント定義及び/又はその内容に関連した著作権声明。著作権声明は、通常、イベント定義の使用や公開に対する法的制限です。",
+                "requirements": "Consumers must be able to determine any legal restrictions on the use of the event definition and/or its content.",
+                "alias": [
+                    "License",
+                    "Restrictions"
+                ],
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "EventDefinition.copyright",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "markdown"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Definition.copyright"
+                    },
+                    {
+                        "identity": "objimpl",
+                        "map": "no-gen-base"
+                    }
+                ]
+            },
+            {
+                "id": "EventDefinition.approvalDate",
+                "path": "EventDefinition.approvalDate",
+                "short": "「イベントの定義が出版社によって承認された時」",
+                "definition": "リソースのコンテンツが出版者によって承認された日付。承認は、コンテンツが公式に使用許可された際に一度行われます。",
+                "comment": "「'日付' 要素は、細かい修正や編集のために承認日よりも新しい場合があります。」",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "EventDefinition.approvalDate",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "date"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Definition.approvalDate"
+                    },
+                    {
+                        "identity": "objimpl",
+                        "map": "no-gen-base"
+                    }
+                ]
+            },
+            {
+                "id": "EventDefinition.lastReviewDate",
+                "path": "EventDefinition.lastReviewDate",
+                "short": "「イベントの定義が最後に確認されたとき」",
+                "definition": "「リソース内容が最後にレビューされた日付。承認後に定期的にレビューが行われますが、承認日は変更されません。」",
+                "comment": "「指定された場合、この日付は元の承認日付に続きます。」",
+                "requirements": "Gives a sense of how \"current\" the content is.  Resources that have not been reviewed in a long time may have a risk of being less appropriate/relevant.",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "EventDefinition.lastReviewDate",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "date"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Definition.lastReviewDate"
+                    },
+                    {
+                        "identity": "objimpl",
+                        "map": "no-gen-base"
+                    }
+                ]
+            },
+            {
+                "id": "EventDefinition.effectivePeriod",
+                "path": "EventDefinition.effectivePeriod",
+                "short": "「イベント定義が使用される予定の時」",
+                "definition": "「イベント定義内容が活用されていたまたは活用されている期間」という意味になります。",
+                "comment": "イベント定義の有効期間は、コンテンツが使用可能である期間を決定し、出版およびレビュー日付とは独立しています。たとえば、2016年に使用することを意図した措置は、2015年に公表される可能性があります。",
+                "requirements": "Allows establishing a transition before a resource comes into effect and also allows for a sunsetting  process when new versions of the event definition are or are expected to be used instead.",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "EventDefinition.effectivePeriod",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "Period"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Definition.effectivePeriod"
+                    },
+                    {
+                        "identity": "objimpl",
+                        "map": "no-gen-base"
+                    }
+                ]
+            },
+            {
+                "id": "EventDefinition.topic",
+                "path": "EventDefinition.topic",
+                "short": "例：教育、治療、評価など。",
+                "definition": "モジュールに関連する説明的なトピック。トピックは、モジュールの高レベルのカテゴリ分類を提供し、フィルタリングや検索に役立つ場合があります。",
+                "requirements": "Repositories must be able to determine how to categorize the module so that it can be found by topical searches.",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "EventDefinition.topic",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "CodeableConcept"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "DefinitionTopic"
+                        }
+                    ],
+                    "strength": "example",
+                    "description": "定義の高レベルの分類。検索、ソート、フィルタリングに使用されます。",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/definition-topic"
+                }
+            },
+            {
+                "id": "EventDefinition.author",
+                "path": "EventDefinition.author",
+                "short": "「誰がその内容を作成したのですか？」(dare ga sono naiyou wo sakusei shita no desu ka?)",
+                "definition": "「コンテンツの作成と維持に主に関与する個人または組織」",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "EventDefinition.author",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "ContactDetail"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": ".participation[typeCode=AUT]"
+                    }
+                ]
+            },
+            {
+                "id": "EventDefinition.editor",
+                "path": "EventDefinition.editor",
+                "short": "誰がコンテンツを編集しましたか？ (dare ga kontentsu o henshu shimashita ka?)",
+                "definition": "「コンテンツの内部的一貫性を主に責任を負う個人または組織。」",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "EventDefinition.editor",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "ContactDetail"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false
+            },
+            {
+                "id": "EventDefinition.reviewer",
+                "path": "EventDefinition.reviewer",
+                "short": "「誰がコンテンツを確認しましたか？」(dare ga kontentsu wo kakunin shimashita ka?)",
+                "definition": "「コンテンツの一部のレビューを主に担当する個人または組織」",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "EventDefinition.reviewer",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "ContactDetail"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": ".participation[typeCode=VRF] {not clear whether VRF best corresponds to reviewer or endorser}"
+                    }
+                ]
+            },
+            {
+                "id": "EventDefinition.endorser",
+                "path": "EventDefinition.endorser",
+                "short": "「誰が内容を承認しましたか？」(Dare ga naiyou wo shounin shimashita ka?)",
+                "definition": "ある設定で使用するためにコンテンツを正式に承認する責任を持つ個人または組織。",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "EventDefinition.endorser",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "ContactDetail"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": ".participation[typeCode=VRF] {not clear whether VRF best corresponds to reviewer or endorser}"
+                    }
+                ]
+            },
+            {
+                "id": "EventDefinition.relatedArtifact",
+                "path": "EventDefinition.relatedArtifact",
+                "short": "追加の文書、引用など。",
+                "definition": "「追加ドキュメント、正当化、または参考文献などの関連資源」",
+                "comment": "「各関連リソースは、添付ファイルであるか他のリソースへの参照であるが、両方ではありません。」",
+                "requirements": "Modules must be able to provide enough information for consumers of the content (and/or interventions or results produced by the content) to be able to determine and understand the justification for and evidence in support of the content.",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "EventDefinition.relatedArtifact",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "RelatedArtifact"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false
+            },
+            {
+                "id": "EventDefinition.trigger",
+                "path": "EventDefinition.trigger",
+                "short": "「イベントが起こる '時' (複数 = 'または')」",
+                "definition": "トリガー要素は、イベントが発生するタイミングを定義します。複数のトリガー条件が指定されている場合、トリガー条件のいずれかが満たされるたびにイベントが発生します。",
+                "min": 1,
+                "max": "*",
+                "base": {
+                    "path": "EventDefinition.trigger",
+                    "min": 1,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "TriggerDefinition"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true
+            }
+        ]
+    },
+    "differential": {
+        "element": [
+            {
+                "id": "EventDefinition",
+                "path": "EventDefinition",
+                "short": "イベントが発生するときの説明",
+                "definition": "EventDefinitionリソースは、特定のイベントがいつ発生するかを再利用可能な説明を提供します。",
+                "min": 0,
+                "max": "*",
+                "constraint": [
+                    {
+                        "key": "evd-0",
+                        "severity": "warning",
+                        "human": "「名前は、コード生成などの機械処理アプリケーションによるモジュールの識別子として使用できる必要があります」",
+                        "expression": "name.matches('[A-Z]([A-Za-z0-9_]){0,254}')",
+                        "xpath": "not(exists(f:name/@value)) or matches(f:name/@value, '[A-Z]([A-Za-z0-9_]){0,254}')"
+                    }
+                ],
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Definition"
+                    }
+                ]
+            },
+            {
+                "id": "EventDefinition.url",
+                "path": "EventDefinition.url",
+                "short": "このイベント定義のための正準識別子は、URIとして表され、グローバルに一意です。",
+                "definition": "「仕様、モデル、デザイン、またはインスタンスで参照されるときにこのイベント定義を識別するために使用される絶対URI、または正規の識別子とも呼ばれます。これはグローバルに一意である必要があり、このイベント定義の権威あるインスタンスが（またはされる）公開されるリテラルアドレスである必要があります。このURLは正規の参照のターゲットになります。イベント定義が異なるサーバーに保存されているとき、これは同じままである必要があります。」",
+                "comment": "\"urn:uuid:またはurn:oid:であることができますが、実際のhttp:アドレスが優先されます。異なるバージョンを有する複数のインスタンスが同じURLを共有することができます。\n\nリソース（同じURL、新しいバージョン）の新しいバージョンを作成するか新しいアーティファクトを定義するかどうかの決定は、著者に任されます。この決定を行うための考慮事項は、[Technical and Business Versions](resource.html#versions)に記載されています。\n\n一部の場合、リソースは指定されたURLで見つからなくなることがありますが、URL自体は変更できません。実装は[meta.source]要素を使用して、リソースの現在のマスターソースがどこにあるかを示すことができます。\"",
+                "requirements": "Allows the event definition to be referenced by a single globally unique identifier.",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "uri"
+                    }
+                ],
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Definition.url"
+                    },
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.identifier"
+                    }
+                ]
+            },
+            {
+                "id": "EventDefinition.identifier",
+                "path": "EventDefinition.identifier",
+                "short": "イベント定義の追加識別子",
+                "definition": "「このイベント定義を他の形式で表現したり、仕様書、モデル、設計、またはインスタンスで参照する際に使用される形式的な識別子」",
+                "comment": "通常、これはHL7 V3 II（インスタンス識別子）データ型に入れることができる識別子に使用され、論理URIが使用できないFHIR外のこのイベント定義を識別することができます。",
+                "requirements": "Allows externally provided and/or usable business identifiers to be easily associated with the module.",
+                "min": 0,
+                "max": "*",
+                "type": [
+                    {
+                        "code": "Identifier"
+                    }
+                ],
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Definition.identifier"
+                    },
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.identifier"
+                    },
+                    {
+                        "identity": "objimpl",
+                        "map": "no-gen-base"
+                    }
+                ]
+            },
+            {
+                "id": "EventDefinition.version",
+                "path": "EventDefinition.version",
+                "short": "「イベント定義のビジネス版」",
+                "definition": "仕様、モデル、デザイン、またはインスタンスで参照されるイベント定義のバージョンを識別するために使用される識別子です。これは、イベント定義の作成者によって管理される任意の値であり、グローバルに一意である必要はありません。たとえば、管理されたバージョンが利用できない場合、タイムスタンプ（yyyymmddなど）である可能性があります。また、バージョンを辞書的な順序に配置する必要もありません。",
+                "comment": "同じ識別子を持ちながらも異なるバージョンを持つイベント定義インスタンスが存在する可能性があります。バージョンは、フォーマット[url] | [version]を使用して、特定のビジネスバージョンのイベント定義を参照するためにURLに追加することができます。",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ],
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Definition.version"
+                    },
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.version"
+                    }
+                ]
+            },
+            {
+                "id": "EventDefinition.name",
+                "path": "EventDefinition.name",
+                "short": "このイベントの定義の名称（コンピューターに対応）",
+                "definition": "「イベント定義を識別する自然言語の名前。この名前は、コード生成などの機械処理アプリケーションによるモジュールの識別子として使用可能である必要があります。」",
+                "comment": "その名前は、グローバルにユニークである必要はありません。機械処理に適していることを保証するために、単純で英数字の名前であるべきです。",
+                "requirements": "Support human navigation and code generation.",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ],
+                "condition": [
+                    "inv-0"
+                ],
+                "isSummary": true
+            },
+            {
+                "id": "EventDefinition.title",
+                "path": "EventDefinition.title",
+                "short": "「このイベントの定義についての名前（ユーザーフレンドリー）」",
+                "definition": "イベント定義に適した、短くて説明的で使いやすいタイトル。",
+                "comment": "この名前は機械処理に適している必要はなく、句読点、空白などが含まれていても構いません。",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ],
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Definition.title"
+                    }
+                ]
+            },
+            {
+                "id": "EventDefinition.subtitle",
+                "path": "EventDefinition.subtitle",
+                "short": "イベント定義の下位タイトル",
+                "definition": "\"イベントの定義に対する説明または代替タイトルで、内容に関する追加情報を提供するもの。\"",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ]
+            },
+            {
+                "id": "EventDefinition.status",
+                "path": "EventDefinition.status",
+                "short": "下書き | アクティブ | 引退した | 不明",
+                "definition": "このイベントの定義の状況。コンテンツのライフサイクルの追跡を可能にします。",
+                "comment": "「使用可能なイベントの定義を選択できます。」",
+                "min": 1,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "code"
+                    }
+                ],
+                "isModifier": true,
+                "isModifierReason": "This is labeled as \"Is Modifier\" because applications should not use a retired {{title}} without due consideration",
+                "isSummary": true,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "PublicationStatus"
+                        },
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-isCommonBinding",
+                            "valueBoolean": true
+                        }
+                    ],
+                    "strength": "required",
+                    "description": "「アーティファクトのライフサイクルステータス」",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/publication-status|4.0.1"
+                },
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Definition.status"
+                    },
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.status"
+                    }
+                ]
+            },
+            {
+                "id": "EventDefinition.experimental",
+                "path": "EventDefinition.experimental",
+                "short": "テスト目的であり、実際の使用を意図していません。",
+                "definition": "このイベント定義がテスト目的（または教育/評価/マーケティング）のために作成されたもので、本番使用には使用しないことを示すブール値。",
+                "comment": "「使用可能なイベントの定義を選択できます。」",
+                "requirements": "Enables experimental content to be developed following the same lifecycle that would be used for a production-level event definition.",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "boolean"
+                    }
+                ],
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Definition.experimental"
+                    },
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.class"
+                    }
+                ]
+            },
+            {
+                "id": "EventDefinition.subject[x]",
+                "path": "EventDefinition.subject[x]",
+                "short": "「イベント定義が焦点とする個人のタイプ」",
+                "definition": "「イベント定義の意図する対象を説明するコードまたはグループの定義」",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "CodeableConcept"
+                    },
+                    {
+                        "code": "Reference",
+                        "targetProfile": [
+                            "http://hl7.org/fhir/StructureDefinition/Group"
+                        ]
+                    }
+                ],
+                "meaningWhenMissing": "Patient",
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "SubjectType"
+                        }
+                    ],
+                    "strength": "extensible",
+                    "description": "可能なイベントの被験者の種類（例：患者、医師、組織、場所など）。",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/subject-type"
+                },
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Definition.subject"
+                    }
+                ]
+            },
+            {
+                "id": "EventDefinition.date",
+                "path": "EventDefinition.date",
+                "short": "最終更新日 (Saishuu koushinbi)",
+                "definition": "「イベント定義が公開された日付(時間はオプション)。ビジネスバージョンが変更された場合、また状態コードが変更された場合には、日付を変更する必要があります。加えて、イベント定義の実質的な内容が変更された場合にも日付を変更するべきです。」",
+                "comment": "「この日付はイベントの定義の最終更新日付とは異なることに注意してください。リソースがイベント定義の代替表現である可能性があるためです。追加の特定日付は拡張として追加される場合があります。または過去のリソースバージョンに関連する起源を参照することで見つけることができます。」",
+                "alias": [
+                    "Revision Date"
+                ],
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "dateTime"
+                    }
+                ],
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Definition.date"
+                    },
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.recorded"
+                    }
+                ]
+            },
+            {
+                "id": "EventDefinition.publisher",
+                "path": "EventDefinition.publisher",
+                "short": "出版社の名前（組織または個人）",
+                "definition": "イベント定義を公開した団体または個人の名前。",
+                "comment": "通常は組織であるが、個人も可能である。イベント定義の発行者（または管理者）は、イベント定義の維持と保守に主に責任を持つ組織または個人である。これは、コンテンツを最初に執筆した個人または組織と必ずしも同じではない。発行者は、イベント定義に関する質問や問題の主要な連絡先である。この項目は、情報が文脈から利用可能でない限り、必ず入力する必要がある。",
+                "requirements": "Helps establish the \"authority/credibility\" of the event definition.  May also allow for contact.",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ],
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Definition.publisher"
+                    },
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.witness"
+                    }
+                ]
+            },
+            {
+                "id": "EventDefinition.contact",
+                "path": "EventDefinition.contact",
+                "short": "出版社の連絡先詳細",
+                "definition": "ユーザーが出版者を見つけてコミュニケーションを取るのを支援するための連絡先詳細。",
+                "comment": "「ウェブサイト、メールアドレス、電話番号などかもしれません。」",
+                "min": 0,
+                "max": "*",
+                "type": [
+                    {
+                        "code": "ContactDetail"
+                    }
+                ],
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Definition.contact"
+                    }
+                ]
+            },
+            {
+                "id": "EventDefinition.description",
+                "path": "EventDefinition.description",
+                "short": "イベント定義の自然言語形式による説明",
+                "definition": "「消費者の観点からのイベント定義の自然言語説明」の自由なテキスト。」",
+                "comment": "「この説明は、なぜこのイベント定義が作成されたか、誤用に関するコメント、臨床的使用や解釈のための指示、文献参照、紙面からの例など、詳細を捉えるために使用できます。これは、リソース自体の「テキスト」フィールドで伝えられるイベント定義の描写ではありません。このアイテムは、イベント定義の言語が作成された場所で優勢な言語であると推定される場合を除き、埋める必要があります。」",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "markdown"
+                    }
+                ],
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Definition.description"
+                    }
+                ]
+            },
+            {
+                "id": "EventDefinition.useContext",
+                "path": "EventDefinition.useContext",
+                "short": "「コンテンツが支援することを意図した文脈」",
+                "definition": "このコンテンツは、掲載されているコンテキストをサポートする意図と焦点を持って開発されました。これらのコンテキストは、一般的なカテゴリ（性別、年齢など）である場合や、特定のプログラム（保険プラン、研究など）への参照である場合があり、適切なイベント定義インスタンスの索引付けや検索の支援に使用できます。",
+                "comment": "複数のuseContextが指定された場合、すべてまたはどれも適用されるという期待はありません。",
+                "requirements": "Assist in searching for appropriate content.",
+                "min": 0,
+                "max": "*",
+                "type": [
+                    {
+                        "code": "UsageContext"
+                    }
+                ],
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Definition.useContext"
+                    }
+                ]
+            },
+            {
+                "id": "EventDefinition.jurisdiction",
+                "path": "EventDefinition.jurisdiction",
+                "short": "\"適用される場合のイベント定義の意図された管轄地\"",
+                "definition": "\"事象定義の使用が意図されている法的または地理的地域。\"",
+                "comment": "「イベント定義が、元々設計されたまたは意図された範囲以外の管轄区域でも利用可能である可能性があります。」",
+                "min": 0,
+                "max": "*",
+                "type": [
+                    {
+                        "code": "CodeableConcept"
+                    }
+                ],
+                "isSummary": true,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "Jurisdiction"
+                        },
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-isCommonBinding",
+                            "valueBoolean": true
+                        }
+                    ],
+                    "strength": "extensible",
+                    "description": "このアーティファクトの使用の対象となる国や地域。",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/jurisdiction"
+                },
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Definition.jurisdiction"
+                    }
+                ]
+            },
+            {
+                "id": "EventDefinition.purpose",
+                "path": "EventDefinition.purpose",
+                "short": "なぜこのイベントの定義がされたのか？(Naze kono ibento no teigi ga sareta no ka?)",
+                "definition": "このイベント定義が必要とされている理由と、なぜそのように設計されたかの説明。",
+                "comment": "この要素は、イベントの定義の使用方法を説明するものではなく、「なぜ」リソースが必要であるか、または「なぜ」それが定義されたかを追跡するためのものです。これは、イベント定義の構造を推進するソース資料や仕様に指向するために使用することができます。",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "markdown"
+                    }
+                ],
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Definition.purpose"
+                    },
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.why[x]"
+                    },
+                    {
+                        "identity": "objimpl",
+                        "map": "no-gen-base"
+                    }
+                ]
+            },
+            {
+                "id": "EventDefinition.usage",
+                "path": "EventDefinition.usage",
+                "short": "「イベント定義の臨床的使用方法を説明します」",
+                "definition": "「臨床的観点からイベント定義がどのように使用されるかの詳細な説明」",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ]
+            },
+            {
+                "id": "EventDefinition.copyright",
+                "path": "EventDefinition.copyright",
+                "short": "「使用および/または公開制限」",
+                "definition": "イベント定義及び/又はその内容に関連した著作権声明。著作権声明は、通常、イベント定義の使用や公開に対する法的制限です。",
+                "requirements": "Consumers must be able to determine any legal restrictions on the use of the event definition and/or its content.",
+                "alias": [
+                    "License",
+                    "Restrictions"
+                ],
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "markdown"
+                    }
+                ],
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Definition.copyright"
+                    },
+                    {
+                        "identity": "objimpl",
+                        "map": "no-gen-base"
+                    }
+                ]
+            },
+            {
+                "id": "EventDefinition.approvalDate",
+                "path": "EventDefinition.approvalDate",
+                "short": "「イベントの定義が出版社によって承認された時」",
+                "definition": "リソースのコンテンツが出版者によって承認された日付。承認は、コンテンツが公式に使用許可された際に一度行われます。",
+                "comment": "「'日付' 要素は、細かい修正や編集のために承認日よりも新しい場合があります。」",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "date"
+                    }
+                ],
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Definition.approvalDate"
+                    },
+                    {
+                        "identity": "objimpl",
+                        "map": "no-gen-base"
+                    }
+                ]
+            },
+            {
+                "id": "EventDefinition.lastReviewDate",
+                "path": "EventDefinition.lastReviewDate",
+                "short": "「イベントの定義が最後に確認されたとき」",
+                "definition": "「リソース内容が最後にレビューされた日付。承認後に定期的にレビューが行われますが、承認日は変更されません。」",
+                "comment": "「指定された場合、この日付は元の承認日付に続きます。」",
+                "requirements": "Gives a sense of how \"current\" the content is.  Resources that have not been reviewed in a long time may have a risk of being less appropriate/relevant.",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "date"
+                    }
+                ],
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Definition.lastReviewDate"
+                    },
+                    {
+                        "identity": "objimpl",
+                        "map": "no-gen-base"
+                    }
+                ]
+            },
+            {
+                "id": "EventDefinition.effectivePeriod",
+                "path": "EventDefinition.effectivePeriod",
+                "short": "「イベント定義が使用される予定の時」",
+                "definition": "「イベント定義内容が活用されていたまたは活用されている期間」という意味になります。",
+                "comment": "イベント定義の有効期間は、コンテンツが使用可能である期間を決定し、出版およびレビュー日付とは独立しています。たとえば、2016年に使用することを意図した措置は、2015年に公表される可能性があります。",
+                "requirements": "Allows establishing a transition before a resource comes into effect and also allows for a sunsetting  process when new versions of the event definition are or are expected to be used instead.",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "Period"
+                    }
+                ],
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Definition.effectivePeriod"
+                    },
+                    {
+                        "identity": "objimpl",
+                        "map": "no-gen-base"
+                    }
+                ]
+            },
+            {
+                "id": "EventDefinition.topic",
+                "path": "EventDefinition.topic",
+                "short": "例：教育、治療、評価など。",
+                "definition": "モジュールに関連する説明的なトピック。トピックは、モジュールの高レベルのカテゴリ分類を提供し、フィルタリングや検索に役立つ場合があります。",
+                "requirements": "Repositories must be able to determine how to categorize the module so that it can be found by topical searches.",
+                "min": 0,
+                "max": "*",
+                "type": [
+                    {
+                        "code": "CodeableConcept"
+                    }
+                ],
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "DefinitionTopic"
+                        }
+                    ],
+                    "strength": "example",
+                    "description": "定義の高レベルの分類。検索、ソート、フィルタリングに使用されます。",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/definition-topic"
+                }
+            },
+            {
+                "id": "EventDefinition.author",
+                "path": "EventDefinition.author",
+                "short": "「誰がその内容を作成したのですか？」(dare ga sono naiyou wo sakusei shita no desu ka?)",
+                "definition": "「コンテンツの作成と維持に主に関与する個人または組織」",
+                "min": 0,
+                "max": "*",
+                "type": [
+                    {
+                        "code": "ContactDetail"
+                    }
+                ],
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": ".participation[typeCode=AUT]"
+                    }
+                ]
+            },
+            {
+                "id": "EventDefinition.editor",
+                "path": "EventDefinition.editor",
+                "short": "誰がコンテンツを編集しましたか？ (dare ga kontentsu o henshu shimashita ka?)",
+                "definition": "「コンテンツの内部的一貫性を主に責任を負う個人または組織。」",
+                "min": 0,
+                "max": "*",
+                "type": [
+                    {
+                        "code": "ContactDetail"
+                    }
+                ]
+            },
+            {
+                "id": "EventDefinition.reviewer",
+                "path": "EventDefinition.reviewer",
+                "short": "「誰がコンテンツを確認しましたか？」(dare ga kontentsu wo kakunin shimashita ka?)",
+                "definition": "「コンテンツの一部のレビューを主に担当する個人または組織」",
+                "min": 0,
+                "max": "*",
+                "type": [
+                    {
+                        "code": "ContactDetail"
+                    }
+                ],
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": ".participation[typeCode=VRF] {not clear whether VRF best corresponds to reviewer or endorser}"
+                    }
+                ]
+            },
+            {
+                "id": "EventDefinition.endorser",
+                "path": "EventDefinition.endorser",
+                "short": "「誰が内容を承認しましたか？」(Dare ga naiyou wo shounin shimashita ka?)",
+                "definition": "ある設定で使用するためにコンテンツを正式に承認する責任を持つ個人または組織。",
+                "min": 0,
+                "max": "*",
+                "type": [
+                    {
+                        "code": "ContactDetail"
+                    }
+                ],
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": ".participation[typeCode=VRF] {not clear whether VRF best corresponds to reviewer or endorser}"
+                    }
+                ]
+            },
+            {
+                "id": "EventDefinition.relatedArtifact",
+                "path": "EventDefinition.relatedArtifact",
+                "short": "追加の文書、引用など。",
+                "definition": "「追加ドキュメント、正当化、または参考文献などの関連資源」",
+                "comment": "「各関連リソースは、添付ファイルであるか他のリソースへの参照であるが、両方ではありません。」",
+                "requirements": "Modules must be able to provide enough information for consumers of the content (and/or interventions or results produced by the content) to be able to determine and understand the justification for and evidence in support of the content.",
+                "min": 0,
+                "max": "*",
+                "type": [
+                    {
+                        "code": "RelatedArtifact"
+                    }
+                ]
+            },
+            {
+                "id": "EventDefinition.trigger",
+                "path": "EventDefinition.trigger",
+                "short": "「イベントが起こる '時' (複数 = 'または')」",
+                "definition": "トリガー要素は、イベントが発生するタイミングを定義します。複数のトリガー条件が指定されている場合、トリガー条件のいずれかが満たされるたびにイベントが発生します。",
+                "min": 1,
+                "max": "*",
+                "type": [
+                    {
+                        "code": "TriggerDefinition"
+                    }
+                ],
+                "isSummary": true
+            }
+        ]
+    }
+}

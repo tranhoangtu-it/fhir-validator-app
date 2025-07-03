@@ -1,0 +1,284 @@
+{
+    "resourceType": "StructureDefinition",
+    "id": "bodySite",
+    "extension": [
+        {
+            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-wg",
+            "valueCode": "fhir"
+        },
+        {
+            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fmm",
+            "valueInteger": 1
+        }
+    ],
+    "url": "http://hl7.org/fhir/StructureDefinition/bodySite",
+    "version": "4.0.1",
+    "name": "BodyStructure Reference",
+    "title": "Body Site",
+    "status": "draft",
+    "date": "2013-12-05",
+    "publisher": "Health Level Seven International (FHIR Infrastructure)",
+    "contact": [
+        {
+            "telecom": [
+                {
+                    "system": "url",
+                    "value": "http://www.hl7.org/Special/committees/fiwg"
+                }
+            ]
+        }
+    ],
+    "description": "標本または身体部位の解剖学的位置に関する詳細を記録します。 このリソースは、コード化された概念がユースケースに必要な詳細を提供しない場合に使用できます。",
+    "fhirVersion": "4.0.1",
+    "mapping": [
+        {
+            "identity": "rim",
+            "uri": "http://hl7.org/v3",
+            "name": "RIM Mapping"
+        }
+    ],
+    "kind": "complex-type",
+    "abstract": false,
+    "context": [
+        {
+            "type": "element",
+            "expression": "Element"
+        }
+    ],
+    "type": "Extension",
+    "baseDefinition": "http://hl7.org/fhir/StructureDefinition/Extension",
+    "derivation": "constraint",
+    "snapshot": {
+        "element": [
+            {
+                "id": "Extension",
+                "path": "Extension",
+                "short": "ターゲットの解剖学的位置または構造",
+                "definition": "標本または身体部位の解剖学的位置に関する詳細を記録します。 このリソースは、コード化された概念がユースケースに必要な詳細を提供しない場合に使用できます。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Extension",
+                    "min": 0,
+                    "max": "*"
+                },
+                "condition": [
+                    "ele-1"
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    },
+                    {
+                        "key": "ext-1",
+                        "severity": "error",
+                        "human": "「拡張機能または値[x]のいずれかが必要です。両方ではありません。」",
+                        "expression": "extension.exists() != value.exists()",
+                        "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), 'value')])",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Extension"
+                    }
+                ],
+                "isModifier": false
+            },
+            {
+                "id": "Extension.id",
+                "path": "Extension.id",
+                "representation": [
+                    "xmlAttr"
+                ],
+                "short": "エレメント相互参照のためのユニークID",
+                "definition": "リソース内の要素の固有ID（内部参照用）。これは、スペースを含まない任意の文字列値である可能性があります。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Element.id",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "extension": [
+                            {
+                                "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fhir-type",
+                                "valueUrl": "string"
+                            }
+                        ],
+                        "code": "http://hl7.org/fhirpath/System.String"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "Extension.extension",
+                "path": "Extension.extension",
+                "slicing": {
+                    "discriminator": [
+                        {
+                            "type": "value",
+                            "path": "url"
+                        }
+                    ],
+                    "description": "拡張子は常にURLで切り片にされます。",
+                    "rules": "open"
+                },
+                "short": "拡張 (Kakuchou)",
+                "definition": "「エクステンション」",
+                "min": 0,
+                "max": "0",
+                "base": {
+                    "path": "Element.extension",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "Extension"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    },
+                    {
+                        "key": "ext-1",
+                        "severity": "error",
+                        "human": "「拡張機能または値[x]のいずれかが必要です。両方ではありません。」",
+                        "expression": "extension.exists() != value.exists()",
+                        "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Extension"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false
+            },
+            {
+                "id": "Extension.url",
+                "path": "Extension.url",
+                "representation": [
+                    "xmlAttr"
+                ],
+                "short": "「拡張子の意味を特定します」",
+                "definition": "拡張子の定義元 - 論理名またはURL。",
+                "comment": "その定義は、拡張性コードの計算可能なまたは人間が読み取れる定義を直接指し示す場合があれば、他の仕様書で宣言された論理URIである場合もあります。定義は、拡張を定義する構造定義のURIでなければなりません。",
+                "min": 1,
+                "max": "1",
+                "base": {
+                    "path": "Extension.url",
+                    "min": 1,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "extension": [
+                            {
+                                "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fhir-type",
+                                "valueUrl": "uri"
+                            }
+                        ],
+                        "code": "http://hl7.org/fhirpath/System.String"
+                    }
+                ],
+                "fixedUri": "http://hl7.org/fhir/StructureDefinition/bodySite",
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "N/A"
+                    }
+                ]
+            },
+            {
+                "id": "Extension.value[x]",
+                "path": "Extension.value[x]",
+                "short": "「拡張の価値」(Kakuchō no kachi)",
+                "definition": "拡張子の値は、データ型の制限されたセットの一つである必要があります（リストについては[拡張性](http://hl7.org/fhir/extensibility.html)を参照）。",
+                "min": 1,
+                "max": "1",
+                "base": {
+                    "path": "Extension.value[x]",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "Reference",
+                        "targetProfile": [
+                            "http://hl7.org/fhir/StructureDefinition/BodyStructure"
+                        ]
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "N/A"
+                    }
+                ]
+            }
+        ]
+    },
+    "differential": {
+        "element": [
+            {
+                "id": "Extension",
+                "path": "Extension",
+                "short": "ターゲットの解剖学的位置または構造",
+                "definition": "標本または身体部位の解剖学的位置に関する詳細を記録します。 このリソースは、コード化された概念がユースケースに必要な詳細を提供しない場合に使用できます。",
+                "min": 0,
+                "max": "1"
+            },
+            {
+                "id": "Extension.extension",
+                "path": "Extension.extension",
+                "max": "0"
+            },
+            {
+                "id": "Extension.url",
+                "path": "Extension.url",
+                "fixedUri": "http://hl7.org/fhir/StructureDefinition/bodySite"
+            },
+            {
+                "id": "Extension.value[x]",
+                "path": "Extension.value[x]",
+                "min": 1,
+                "type": [
+                    {
+                        "code": "Reference",
+                        "targetProfile": [
+                            "http://hl7.org/fhir/StructureDefinition/BodyStructure"
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+}

@@ -1,0 +1,1243 @@
+{
+    "resourceType": "StructureDefinition",
+    "id": "Endpoint",
+    "meta": {
+        "lastUpdated": "2019-11-01T09:29:23.356+11:00"
+    },
+    "extension": [
+        {
+            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-category",
+            "valueString": "Base.Entities"
+        },
+        {
+            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
+            "valueCode": "trial-use"
+        },
+        {
+            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fmm",
+            "valueInteger": 2
+        },
+        {
+            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-security-category",
+            "valueCode": "business"
+        },
+        {
+            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-wg",
+            "valueCode": "pa"
+        }
+    ],
+    "url": "http://hl7.org/fhir/StructureDefinition/Endpoint",
+    "version": "4.0.1",
+    "name": "Endpoint",
+    "status": "draft",
+    "date": "2019-11-01T09:29:23+11:00",
+    "publisher": "Health Level Seven International (Patient Administration)",
+    "contact": [
+        {
+            "telecom": [
+                {
+                    "system": "url",
+                    "value": "http://hl7.org/fhir"
+                }
+            ]
+        },
+        {
+            "telecom": [
+                {
+                    "system": "url",
+                    "value": "http://www.hl7.org/Special/committees/pafm/index.cfm"
+                }
+            ]
+        }
+    ],
+    "description": "「XDS.bを提供するウェブサービスや、別のFHIRサーバーのRESTエンドポイントなど、電子サービスに使用できるエンドポイントの技術的詳細について。これにはセキュリティコンテキスト情報を含めることができます。」",
+    "fhirVersion": "4.0.1",
+    "mapping": [
+        {
+            "identity": "rim",
+            "uri": "http://hl7.org/v3",
+            "name": "RIM Mapping"
+        },
+        {
+            "identity": "w5",
+            "uri": "http://hl7.org/fhir/fivews",
+            "name": "FiveWs Pattern Mapping"
+        }
+    ],
+    "kind": "resource",
+    "abstract": false,
+    "type": "Endpoint",
+    "baseDefinition": "http://hl7.org/fhir/StructureDefinition/DomainResource",
+    "derivation": "specialization",
+    "snapshot": {
+        "element": [
+            {
+                "id": "Endpoint",
+                "path": "Endpoint",
+                "short": "「電子サービスに利用できるエンドポイントの技術的詳細」",
+                "definition": "「XDS.bを提供するウェブサービスや、別のFHIRサーバーのRESTエンドポイントなど、電子サービスに使用できるエンドポイントの技術的詳細について。これにはセキュリティコンテキスト情報を含めることができます。」",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Endpoint",
+                    "min": 0,
+                    "max": "*"
+                },
+                "constraint": [
+                    {
+                        "key": "dom-2",
+                        "severity": "error",
+                        "human": "もしリソースが他のリソースに含まれている場合、そのリソースにはネストされたリソースを含めてはなりません (moshi risōsu ga hoka no risōsu ni fukumarete iru baai, sono risōsu ni wa nesuto sareta risōsu o fukumete wa narimasen).",
+                        "expression": "contained.contained.empty()",
+                        "xpath": "not(parent::f:contained and f:contained)",
+                        "source": "http://hl7.org/fhir/StructureDefinition/DomainResource"
+                    },
+                    {
+                        "key": "dom-3",
+                        "severity": "error",
+                        "human": "もしリソースが他のリソースに含まれている場合、それはリソースの他の場所から参照されるか、含まれるリソースに参照されるべきです。",
+                        "expression": "contained.where((('#'+id in (%resource.descendants().reference | %resource.descendants().as(canonical) | %resource.descendants().as(uri) | %resource.descendants().as(url))) or descendants().where(reference = '#').exists() or descendants().where(as(canonical) = '#').exists() or descendants().where(as(canonical) = '#').exists()).not()).trace('unmatched', id).empty()",
+                        "xpath": "not(exists(for $id in f:contained/*/f:id/@value return $contained[not(parent::*/descendant::f:reference/@value=concat('#', $contained/*/id/@value) or descendant::f:reference[@value='#'])]))",
+                        "source": "http://hl7.org/fhir/StructureDefinition/DomainResource"
+                    },
+                    {
+                        "key": "dom-4",
+                        "severity": "error",
+                        "human": "もしリソースが別のリソースの中に含まれる場合、meta.versionIdまたはmeta.lastUpdatedを持つべきではありません。",
+                        "expression": "contained.meta.versionId.empty() and contained.meta.lastUpdated.empty()",
+                        "xpath": "not(exists(f:contained/*/f:meta/f:versionId)) and not(exists(f:contained/*/f:meta/f:lastUpdated))",
+                        "source": "http://hl7.org/fhir/StructureDefinition/DomainResource"
+                    },
+                    {
+                        "key": "dom-5",
+                        "severity": "error",
+                        "human": "「もしリソースが他のリソースに含まれている場合、セキュリティラベルを持つべきではありません。」",
+                        "expression": "contained.meta.security.empty()",
+                        "xpath": "not(exists(f:contained/*/f:meta/f:security))",
+                        "source": "http://hl7.org/fhir/StructureDefinition/DomainResource"
+                    },
+                    {
+                        "extension": [
+                            {
+                                "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bestpractice",
+                                "valueBoolean": true
+                            },
+                            {
+                                "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bestpractice-explanation",
+                                "valueMarkdown": "When a resource has no narrative, only systems that fully understand the data can display the resource to a human safely. Including a human readable representation in the resource makes for a much more robust eco-system and cheaper handling of resources by intermediary systems. Some ecosystems restrict distribution of resources to only those systems that do fully understand the resources, and as a consequence implementers may believe that the narrative is superfluous. However experience shows that such eco-systems often open up to new participants over time."
+                            }
+                        ],
+                        "key": "dom-6",
+                        "severity": "warning",
+                        "human": "「資源は堅牢な管理のために物語を持つべきである。」",
+                        "expression": "text.`div`.exists()",
+                        "xpath": "exists(f:text/h:div)",
+                        "source": "http://hl7.org/fhir/StructureDefinition/DomainResource"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "Entity. Role, or Act"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "Endpoint.id",
+                "path": "Endpoint.id",
+                "short": "このアーティファクトの論理ID",
+                "definition": "「リソースのURLで使用される論理ID。一度割り当てられたら、この値は変更されません。」",
+                "comment": "「リソースにIDがないのは、作成操作を使用してサーバーに送信されているときだけです。」",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Resource.id",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "extension": [
+                            {
+                                "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fhir-type",
+                                "valueUrl": "string"
+                            }
+                        ],
+                        "code": "http://hl7.org/fhirpath/System.String"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true
+            },
+            {
+                "id": "Endpoint.meta",
+                "path": "Endpoint.meta",
+                "short": "「リソースに関するメタデータ」",
+                "definition": "リソースに関するメタデータ。これはインフラストラクチャによって維持されるコンテンツです。 コンテンツの変更は、リソースのバージョン変更と常に関連しているわけではありません。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Resource.meta",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "Meta"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true
+            },
+            {
+                "id": "Endpoint.implicitRules",
+                "path": "Endpoint.implicitRules",
+                "short": "このコンテンツが作成されたルールセット",
+                "definition": "「リソース構築時に遵守された一連のルールを指すものであり、コンテンツを処理する際に理解する必要があります。しばしば、特別なルールを定義する実装ガイドとその他のプロファイルなどを含むものです。」",
+                "comment": "このルールセットを主張することで、取引先の限られた集団にしか内容を理解させることができず、長期的にはデータの有用性が制限されます。しかしながら、現存するヘルスエコシステムは高度に分断化しており、一般的に計算可能な形式でデータを定義、収集、交換する準備が整っていません。できる限り、実装者および/または仕様ライターはこの要素の使用を避けるべきです。使用する場合、URLは、そのナラティブとともに他のプロファイル、値セットなどを含む実装ガイドを定義する参照となります。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Resource.implicitRules",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "uri"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": true,
+                "isModifierReason": "This element is labeled as a modifier because the implicit rules may provide additional knowledge about the resource that modifies it's meaning or interpretation",
+                "isSummary": true
+            },
+            {
+                "id": "Endpoint.language",
+                "path": "Endpoint.language",
+                "short": "「リソースコンテンツの言語」(Risōsukontentsu no gengo)",
+                "definition": "「リソースが書かれている基本言語。」",
+                "comment": "言語はインデックスとアクセシビリティをサポートするために提供されます（通常、テキスト読み上げなどのサービスは言語タグを使用します）。物語のHTML言語タグは、物語に適用されます。リソース上の言語タグは、リソース内のデータから生成される他のプレゼンテーションの言語を指定するために使用できます。すべてのコンテンツが基本言語である必要はありません。Resource.languageは自動的に物語に適用されたと想定してはいけません。言語が指定されている場合、HTMLのdiv要素にも指定する必要があります（xml：langとhtml lang属性の関係に関する情報はHTML5の規則を参照）。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Resource.language",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "code"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-maxValueSet",
+                            "valueCanonical": "http://hl7.org/fhir/ValueSet/all-languages"
+                        },
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "Language"
+                        },
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-isCommonBinding",
+                            "valueBoolean": true
+                        }
+                    ],
+                    "strength": "preferred",
+                    "description": "「人間の言語。」(Ningen no gengo.)",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/languages"
+                }
+            },
+            {
+                "id": "Endpoint.text",
+                "path": "Endpoint.text",
+                "short": "「人間の解釈のためのリソースのテキスト要約」",
+                "definition": "「リソースの要約を含む人が読めるナビゲーションであり、リソースの内容を人に表現するために使用できます。ナビゲーションはすべての構造化されたデータをエンコードする必要はありませんが、人間がナビゲーションを読むだけで「臨床的に安全」であるために十分な詳細を含む必要があります。リソース定義には、臨床的な安全性を確保するためにナビゲーションで表現する必要があるコンテンツが定義される場合があります。」",
+                "comment": "含まれるリソースには説明がありません。含まれないリソースには説明が必要です。場合によっては、リソースが少量のデータしか含まず、テキストだけで表現されることがあります（minOccurs = 1要素がすべて満たされている限り）。これは、情報が「テキストの塊」としてキャプチャされるレガシーシステムからのデータや、テキストが生またはナレーションされて符号化された情報が後で追加される場合に必要な場合があります。",
+                "alias": [
+                    "narrative",
+                    "html",
+                    "xhtml",
+                    "display"
+                ],
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "DomainResource.text",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "Narrative"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "Act.text?"
+                    }
+                ]
+            },
+            {
+                "id": "Endpoint.contained",
+                "path": "Endpoint.contained",
+                "short": "「含まれている、インラインのリソース」(Fukuma rete iru, inrain no risōsu)",
+                "definition": "「これらのリソースは、それらを含むリソースから独立した存在を持ちません。それらは独立して識別することはできず、独自の独立したトランザクション範囲を持つこともできません。」",
+                "comment": "「コンテンツが適切に識別できる場合には、これを行うべきではありません。識別が失われると、再び復元することは非常に困難であり（文脈に依存します）、メタ要素にプロファイルとタグを持つことができますが、セキュリティのラベルを持っていてはいけません。」",
+                "alias": [
+                    "inline resources",
+                    "anonymous resources",
+                    "contained resources"
+                ],
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "DomainResource.contained",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "Resource"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "N/A"
+                    }
+                ]
+            },
+            {
+                "id": "Endpoint.extension",
+                "path": "Endpoint.extension",
+                "short": "実装によって定義される追加コンテンツ",
+                "definition": "「リソースの基本的な定義の一部ではない追加情報を表すために使用することができます。拡張機能の使用を安全かつ管理可能にするために、定義と使用の一定のガバナンスが適用されます。実装者はどんな拡張機能でも定義できますが、拡張機能の定義の一部として満たす必要がある要件があります」",
+                "comment": "どのようなアプリケーション、プロジェクト、または標準が拡張機能を使用しているかに関わらず、拡張機能の使用には決して汚名が付くわけではありません - それらを使用または定義する機関または管轄区域に関係なく。拡張機能の使用こそが、FHIR仕様を誰にとっても簡単なコアレベルで維持することを可能にします。",
+                "alias": [
+                    "extensions",
+                    "user content"
+                ],
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "DomainResource.extension",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "Extension"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    },
+                    {
+                        "key": "ext-1",
+                        "severity": "error",
+                        "human": "「拡張機能または値[x]のいずれかが必要です。両方ではありません。」",
+                        "expression": "extension.exists() != value.exists()",
+                        "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Extension"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "N/A"
+                    }
+                ]
+            },
+            {
+                "id": "Endpoint.modifierExtension",
+                "path": "Endpoint.modifierExtension",
+                "short": "無視できない拡張機能 (Mushi dekinai kakuchou kinou)",
+                "definition": "「リソースの基本的な定義に含まれない、要素の理解や、それを含む要素の子孫の理解を修正する追加情報を表すためにも使用されることがあります。通常、修飾要素は否定や修飾を提供します。拡張機能の使用を安全で管理しやすくするために、拡張機能の定義と使用に対して厳格な統治が適用されます。実装者は拡張機能を定義することが許可されていますが、拡張機能の定義の一部として満たす必要がある要件があります。リソースを処理するアプリケーションは、修飾子拡張をチェックする必要があります。修飾子拡張は、リソースまたはドメインリソースの任意の要素の意味を変更してはなりません（修飾子拡張自体の意味も変更できません）。」",
+                "comment": "どのようなアプリケーション、プロジェクト、または標準が拡張機能を使用しているかに関わらず、拡張機能の使用には決して汚名が付くわけではありません - それらを使用または定義する機関または管轄区域に関係なく。拡張機能の使用こそが、FHIR仕様を誰にとっても簡単なコアレベルで維持することを可能にします。",
+                "requirements": "Modifier extensions allow for extensions that *cannot* be safely ignored to be clearly distinguished from the vast majority of extensions which can be safely ignored.  This promotes interoperability by eliminating the need for implementers to prohibit the presence of extensions. For further information, see the [definition of modifier extensions](extensibility.html#modifierExtension).",
+                "alias": [
+                    "extensions",
+                    "user content"
+                ],
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "DomainResource.modifierExtension",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "Extension"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    },
+                    {
+                        "key": "ext-1",
+                        "severity": "error",
+                        "human": "「拡張機能または値[x]のいずれかが必要です。両方ではありません。」",
+                        "expression": "extension.exists() != value.exists()",
+                        "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Extension"
+                    }
+                ],
+                "isModifier": true,
+                "isModifierReason": "Modifier extensions are expected to modify the meaning or interpretation of the resource that contains them",
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "N/A"
+                    }
+                ]
+            },
+            {
+                "id": "Endpoint.identifier",
+                "path": "Endpoint.identifier",
+                "short": "「複数のシステム上でこのエンドポイントを識別します」",
+                "definition": "複数の異なるシステム全体でエンドポイントを識別するために使用される組織の識別子。",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Endpoint.identifier",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "Identifier"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.identifier"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "Endpoint.status",
+                "path": "Endpoint.status",
+                "short": "アクティブ | 中断 | エラー | オフ | 入力エラー | テスト",
+                "definition": "アクティブ | 中断 | エラー | オフ | テスト。",
+                "comment": "この要素は修飾語としてラベル付けされています。状態には、エンドポイントを現在有効ではないとマークするコードが含まれています。",
+                "min": 1,
+                "max": "1",
+                "base": {
+                    "path": "Endpoint.status",
+                    "min": 1,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "code"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": true,
+                "isModifierReason": "This element is labelled as a modifier because it is a status element that contains status entered-in-error which means that the resource should not be treated as valid",
+                "isSummary": true,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "EndpointStatus"
+                        }
+                    ],
+                    "strength": "required",
+                    "description": "\"エンドポイントの状態。\" (Endopointo no joutai.)",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/endpoint-status|4.0.1"
+                },
+                "mapping": [
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.status"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "Endpoint.connectionType",
+                "path": "Endpoint.connectionType",
+                "short": "このエンドポイント接続に使用するプロトコル/プロファイル/標準。",
+                "definition": "「このエンドポイントの使用方法に関する技術的詳細を表すコード値で、どのようにWSDLを使用するかといった情報が含まれます。（例：XDS.b / DICOM / cds-hookなど）」",
+                "comment": "「プロトコルの追加接続の詳細については、XDSの例のように、この時点で拡張が使用されます。」",
+                "min": 1,
+                "max": "1",
+                "base": {
+                    "path": "Endpoint.connectionType",
+                    "min": 1,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "Coding"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "endpoint-contype"
+                        }
+                    ],
+                    "strength": "extensible",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/endpoint-connection-type"
+                },
+                "mapping": [
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.class"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "Endpoint.name",
+                "path": "Endpoint.name",
+                "short": "「このエンドポイントが識別可能な名前」",
+                "definition": "「このエンドポイントに親しみやすい名前を付けることができます。」",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Endpoint.name",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.what[x]"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "Endpoint.managingOrganization",
+                "path": "Endpoint.managingOrganization",
+                "short": "このエンドポイントを管理する組織（エンドポイントを公開する組織であるとは限らない）",
+                "definition": "このエンドポイントを管理する組織 (クラウド上で別の組織がホスティングしている場合でも、データに関連する組織である)。",
+                "comment": "このプロパティは、使用時にエンドポイントリソースを検索する際に通常使用されません。典型的な使用方法は、適用可能な組織/場所/開業医リソースからの参照によるものであり、それが文脈が提供される場所です。複数の場所が単一のエンドポイントを参照することができ、同じ組織リソース内である必要はありませんが、おそらくは同じ組織階層内にあるでしょう。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Endpoint.managingOrganization",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "Reference",
+                        "targetProfile": [
+                            "http://hl7.org/fhir/StructureDefinition/Organization"
+                        ]
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "Endpoint.contact",
+                "path": "Endpoint.contact",
+                "short": "「ソースの連絡先詳細（例：トラブルシューティング）」",
+                "definition": "\"定期購読に関する人との連絡先。このシステムは主にシステム管理者のトラブルシューティングに使用されます。\"",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Endpoint.contact",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "ContactPoint"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "Endpoint.period",
+                "path": "Endpoint.period",
+                "short": "\"インターバルの終端が稼働することを期待されています。\"",
+                "definition": "エンドポイントが稼働することが期待される間隔。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Endpoint.period",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "Period"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.done[x]"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "Endpoint.payloadType",
+                "path": "Endpoint.payloadType",
+                "short": "このエンドポイントで使用できるコンテンツの種類（例：XDS退院サマリー）",
+                "definition": "ペイロードタイプは、エンドポイントで通信可能な受け入れ可能なコンテンツを記述します。",
+                "comment": "ペイロード形式はデータの直列化形式を記述し、ペイロードタイプは転送される特定の文書/スキーマを示します。たとえば、DischargeSummaryまたはCarePlanなどがあります。",
+                "min": 1,
+                "max": "*",
+                "base": {
+                    "path": "Endpoint.payloadType",
+                    "min": 1,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "CodeableConcept"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "PayloadType"
+                        }
+                    ],
+                    "strength": "example",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/endpoint-payload-type"
+                },
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "Endpoint.payloadMimeType",
+                "path": "Endpoint.payloadMimeType",
+                "short": "送信するMimetype。指定されていない場合、コンテンツは何でも（接続タイプがこれを定義する場合を含む）可能です。",
+                "definition": "ペイロードを送信するためのマイムタイプ - 例えば、application/fhir+xml、application/fhir+json。マイムタイプが指定されていない場合、送信者は接続タイプに応じて任意のコンテンツ（コンテンツがない場合も含む）を送信することができます。",
+                "comment": "ペイロードを送信すると明らかにセキュリティ上の影響があるため、サーバーは適切にセキュリティが確保されていることを保証する責任があります。",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Endpoint.payloadMimeType",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "code"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "MimeType"
+                        },
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-isCommonBinding",
+                            "valueBoolean": true
+                        }
+                    ],
+                    "strength": "required",
+                    "description": "添付ファイルのMIMEタイプ。有効なMIMEタイプはすべて許可されています。",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/mimetypes|4.0.1"
+                },
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "Endpoint.address",
+                "path": "Endpoint.address",
+                "short": "このエンドポイントに接続するための技術的な基本アドレス",
+                "definition": "実際に接続するためのエンドポイントを記述するURI。",
+                "comment": "休憩用のフックやWebsocketでは、エンドポイントはhttp：またはhttps：URLである必要があります。メールの場合はmailto：URLで、SMSの場合はtel：URLで、メッセージの場合は、エンドポイントはサーバーが理解する任意の形式のURLである場合があります（通常、http：またはmllp：）URIは相対的であることが許可されており、その場合はサーバーエンドポイントに相対的であることができます（複数ある場合があるため、クライアントは相対URIの使用を避けることが望ましいです）。\n\nこのアドレスは、パラメーターもサブサービスも含まず、リソースも追加されていないサービスベースになります。\n\n例えば、WADO-RSエンドポイントの場合、URLは「https：// pacs.hospital.org/wado-rs」となります。\n\nそして、「https://pacs.hospital.org/wado-rs/studies/1.2.250.1.59.40211.12345678.678910/series/1.2.250.1.59.40211.789001276.14556172.67789/instances/...」のように、サブサービスやリソースが追加されたものではなくなります。",
+                "min": 1,
+                "max": "1",
+                "base": {
+                    "path": "Endpoint.address",
+                    "min": 1,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "url"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "Endpoint.header",
+                "path": "Endpoint.header",
+                "short": "使用方法はチャンネルタイプによって異なります。 (Shiyō hōhō wa channeru taipu ni yotte kotonarimasu.)",
+                "definition": "通知の一部として送信する追加ヘッダー/情報。",
+                "comment": "「これらが正確に何を意味するかは、チャネルのタイプによって異なります。それらは受信者に追加情報を伝えたり、セキュリティ要件を満たすために使用されることがあります。」",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Endpoint.header",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false
+            }
+        ]
+    },
+    "differential": {
+        "element": [
+            {
+                "id": "Endpoint",
+                "path": "Endpoint",
+                "short": "「電子サービスに利用できるエンドポイントの技術的詳細」",
+                "definition": "「XDS.bを提供するウェブサービスや、別のFHIRサーバーのRESTエンドポイントなど、電子サービスに使用できるエンドポイントの技術的詳細について。これにはセキュリティコンテキスト情報を含めることができます。」",
+                "min": 0,
+                "max": "*",
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "Endpoint.identifier",
+                "path": "Endpoint.identifier",
+                "short": "「複数のシステム上でこのエンドポイントを識別します」",
+                "definition": "複数の異なるシステム全体でエンドポイントを識別するために使用される組織の識別子。",
+                "min": 0,
+                "max": "*",
+                "type": [
+                    {
+                        "code": "Identifier"
+                    }
+                ],
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.identifier"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "Endpoint.status",
+                "path": "Endpoint.status",
+                "short": "アクティブ | 中断 | エラー | オフ | 入力エラー | テスト",
+                "definition": "アクティブ | 中断 | エラー | オフ | テスト。",
+                "comment": "この要素は修飾語としてラベル付けされています。状態には、エンドポイントを現在有効ではないとマークするコードが含まれています。",
+                "min": 1,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "code"
+                    }
+                ],
+                "isModifier": true,
+                "isModifierReason": "This element is labelled as a modifier because it is a status element that contains status entered-in-error which means that the resource should not be treated as valid",
+                "isSummary": true,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "EndpointStatus"
+                        }
+                    ],
+                    "strength": "required",
+                    "description": "\"エンドポイントの状態。\" (Endopointo no joutai.)",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/endpoint-status|4.0.1"
+                },
+                "mapping": [
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.status"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "Endpoint.connectionType",
+                "path": "Endpoint.connectionType",
+                "short": "このエンドポイント接続に使用するプロトコル/プロファイル/標準。",
+                "definition": "「このエンドポイントの使用方法に関する技術的詳細を表すコード値で、どのようにWSDLを使用するかといった情報が含まれます。（例：XDS.b / DICOM / cds-hookなど）」",
+                "comment": "「プロトコルの追加接続の詳細については、XDSの例のように、この時点で拡張が使用されます。」",
+                "min": 1,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "Coding"
+                    }
+                ],
+                "isSummary": true,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "endpoint-contype"
+                        }
+                    ],
+                    "strength": "extensible",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/endpoint-connection-type"
+                },
+                "mapping": [
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.class"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "Endpoint.name",
+                "path": "Endpoint.name",
+                "short": "「このエンドポイントが識別可能な名前」",
+                "definition": "「このエンドポイントに親しみやすい名前を付けることができます。」",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ],
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.what[x]"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "Endpoint.managingOrganization",
+                "path": "Endpoint.managingOrganization",
+                "short": "このエンドポイントを管理する組織（エンドポイントを公開する組織であるとは限らない）",
+                "definition": "このエンドポイントを管理する組織 (クラウド上で別の組織がホスティングしている場合でも、データに関連する組織である)。",
+                "comment": "このプロパティは、使用時にエンドポイントリソースを検索する際に通常使用されません。典型的な使用方法は、適用可能な組織/場所/開業医リソースからの参照によるものであり、それが文脈が提供される場所です。複数の場所が単一のエンドポイントを参照することができ、同じ組織リソース内である必要はありませんが、おそらくは同じ組織階層内にあるでしょう。",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "Reference",
+                        "targetProfile": [
+                            "http://hl7.org/fhir/StructureDefinition/Organization"
+                        ]
+                    }
+                ],
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "Endpoint.contact",
+                "path": "Endpoint.contact",
+                "short": "「ソースの連絡先詳細（例：トラブルシューティング）」",
+                "definition": "\"定期購読に関する人との連絡先。このシステムは主にシステム管理者のトラブルシューティングに使用されます。\"",
+                "min": 0,
+                "max": "*",
+                "type": [
+                    {
+                        "code": "ContactPoint"
+                    }
+                ],
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "Endpoint.period",
+                "path": "Endpoint.period",
+                "short": "\"インターバルの終端が稼働することを期待されています。\"",
+                "definition": "エンドポイントが稼働することが期待される間隔。",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "Period"
+                    }
+                ],
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.done[x]"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "Endpoint.payloadType",
+                "path": "Endpoint.payloadType",
+                "short": "このエンドポイントで使用できるコンテンツの種類（例：XDS退院サマリー）",
+                "definition": "ペイロードタイプは、エンドポイントで通信可能な受け入れ可能なコンテンツを記述します。",
+                "comment": "ペイロード形式はデータの直列化形式を記述し、ペイロードタイプは転送される特定の文書/スキーマを示します。たとえば、DischargeSummaryまたはCarePlanなどがあります。",
+                "min": 1,
+                "max": "*",
+                "type": [
+                    {
+                        "code": "CodeableConcept"
+                    }
+                ],
+                "isSummary": true,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "PayloadType"
+                        }
+                    ],
+                    "strength": "example",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/endpoint-payload-type"
+                },
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "Endpoint.payloadMimeType",
+                "path": "Endpoint.payloadMimeType",
+                "short": "送信するMimetype。指定されていない場合、コンテンツは何でも（接続タイプがこれを定義する場合を含む）可能です。",
+                "definition": "ペイロードを送信するためのマイムタイプ - 例えば、application/fhir+xml、application/fhir+json。マイムタイプが指定されていない場合、送信者は接続タイプに応じて任意のコンテンツ（コンテンツがない場合も含む）を送信することができます。",
+                "comment": "ペイロードを送信すると明らかにセキュリティ上の影響があるため、サーバーは適切にセキュリティが確保されていることを保証する責任があります。",
+                "min": 0,
+                "max": "*",
+                "type": [
+                    {
+                        "code": "code"
+                    }
+                ],
+                "isSummary": true,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "MimeType"
+                        },
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-isCommonBinding",
+                            "valueBoolean": true
+                        }
+                    ],
+                    "strength": "required",
+                    "description": "添付ファイルのMIMEタイプ。有効なMIMEタイプはすべて許可されています。",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/mimetypes|4.0.1"
+                },
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "Endpoint.address",
+                "path": "Endpoint.address",
+                "short": "このエンドポイントに接続するための技術的な基本アドレス",
+                "definition": "実際に接続するためのエンドポイントを記述するURI。",
+                "comment": "休憩用のフックやWebsocketでは、エンドポイントはhttp：またはhttps：URLである必要があります。メールの場合はmailto：URLで、SMSの場合はtel：URLで、メッセージの場合は、エンドポイントはサーバーが理解する任意の形式のURLである場合があります（通常、http：またはmllp：）URIは相対的であることが許可されており、その場合はサーバーエンドポイントに相対的であることができます（複数ある場合があるため、クライアントは相対URIの使用を避けることが望ましいです）。\n\nこのアドレスは、パラメーターもサブサービスも含まず、リソースも追加されていないサービスベースになります。\n\n例えば、WADO-RSエンドポイントの場合、URLは「https：// pacs.hospital.org/wado-rs」となります。\n\nそして、「https://pacs.hospital.org/wado-rs/studies/1.2.250.1.59.40211.12345678.678910/series/1.2.250.1.59.40211.789001276.14556172.67789/instances/...」のように、サブサービスやリソースが追加されたものではなくなります。",
+                "min": 1,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "url"
+                    }
+                ],
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "Endpoint.header",
+                "path": "Endpoint.header",
+                "short": "使用方法はチャンネルタイプによって異なります。 (Shiyō hōhō wa channeru taipu ni yotte kotonarimasu.)",
+                "definition": "通知の一部として送信する追加ヘッダー/情報。",
+                "comment": "「これらが正確に何を意味するかは、チャネルのタイプによって異なります。それらは受信者に追加情報を伝えたり、セキュリティ要件を満たすために使用されることがあります。」",
+                "min": 0,
+                "max": "*",
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ],
+                "isSummary": false
+            }
+        ]
+    }
+}

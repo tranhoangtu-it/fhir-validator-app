@@ -1,0 +1,268 @@
+{
+    "resourceType": "StructureDefinition",
+    "id": "patient-disability",
+    "extension": [
+        {
+            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-wg",
+            "valueCode": "pa"
+        },
+        {
+            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fmm",
+            "valueInteger": 1
+        }
+    ],
+    "url": "http://hl7.org/fhir/StructureDefinition/patient-disability",
+    "version": "4.0.1",
+    "name": "disability",
+    "title": "disability",
+    "status": "draft",
+    "date": "2019-11-01T09:29:23+11:00",
+    "publisher": "HL7",
+    "description": "「身体的または精神的状態を特定する価値観、これにより人々の動き、感覚、活動に制限がかかることがある。」",
+    "fhirVersion": "4.0.1",
+    "mapping": [
+        {
+            "identity": "rim",
+            "uri": "http://hl7.org/v3",
+            "name": "RIM Mapping"
+        }
+    ],
+    "kind": "complex-type",
+    "abstract": false,
+    "context": [
+        {
+            "type": "element",
+            "expression": "Patient"
+        }
+    ],
+    "type": "Extension",
+    "baseDefinition": "http://hl7.org/fhir/StructureDefinition/Extension",
+    "derivation": "constraint",
+    "snapshot": {
+        "element": [
+            {
+                "id": "Extension",
+                "path": "Extension",
+                "short": "動きや感覚、活動を制限する状態。",
+                "definition": "「身体的または精神的状態を特定する価値観、これにより人々の動き、感覚、活動に制限がかかることがある。」",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Extension",
+                    "min": 0,
+                    "max": "*"
+                },
+                "condition": [
+                    "ele-1"
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    },
+                    {
+                        "key": "ext-1",
+                        "severity": "error",
+                        "human": "「拡張機能または値[x]のいずれかが必要です。両方ではありません。」",
+                        "expression": "extension.exists() != value.exists()",
+                        "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), 'value')])",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Extension"
+                    }
+                ],
+                "isModifier": false
+            },
+            {
+                "id": "Extension.id",
+                "path": "Extension.id",
+                "representation": [
+                    "xmlAttr"
+                ],
+                "short": "エレメント相互参照のためのユニークID",
+                "definition": "リソース内の要素の固有ID（内部参照用）。これは、スペースを含まない任意の文字列値である可能性があります。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Element.id",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "extension": [
+                            {
+                                "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fhir-type",
+                                "valueUrl": "string"
+                            }
+                        ],
+                        "code": "http://hl7.org/fhirpath/System.String"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "Extension.extension",
+                "path": "Extension.extension",
+                "slicing": {
+                    "discriminator": [
+                        {
+                            "type": "value",
+                            "path": "url"
+                        }
+                    ],
+                    "description": "拡張子は常にURLで切り片にされます。",
+                    "rules": "open"
+                },
+                "short": "拡張 (Kakuchou)",
+                "definition": "「エクステンション」",
+                "min": 0,
+                "max": "0",
+                "base": {
+                    "path": "Element.extension",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "Extension"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    },
+                    {
+                        "key": "ext-1",
+                        "severity": "error",
+                        "human": "「拡張機能または値[x]のいずれかが必要です。両方ではありません。」",
+                        "expression": "extension.exists() != value.exists()",
+                        "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Extension"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false
+            },
+            {
+                "id": "Extension.url",
+                "path": "Extension.url",
+                "representation": [
+                    "xmlAttr"
+                ],
+                "short": "「拡張子の意味を特定します」",
+                "definition": "拡張子の定義元 - 論理名またはURL。",
+                "comment": "その定義は、拡張性コードの計算可能なまたは人間が読み取れる定義を直接指し示す場合があれば、他の仕様書で宣言された論理URIである場合もあります。定義は、拡張を定義する構造定義のURIでなければなりません。",
+                "min": 1,
+                "max": "1",
+                "base": {
+                    "path": "Extension.url",
+                    "min": 1,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "extension": [
+                            {
+                                "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fhir-type",
+                                "valueUrl": "uri"
+                            }
+                        ],
+                        "code": "http://hl7.org/fhirpath/System.String"
+                    }
+                ],
+                "fixedUri": "http://hl7.org/fhir/StructureDefinition/patient-disability",
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "N/A"
+                    }
+                ]
+            },
+            {
+                "id": "Extension.value[x]",
+                "path": "Extension.value[x]",
+                "short": "「拡張の価値」(Kakuchō no kachi)",
+                "definition": "拡張子の値は、データ型の制限されたセットの一つである必要があります（リストについては[拡張性](http://hl7.org/fhir/extensibility.html)を参照）。",
+                "min": 1,
+                "max": "1",
+                "base": {
+                    "path": "Extension.value[x]",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "CodeableConcept"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "N/A"
+                    }
+                ]
+            }
+        ]
+    },
+    "differential": {
+        "element": [
+            {
+                "id": "Extension",
+                "path": "Extension",
+                "short": "動きや感覚、活動を制限する状態。",
+                "definition": "「身体的または精神的状態を特定する価値観、これにより人々の動き、感覚、活動に制限がかかることがある。」",
+                "min": 0,
+                "max": "*"
+            },
+            {
+                "id": "Extension.extension",
+                "path": "Extension.extension",
+                "max": "0"
+            },
+            {
+                "id": "Extension.url",
+                "path": "Extension.url",
+                "fixedUri": "http://hl7.org/fhir/StructureDefinition/patient-disability"
+            },
+            {
+                "id": "Extension.value[x]",
+                "path": "Extension.value[x]",
+                "min": 1,
+                "type": [
+                    {
+                        "code": "CodeableConcept"
+                    }
+                ]
+            }
+        ]
+    }
+}

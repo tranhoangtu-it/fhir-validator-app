@@ -1,0 +1,2940 @@
+{
+    "resourceType": "StructureDefinition",
+    "id": "Appointment",
+    "meta": {
+        "lastUpdated": "2019-11-01T09:29:23.356+11:00"
+    },
+    "extension": [
+        {
+            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-category",
+            "valueString": "Base.Workflow"
+        },
+        {
+            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
+            "valueCode": "trial-use"
+        },
+        {
+            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fmm",
+            "valueInteger": 3
+        },
+        {
+            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-security-category",
+            "valueCode": "patient"
+        },
+        {
+            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-wg",
+            "valueCode": "pa"
+        }
+    ],
+    "url": "http://hl7.org/fhir/StructureDefinition/Appointment",
+    "version": "4.0.1",
+    "name": "Appointment",
+    "status": "draft",
+    "date": "2019-11-01T09:29:23+11:00",
+    "publisher": "Health Level Seven International (Patient Administration)",
+    "contact": [
+        {
+            "telecom": [
+                {
+                    "system": "url",
+                    "value": "http://hl7.org/fhir"
+                }
+            ]
+        },
+        {
+            "telecom": [
+                {
+                    "system": "url",
+                    "value": "http://www.hl7.org/Special/committees/pafm/index.cfm"
+                }
+            ]
+        }
+    ],
+    "description": "特定の日時に、患者、医療従事者、関係者、および/またはデバイスの健康イベントの予約。これは1つ以上のエンカウンターにつながる可能性があります。",
+    "fhirVersion": "4.0.1",
+    "mapping": [
+        {
+            "identity": "workflow",
+            "uri": "http://hl7.org/fhir/workflow",
+            "name": "Workflow Pattern"
+        },
+        {
+            "identity": "rim",
+            "uri": "http://hl7.org/v3",
+            "name": "RIM Mapping"
+        },
+        {
+            "identity": "ical",
+            "uri": "http://ietf.org/rfc/2445",
+            "name": "iCalendar"
+        },
+        {
+            "identity": "w5",
+            "uri": "http://hl7.org/fhir/fivews",
+            "name": "FiveWs Pattern Mapping"
+        },
+        {
+            "identity": "v2",
+            "uri": "http://hl7.org/v2",
+            "name": "HL7 v2 Mapping"
+        }
+    ],
+    "kind": "resource",
+    "abstract": false,
+    "type": "Appointment",
+    "baseDefinition": "http://hl7.org/fhir/StructureDefinition/DomainResource",
+    "derivation": "specialization",
+    "snapshot": {
+        "element": [
+            {
+                "id": "Appointment",
+                "path": "Appointment",
+                "short": "特定の日時に患者、医療従事者、関係者、および/またはデバイスの間での医療イベントの予約。これにより、1つ以上の「エンカウンター」が発生する場合があります。",
+                "definition": "特定の日時に、患者、医療従事者、関係者、および/またはデバイスの健康イベントの予約。これは1つ以上のエンカウンターにつながる可能性があります。",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Appointment",
+                    "min": 0,
+                    "max": "*"
+                },
+                "constraint": [
+                    {
+                        "key": "app-2",
+                        "severity": "error",
+                        "human": "「始点と終点が指定されるか、指定されないかのいずれかです。」",
+                        "expression": "start.exists() = end.exists()",
+                        "xpath": "((exists(f:start) and exists(f:end)) or (not(exists(f:start)) and not(exists(f:end))))"
+                    },
+                    {
+                        "key": "app-3",
+                        "severity": "error",
+                        "human": "「提案された予定やキャンセルされた予定のみが開始・終了日付が不足している可能性があります」",
+                        "expression": "(start.exists() and end.exists()) or (status in ('proposed' | 'cancelled' | 'waitlist'))",
+                        "xpath": "((exists(f:start) and exists(f:end)) or (f:status/@value='proposed') or (f:status/@value='cancelled') or (f:status/@value='waitlist'))"
+                    },
+                    {
+                        "key": "app-4",
+                        "severity": "error",
+                        "human": "「キャンセル理由は、キャンセルされた予約または無断欠席がある場合にのみ使用されます。」",
+                        "expression": "Appointment.cancelationReason.exists() implies (Appointment.status='no-show' or Appointment.status='cancelled')",
+                        "xpath": "not(exists(f:cancellationReason)) or f:status/@value=('no-show', 'cancelled')"
+                    },
+                    {
+                        "key": "dom-2",
+                        "severity": "error",
+                        "human": "もしリソースが他のリソースに含まれている場合、そのリソースにはネストされたリソースを含めてはなりません (moshi risōsu ga hoka no risōsu ni fukumarete iru baai, sono risōsu ni wa nesuto sareta risōsu o fukumete wa narimasen).",
+                        "expression": "contained.contained.empty()",
+                        "xpath": "not(parent::f:contained and f:contained)",
+                        "source": "http://hl7.org/fhir/StructureDefinition/DomainResource"
+                    },
+                    {
+                        "key": "dom-3",
+                        "severity": "error",
+                        "human": "もしリソースが他のリソースに含まれている場合、それはリソースの他の場所から参照されるか、含まれるリソースに参照されるべきです。",
+                        "expression": "contained.where((('#'+id in (%resource.descendants().reference | %resource.descendants().as(canonical) | %resource.descendants().as(uri) | %resource.descendants().as(url))) or descendants().where(reference = '#').exists() or descendants().where(as(canonical) = '#').exists() or descendants().where(as(canonical) = '#').exists()).not()).trace('unmatched', id).empty()",
+                        "xpath": "not(exists(for $id in f:contained/*/f:id/@value return $contained[not(parent::*/descendant::f:reference/@value=concat('#', $contained/*/id/@value) or descendant::f:reference[@value='#'])]))",
+                        "source": "http://hl7.org/fhir/StructureDefinition/DomainResource"
+                    },
+                    {
+                        "key": "dom-4",
+                        "severity": "error",
+                        "human": "もしリソースが別のリソースの中に含まれる場合、meta.versionIdまたはmeta.lastUpdatedを持つべきではありません。",
+                        "expression": "contained.meta.versionId.empty() and contained.meta.lastUpdated.empty()",
+                        "xpath": "not(exists(f:contained/*/f:meta/f:versionId)) and not(exists(f:contained/*/f:meta/f:lastUpdated))",
+                        "source": "http://hl7.org/fhir/StructureDefinition/DomainResource"
+                    },
+                    {
+                        "key": "dom-5",
+                        "severity": "error",
+                        "human": "「もしリソースが他のリソースに含まれている場合、セキュリティラベルを持つべきではありません。」",
+                        "expression": "contained.meta.security.empty()",
+                        "xpath": "not(exists(f:contained/*/f:meta/f:security))",
+                        "source": "http://hl7.org/fhir/StructureDefinition/DomainResource"
+                    },
+                    {
+                        "extension": [
+                            {
+                                "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bestpractice",
+                                "valueBoolean": true
+                            },
+                            {
+                                "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bestpractice-explanation",
+                                "valueMarkdown": "When a resource has no narrative, only systems that fully understand the data can display the resource to a human safely. Including a human readable representation in the resource makes for a much more robust eco-system and cheaper handling of resources by intermediary systems. Some ecosystems restrict distribution of resources to only those systems that do fully understand the resources, and as a consequence implementers may believe that the narrative is superfluous. However experience shows that such eco-systems often open up to new participants over time."
+                            }
+                        ],
+                        "key": "dom-6",
+                        "severity": "warning",
+                        "human": "「資源は堅牢な管理のために物語を持つべきである。」",
+                        "expression": "text.`div`.exists()",
+                        "xpath": "exists(f:text/h:div)",
+                        "source": "http://hl7.org/fhir/StructureDefinition/DomainResource"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "Entity. Role, or Act"
+                    },
+                    {
+                        "identity": "workflow",
+                        "map": "Request"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": "Act[@moodCode <= 'INT']"
+                    },
+                    {
+                        "identity": "ical",
+                        "map": "VEVENT"
+                    }
+                ]
+            },
+            {
+                "id": "Appointment.id",
+                "path": "Appointment.id",
+                "short": "このアーティファクトの論理ID",
+                "definition": "「リソースのURLで使用される論理ID。一度割り当てられたら、この値は変更されません。」",
+                "comment": "「リソースにIDがないのは、作成操作を使用してサーバーに送信されているときだけです。」",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Resource.id",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "extension": [
+                            {
+                                "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fhir-type",
+                                "valueUrl": "string"
+                            }
+                        ],
+                        "code": "http://hl7.org/fhirpath/System.String"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true
+            },
+            {
+                "id": "Appointment.meta",
+                "path": "Appointment.meta",
+                "short": "「リソースに関するメタデータ」",
+                "definition": "リソースに関するメタデータ。これはインフラストラクチャによって維持されるコンテンツです。 コンテンツの変更は、リソースのバージョン変更と常に関連しているわけではありません。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Resource.meta",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "Meta"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true
+            },
+            {
+                "id": "Appointment.implicitRules",
+                "path": "Appointment.implicitRules",
+                "short": "このコンテンツが作成されたルールセット",
+                "definition": "「リソース構築時に遵守された一連のルールを指すものであり、コンテンツを処理する際に理解する必要があります。しばしば、特別なルールを定義する実装ガイドとその他のプロファイルなどを含むものです。」",
+                "comment": "このルールセットを主張することで、取引先の限られた集団にしか内容を理解させることができず、長期的にはデータの有用性が制限されます。しかしながら、現存するヘルスエコシステムは高度に分断化しており、一般的に計算可能な形式でデータを定義、収集、交換する準備が整っていません。できる限り、実装者および/または仕様ライターはこの要素の使用を避けるべきです。使用する場合、URLは、そのナラティブとともに他のプロファイル、値セットなどを含む実装ガイドを定義する参照となります。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Resource.implicitRules",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "uri"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": true,
+                "isModifierReason": "This element is labeled as a modifier because the implicit rules may provide additional knowledge about the resource that modifies it's meaning or interpretation",
+                "isSummary": true
+            },
+            {
+                "id": "Appointment.language",
+                "path": "Appointment.language",
+                "short": "「リソースコンテンツの言語」(Risōsukontentsu no gengo)",
+                "definition": "「リソースが書かれている基本言語。」",
+                "comment": "言語はインデックスとアクセシビリティをサポートするために提供されます（通常、テキスト読み上げなどのサービスは言語タグを使用します）。物語のHTML言語タグは、物語に適用されます。リソース上の言語タグは、リソース内のデータから生成される他のプレゼンテーションの言語を指定するために使用できます。すべてのコンテンツが基本言語である必要はありません。Resource.languageは自動的に物語に適用されたと想定してはいけません。言語が指定されている場合、HTMLのdiv要素にも指定する必要があります（xml：langとhtml lang属性の関係に関する情報はHTML5の規則を参照）。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Resource.language",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "code"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-maxValueSet",
+                            "valueCanonical": "http://hl7.org/fhir/ValueSet/all-languages"
+                        },
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "Language"
+                        },
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-isCommonBinding",
+                            "valueBoolean": true
+                        }
+                    ],
+                    "strength": "preferred",
+                    "description": "「人間の言語。」(Ningen no gengo.)",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/languages"
+                }
+            },
+            {
+                "id": "Appointment.text",
+                "path": "Appointment.text",
+                "short": "「人間の解釈のためのリソースのテキスト要約」",
+                "definition": "「リソースの要約を含む人が読めるナビゲーションであり、リソースの内容を人に表現するために使用できます。ナビゲーションはすべての構造化されたデータをエンコードする必要はありませんが、人間がナビゲーションを読むだけで「臨床的に安全」であるために十分な詳細を含む必要があります。リソース定義には、臨床的な安全性を確保するためにナビゲーションで表現する必要があるコンテンツが定義される場合があります。」",
+                "comment": "含まれるリソースには説明がありません。含まれないリソースには説明が必要です。場合によっては、リソースが少量のデータしか含まず、テキストだけで表現されることがあります（minOccurs = 1要素がすべて満たされている限り）。これは、情報が「テキストの塊」としてキャプチャされるレガシーシステムからのデータや、テキストが生またはナレーションされて符号化された情報が後で追加される場合に必要な場合があります。",
+                "alias": [
+                    "narrative",
+                    "html",
+                    "xhtml",
+                    "display"
+                ],
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "DomainResource.text",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "Narrative"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "Act.text?"
+                    }
+                ]
+            },
+            {
+                "id": "Appointment.contained",
+                "path": "Appointment.contained",
+                "short": "「含まれている、インラインのリソース」(Fukuma rete iru, inrain no risōsu)",
+                "definition": "「これらのリソースは、それらを含むリソースから独立した存在を持ちません。それらは独立して識別することはできず、独自の独立したトランザクション範囲を持つこともできません。」",
+                "comment": "「コンテンツが適切に識別できる場合には、これを行うべきではありません。識別が失われると、再び復元することは非常に困難であり（文脈に依存します）、メタ要素にプロファイルとタグを持つことができますが、セキュリティのラベルを持っていてはいけません。」",
+                "alias": [
+                    "inline resources",
+                    "anonymous resources",
+                    "contained resources"
+                ],
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "DomainResource.contained",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "Resource"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "N/A"
+                    }
+                ]
+            },
+            {
+                "id": "Appointment.extension",
+                "path": "Appointment.extension",
+                "short": "実装によって定義される追加コンテンツ",
+                "definition": "「リソースの基本的な定義の一部ではない追加情報を表すために使用することができます。拡張機能の使用を安全かつ管理可能にするために、定義と使用の一定のガバナンスが適用されます。実装者はどんな拡張機能でも定義できますが、拡張機能の定義の一部として満たす必要がある要件があります」",
+                "comment": "どのようなアプリケーション、プロジェクト、または標準が拡張機能を使用しているかに関わらず、拡張機能の使用には決して汚名が付くわけではありません - それらを使用または定義する機関または管轄区域に関係なく。拡張機能の使用こそが、FHIR仕様を誰にとっても簡単なコアレベルで維持することを可能にします。",
+                "alias": [
+                    "extensions",
+                    "user content"
+                ],
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "DomainResource.extension",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "Extension"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    },
+                    {
+                        "key": "ext-1",
+                        "severity": "error",
+                        "human": "「拡張機能または値[x]のいずれかが必要です。両方ではありません。」",
+                        "expression": "extension.exists() != value.exists()",
+                        "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Extension"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "N/A"
+                    }
+                ]
+            },
+            {
+                "id": "Appointment.modifierExtension",
+                "path": "Appointment.modifierExtension",
+                "short": "無視できない拡張機能 (Mushi dekinai kakuchou kinou)",
+                "definition": "「リソースの基本的な定義に含まれない、要素の理解や、それを含む要素の子孫の理解を修正する追加情報を表すためにも使用されることがあります。通常、修飾要素は否定や修飾を提供します。拡張機能の使用を安全で管理しやすくするために、拡張機能の定義と使用に対して厳格な統治が適用されます。実装者は拡張機能を定義することが許可されていますが、拡張機能の定義の一部として満たす必要がある要件があります。リソースを処理するアプリケーションは、修飾子拡張をチェックする必要があります。修飾子拡張は、リソースまたはドメインリソースの任意の要素の意味を変更してはなりません（修飾子拡張自体の意味も変更できません）。」",
+                "comment": "どのようなアプリケーション、プロジェクト、または標準が拡張機能を使用しているかに関わらず、拡張機能の使用には決して汚名が付くわけではありません - それらを使用または定義する機関または管轄区域に関係なく。拡張機能の使用こそが、FHIR仕様を誰にとっても簡単なコアレベルで維持することを可能にします。",
+                "requirements": "Modifier extensions allow for extensions that *cannot* be safely ignored to be clearly distinguished from the vast majority of extensions which can be safely ignored.  This promotes interoperability by eliminating the need for implementers to prohibit the presence of extensions. For further information, see the [definition of modifier extensions](extensibility.html#modifierExtension).",
+                "alias": [
+                    "extensions",
+                    "user content"
+                ],
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "DomainResource.modifierExtension",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "Extension"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    },
+                    {
+                        "key": "ext-1",
+                        "severity": "error",
+                        "human": "「拡張機能または値[x]のいずれかが必要です。両方ではありません。」",
+                        "expression": "extension.exists() != value.exists()",
+                        "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Extension"
+                    }
+                ],
+                "isModifier": true,
+                "isModifierReason": "Modifier extensions are expected to modify the meaning or interpretation of the resource that contains them",
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "N/A"
+                    }
+                ]
+            },
+            {
+                "id": "Appointment.identifier",
+                "path": "Appointment.identifier",
+                "short": "このアイテムの外部ID。",
+                "definition": "「この予約に関連する識別子は、ビジネスプロセスで定義され、またはリソース自体への直接のURL参照が適切ではない場合（例：CDA文書、書面/印刷物において）、それを参照するために使用されます。」",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Appointment.identifier",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "Identifier"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Request.identifier"
+                    },
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.identifier"
+                    },
+                    {
+                        "identity": "v2",
+                        "map": "SCH-1, SCH-2, ARQ-1, ARQ-2"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": ".id"
+                    },
+                    {
+                        "identity": "ical",
+                        "map": "UID"
+                    }
+                ]
+            },
+            {
+                "id": "Appointment.status",
+                "path": "Appointment.status",
+                "short": "提案中 | 保留中 | 予約済み | 到着済み | 履行済み | キャンセル済み | ノーショー | 入力エラー | チェックイン済み | ウェイトリスト",
+                "definition": "「アポイントメントの全般的な状態。参加者それぞれがプロセスに関与することを示す参加状態を持っていますが、この状態は共有の状態を示します。」",
+                "comment": "「もし予定のステータスが「キャンセル」となっている場合、すべての参加者は予約期間に関してカレンダーを解放することが期待され、したがって「ビジー」とマークされていたスロットは「フリー」に再設定できます。\n\nこの要素は、ステータスに入力エラーが含まれており、予約が現在有効でないとマークされるため、修飾子としてラベル付けされています。」",
+                "min": 1,
+                "max": "1",
+                "base": {
+                    "path": "Appointment.status",
+                    "min": 1,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "code"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": true,
+                "isModifierReason": "This element is labelled as a modifier because it is a status element that contains status entered-in-error which means that the resource should not be treated as valid",
+                "isSummary": true,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "AppointmentStatus"
+                        }
+                    ],
+                    "strength": "required",
+                    "description": "「アポイントメントの空き/予定状況」",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/appointmentstatus|4.0.1"
+                },
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Request.status"
+                    },
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.status"
+                    },
+                    {
+                        "identity": "v2",
+                        "map": "SCH-25"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": ".statusCode"
+                    },
+                    {
+                        "identity": "ical",
+                        "map": "STATUS"
+                    }
+                ]
+            },
+            {
+                "id": "Appointment.cancelationReason",
+                "path": "Appointment.cancelationReason",
+                "short": "予約がキャンセルされた理由のコード化",
+                "definition": "予約がキャンセルされた理由のコード化。これは、さらなるアクションが必要か、特定の料金が適用されるかを決定するために、報告/請求/追加処理でよく使用されます。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Appointment.cancelationReason",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "CodeableConcept"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "cancelation-reason"
+                        }
+                    ],
+                    "strength": "example",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/appointment-cancellation-reason"
+                },
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "Appointment.serviceCategory",
+                "path": "Appointment.serviceCategory",
+                "short": "「この予定中に実施されるサービスの広範な分類」",
+                "definition": "この予約中に実施されるサービスの広範な分類。",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Appointment.serviceCategory",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "CodeableConcept"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "service-category"
+                        }
+                    ],
+                    "strength": "example",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/service-category"
+                },
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "n/a, might be inferred from the ServiceDeliveryLocation"
+                    },
+                    {
+                        "identity": "ical",
+                        "map": "CATEGORIES"
+                    }
+                ]
+            },
+            {
+                "id": "Appointment.serviceType",
+                "path": "Appointment.serviceType",
+                "short": "この予約中に行われる特定のサービス",
+                "definition": "この予約中に実行される特定のサービス。 (Kono yoyaku chuu ni jikkou sareru tokutei no saabisu.)",
+                "comment": "「プロバイダー間の予約には「FOLLOWUP」というコードが適切であるかもしれません。これは、過去に診察された患者について話し合うことを期待されるためです。」",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Appointment.serviceType",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "CodeableConcept"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "service-type"
+                        }
+                    ],
+                    "strength": "example",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/service-type"
+                },
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Request.code"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": "n/a, might be inferred from the ServiceDeliveryLocation"
+                    }
+                ]
+            },
+            {
+                "id": "Appointment.specialty",
+                "path": "Appointment.specialty",
+                "short": "「この予約で要求されるサービスを実行するために必要な、専門家の専門性」",
+                "definition": "この予約で要求されるサービスを実行するために必要とされる開業者の専門性。 (Kono yoyaku de yōkyū sare ru sābisu o jikkō suru tame ni hitsuyō to sa reru kaigyō-sha no senmonsei.)",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Appointment.specialty",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "CodeableConcept"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "specialty"
+                        }
+                    ],
+                    "strength": "preferred",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/c80-practice-codes"
+                },
+                "mapping": [
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.class"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": ".performer.AssignedPerson.code"
+                    }
+                ]
+            },
+            {
+                "id": "Appointment.appointmentType",
+                "path": "Appointment.appointmentType",
+                "short": "そのスロットに予約された診察のスタイルや患者さん（サービスタイプではありません）",
+                "definition": "そのスロットに予約された患者または患者の予約スタイル（サービスタイプではない）。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Appointment.appointmentType",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "CodeableConcept"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "appointment-type"
+                        }
+                    ],
+                    "strength": "preferred",
+                    "valueSet": "http://terminology.hl7.org/ValueSet/v2-0276"
+                },
+                "mapping": [
+                    {
+                        "identity": "v2",
+                        "map": "ARQ-7"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": ".code"
+                    },
+                    {
+                        "identity": "ical",
+                        "map": "CLASSIFICATION"
+                    }
+                ]
+            },
+            {
+                "id": "Appointment.reasonCode",
+                "path": "Appointment.reasonCode",
+                "short": "予約の理由はコード化されています。",
+                "definition": "この予約がスケジュールされている理由はコード化されています。これは行政的よりも臨床的なものです。",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Appointment.reasonCode",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "CodeableConcept"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "ApptReason"
+                        }
+                    ],
+                    "strength": "preferred",
+                    "description": "「面談の理由」(Mendan no riyuu)",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/encounter-reason"
+                },
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Request.reasonCode"
+                    },
+                    {
+                        "identity": "v2",
+                        "map": "AIS-3, SCH-7"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": ".reasonCode"
+                    }
+                ]
+            },
+            {
+                "id": "Appointment.reasonReference",
+                "path": "Appointment.reasonReference",
+                "short": "予定された理由(リソース)による予約です。",
+                "definition": "別の情報源から指定された理由に基づいて予約が行われたため、患者が到着しエンカウンターが始まると、それは入院診断として使用される可能性があります。指標は通常、状態（evidence.detailで参照される他のリソースを持つ）または手順です。",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Appointment.reasonReference",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "Reference",
+                        "targetProfile": [
+                            "http://hl7.org/fhir/StructureDefinition/Condition",
+                            "http://hl7.org/fhir/StructureDefinition/Procedure",
+                            "http://hl7.org/fhir/StructureDefinition/Observation",
+                            "http://hl7.org/fhir/StructureDefinition/ImmunizationRecommendation"
+                        ]
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Request.reasonReference"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": ".inboundRelationship[@typeCode = 'RSON'].observation"
+                    }
+                ]
+            },
+            {
+                "id": "Appointment.priority",
+                "path": "Appointment.priority",
+                "short": "再優先度付けが必要であれば、情報に基づいて決定するために使用します。 (Sa yūsendo tsuke ga hitsuyō de areba, jōhō ni motozuite kettei suru tame ni shiyō shimasu.)",
+                "definition": "予定の優先度。再度予定を優先順位付けする必要がある場合には、情報を提供するために使用できます。（iCalスタンダードは、未定義を0、最も高い優先度を1、最も低い優先度を9と指定しています。）",
+                "comment": "「このプロパティについて、どの程度相互運用性があるかについて実装者のフィードバックを求めています。コード化可能な概念を記録するための拡張機能を使うことは、将来のコネクタソンでテストされるかもしれません。」",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Appointment.priority",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "unsignedInt"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Request.priority"
+                    },
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.class"
+                    },
+                    {
+                        "identity": "v2",
+                        "map": "ARQ-12, SCH-11.6 / TQ1-9"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": ".priorityCode"
+                    },
+                    {
+                        "identity": "ical",
+                        "map": "PRIORITY"
+                    }
+                ]
+            },
+            {
+                "id": "Appointment.description",
+                "path": "Appointment.description",
+                "short": "「ミーティングリクエストの件名に表示されるか、またはアポイントメントリストに表示される」",
+                "definition": "「会議依頼または予定リストの件名に表示される任命の簡単な説明。詳細または拡張された情報はコメントフィールドに入力する必要があります。」",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Appointment.description",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "v2",
+                        "map": "NTE-3"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": ".text"
+                    },
+                    {
+                        "identity": "ical",
+                        "map": "SUMMARY"
+                    }
+                ]
+            },
+            {
+                "id": "Appointment.supportingInformation",
+                "path": "Appointment.supportingInformation",
+                "short": "「任命をサポートする追加情報」",
+                "definition": "予約をするときに、任命をサポートする追加情報が提供されます。",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Appointment.supportingInformation",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "Reference",
+                        "targetProfile": [
+                            "http://hl7.org/fhir/StructureDefinition/Resource"
+                        ]
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Request.supportingInfo"
+                    },
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.context"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": ".inboundRelationship[@typeCode = 'SPRT'].observation"
+                    },
+                    {
+                        "identity": "ical",
+                        "map": "ATTACH"
+                    }
+                ]
+            },
+            {
+                "id": "Appointment.start",
+                "path": "Appointment.start",
+                "short": "「アポイントメントが行われるとき」",
+                "definition": "予約が行われる日時。 (Yoyaku ga okonawareru nichiji.)",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Appointment.start",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "instant"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Request.occurrence[x]"
+                    },
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.init"
+                    },
+                    {
+                        "identity": "v2",
+                        "map": "ARQ-11.1, SCH-11.4 / TQ1-7"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": ".effectiveTime.low"
+                    },
+                    {
+                        "identity": "ical",
+                        "map": "DTSTART"
+                    }
+                ]
+            },
+            {
+                "id": "Appointment.end",
+                "path": "Appointment.end",
+                "short": "「予約が終了する時」(Yoyaku ga shūryō suru toki)",
+                "definition": "「アポイントメントが終了する予定日/時刻」",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Appointment.end",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "instant"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Request.occurrence[x]"
+                    },
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.done[x]"
+                    },
+                    {
+                        "identity": "v2",
+                        "map": "SCH-11.5 / TQ1-8/ calculated based on the start and the duration which is in ARQ-9"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": ".effectiveTime.high"
+                    },
+                    {
+                        "identity": "ical",
+                        "map": "DTEND"
+                    }
+                ]
+            },
+            {
+                "id": "Appointment.minutesDuration",
+                "path": "Appointment.minutesDuration",
+                "short": "開始/終了よりも少なくなる可能性があります（例：推定）。",
+                "definition": "予約時間の予定時間数。この時間は、開始時間と終了時間の間隔よりも短くすることができます。例えば、実際の予約時間が見積もりの場合や、30分の予約を申し込んだが、どの時間でも構わない場合などです。また、長時間の予約の途中で予定されている15分間の休憩がある場合、予約の終了時間と開始時間の差から15分を引いた時間が予定時間となります。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Appointment.minutesDuration",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "positiveInt"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Request.occurrence[x]"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": ".activityTime[@xsi:type = ('SXPR_TS', 'PIVL_TS')].width"
+                    },
+                    {
+                        "identity": "ical",
+                        "map": "DURATION (e.g. PT15M)"
+                    }
+                ]
+            },
+            {
+                "id": "Appointment.slot",
+                "path": "Appointment.slot",
+                "short": "「この任命が埋めるスロット」",
+                "definition": "「任命によって埋められる参加者のスケジュールからのスロット。」",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Appointment.slot",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "Reference",
+                        "targetProfile": [
+                            "http://hl7.org/fhir/StructureDefinition/Slot"
+                        ]
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": ".outboundRelationship[@typeCode = 'REFR'].act[@classCode = 'ACT'][@moodCode = 'SLOT']"
+                    }
+                ]
+            },
+            {
+                "id": "Appointment.created",
+                "path": "Appointment.created",
+                "short": "「この予約が最初に作成された日付」",
+                "definition": "「この予約が最初に作成された日付。これは初期エントリーのmeta.lastModified値と異なる場合があります。これは、FHIRサーバー上でリソースが作成される前に行われたことがあるため、予約の寿命全体にわたって変更されないようにする必要があります。」",
+                "comment": "「このプロパティは、予定の年齢がスケジューリングや予定の請求の処理フローに考慮される多くの使用例で必要です。」",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Appointment.created",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "dateTime"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Request.authoredOn"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": ".author.time"
+                    },
+                    {
+                        "identity": "ical",
+                        "map": "CREATED"
+                    }
+                ]
+            },
+            {
+                "id": "Appointment.comment",
+                "path": "Appointment.comment",
+                "short": "「追加コメント」",
+                "definition": "「予約に関する追加コメント」",
+                "comment": "予約を容易にするための追加テキスト。例えば、「患者は到着後すぐに点滴室に移動する必要がある」とのコメントがあるかもしれません。開始/終了日が設定されていない予定された予約の場合は、このフィールドを使用して、予約リクエストの詳細に関する追加のガイダンス、予約時に考慮する必要のある制限などを提供できます。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Appointment.comment",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Request.note"
+                    },
+                    {
+                        "identity": "v2",
+                        "map": "NTE-3"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": ".subjectOf.observation[@moodCode = 'EVN'][code = 'annotation'].value"
+                    },
+                    {
+                        "identity": "ical",
+                        "map": "DESCRIPTION (for internal use)"
+                    }
+                ]
+            },
+            {
+                "id": "Appointment.patientInstruction",
+                "path": "Appointment.patientInstruction",
+                "short": "患者のための詳細な情報と指示。",
+                "definition": "「Appointment.commentには内部利用の情報が含まれていますが、Appointment.patientInstructionsはアポイントメントに関する患者向け情報（例：紹介状を持参するように、前日夜8時から絶食するように）を収集するために使用されます。」",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Appointment.patientInstruction",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "v2",
+                        "map": "NTE-3"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": ".subjectOf.observation[@moodCode = 'EVN'][code = 'annotation'].value"
+                    },
+                    {
+                        "identity": "ical",
+                        "map": "DESCRIPTION (for patient use)"
+                    }
+                ]
+            },
+            {
+                "id": "Appointment.basedOn",
+                "path": "Appointment.basedOn",
+                "short": "「このアポイントメントに割り当てられたサービス依頼は評価するためのものです。」",
+                "definition": "この約束は、評価するために割り当てられたサービス依頼に関連しています（例：入局の紹介または手順の依頼）。",
+                "alias": [
+                    "incomingReferral"
+                ],
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Appointment.basedOn",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "Reference",
+                        "targetProfile": [
+                            "http://hl7.org/fhir/StructureDefinition/ServiceRequest"
+                        ]
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Request.basedOn"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": ".outboundRelationship[@typeCode = 'FLFS'].act[@classCode < 'ActCareProvisionRequestType'][@moodCode = 'RQO']"
+                    }
+                ]
+            },
+            {
+                "id": "Appointment.participant",
+                "path": "Appointment.participant",
+                "short": "「アポイントメントに参加する参加者」(Apointomento ni sanka suru sanka-sha)",
+                "definition": "「アポイントメントに関わった参加者リスト」",
+                "min": 1,
+                "max": "*",
+                "base": {
+                    "path": "Appointment.participant",
+                    "min": 1,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "BackboneElement"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "app-1",
+                        "severity": "error",
+                        "human": "参加者のタイプまたはアクターのいずれかを必ず指定する必要があります。",
+                        "expression": "type.exists() or actor.exists()",
+                        "xpath": "(exists(f:type) or exists(f:actor))"
+                    },
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Request.performer, Request.subject"
+                    },
+                    {
+                        "identity": "v2",
+                        "map": "PID, AIP, AIG, AIL"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": "performer | reusableDevice | subject | location"
+                    },
+                    {
+                        "identity": "ical",
+                        "map": "ATTENDEE component to be created"
+                    }
+                ]
+            },
+            {
+                "id": "Appointment.participant.id",
+                "path": "Appointment.participant.id",
+                "representation": [
+                    "xmlAttr"
+                ],
+                "short": "エレメント相互参照のためのユニークID",
+                "definition": "リソース内の要素の固有ID（内部参照用）。これは、スペースを含まない任意の文字列値である可能性があります。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Element.id",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "extension": [
+                            {
+                                "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fhir-type",
+                                "valueUrl": "string"
+                            }
+                        ],
+                        "code": "http://hl7.org/fhirpath/System.String"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "Appointment.participant.extension",
+                "path": "Appointment.participant.extension",
+                "short": "実装によって定義される追加コンテンツ",
+                "definition": "「要素の基本的な定義に含まれない追加情報を表すために使用されることがあります。拡張機能の使用を安全かつ管理しやすくするために、定義および使用に適用される厳格なガバナンスのセットがあります。実装者は拡張機能を定義できますが、拡張機能の定義の一部として満たす必要のある要件のセットがあります。」",
+                "comment": "どのようなアプリケーション、プロジェクト、または標準が拡張機能を使用しているかに関わらず、拡張機能の使用には決して汚名が付くわけではありません - それらを使用または定義する機関または管轄区域に関係なく。拡張機能の使用こそが、FHIR仕様を誰にとっても簡単なコアレベルで維持することを可能にします。",
+                "alias": [
+                    "extensions",
+                    "user content"
+                ],
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Element.extension",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "Extension"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    },
+                    {
+                        "key": "ext-1",
+                        "severity": "error",
+                        "human": "「拡張機能または値[x]のいずれかが必要です。両方ではありません。」",
+                        "expression": "extension.exists() != value.exists()",
+                        "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Extension"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "Appointment.participant.modifierExtension",
+                "path": "Appointment.participant.modifierExtension",
+                "short": "「認識されなくても無視できない拡張機能」(Ninshiki sarenakutemo mushi dekinai kakuchou kinou)",
+                "definition": "「基本的な要素の定義に含まれない追加情報を表すために使用されることがあり、それによって、その要素自体または取り込んでいる要素の子孫の理解を修正する。修飾子要素は通常、否定または修飾を提供します。拡張機能の安全で管理しやすい使用を実現するために、定義および使用に厳しいガバナンスセットが適用されています。どの実装者でも拡張機能を定義できますが、拡張機能の定義の一部として満たす必要がある要件があります。リソースを処理するアプリケーションは、修飾子拡張子をチェックする必要があります。\n\n修飾子拡張機能は、リソースまたはドメインリソースの任意の要素の意味を変更してはなりません（修飾子拡張自体の意味を変更することもできません）。」",
+                "comment": "どのようなアプリケーション、プロジェクト、または標準が拡張機能を使用しているかに関わらず、拡張機能の使用には決して汚名が付くわけではありません - それらを使用または定義する機関または管轄区域に関係なく。拡張機能の使用こそが、FHIR仕様を誰にとっても簡単なコアレベルで維持することを可能にします。",
+                "requirements": "Modifier extensions allow for extensions that *cannot* be safely ignored to be clearly distinguished from the vast majority of extensions which can be safely ignored.  This promotes interoperability by eliminating the need for implementers to prohibit the presence of extensions. For further information, see the [definition of modifier extensions](extensibility.html#modifierExtension).",
+                "alias": [
+                    "extensions",
+                    "user content",
+                    "modifiers"
+                ],
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "BackboneElement.modifierExtension",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "Extension"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    },
+                    {
+                        "key": "ext-1",
+                        "severity": "error",
+                        "human": "「拡張機能または値[x]のいずれかが必要です。両方ではありません。」",
+                        "expression": "extension.exists() != value.exists()",
+                        "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Extension"
+                    }
+                ],
+                "isModifier": true,
+                "isModifierReason": "Modifier extensions are expected to modify the meaning or interpretation of the element that contains them",
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "N/A"
+                    }
+                ]
+            },
+            {
+                "id": "Appointment.participant.type",
+                "path": "Appointment.participant.type",
+                "short": "「予約の参加者の役割」(Yoyaku no sankasha no yakuwari)",
+                "definition": "「任命における参加者の役割。」",
+                "comment": "参加者の役割は、この予約の範囲内でアクターが何をするかを宣言するために使用できます。\n\nアクターが指定されていない場合、後の段階でアクターが埋められることが期待されます。\n\nこの値は、AppointmentResponseを作成するときに同じでなければならないので、それらをマッチングし、その後に予約を更新できます。",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Appointment.participant.type",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "CodeableConcept"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "ParticipantType"
+                        }
+                    ],
+                    "strength": "extensible",
+                    "description": "出会いにおける参加者の役割。",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/encounter-participant-type"
+                },
+                "mapping": [
+                    {
+                        "identity": "v2",
+                        "map": "AIP-4, AIG-4"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": "(performer | reusableDevice | subject | location).@typeCode"
+                    },
+                    {
+                        "identity": "ical",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "Appointment.participant.actor",
+                "path": "Appointment.participant.actor",
+                "short": "「人、場所/医療サービス、またはデバイス」",
+                "definition": "「アポイントメントに参加している人、場所/医療サービス、あるいはデバイス。」",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Appointment.participant.actor",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "Reference",
+                        "targetProfile": [
+                            "http://hl7.org/fhir/StructureDefinition/Patient",
+                            "http://hl7.org/fhir/StructureDefinition/Practitioner",
+                            "http://hl7.org/fhir/StructureDefinition/PractitionerRole",
+                            "http://hl7.org/fhir/StructureDefinition/RelatedPerson",
+                            "http://hl7.org/fhir/StructureDefinition/Device",
+                            "http://hl7.org/fhir/StructureDefinition/HealthcareService",
+                            "http://hl7.org/fhir/StructureDefinition/Location"
+                        ]
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.who"
+                    },
+                    {
+                        "identity": "v2",
+                        "map": "PID-3-Patient ID List | AIL-3 | AIG-3 | AIP-3"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": "performer.person | reusableDevice.manufacturedDevice | subject.patient | location.serviceDeliveryLocation"
+                    },
+                    {
+                        "identity": "ical",
+                        "map": "ATTENDEE: (Need to provide the common name CN and also the MAILTO properties from the practitioner resource) where the participant type is not \"information-only\""
+                    }
+                ]
+            },
+            {
+                "id": "Appointment.participant.required",
+                "path": "Appointment.participant.required",
+                "short": "必須 | オプション | 情報のみ",
+                "definition": "「この参加者が会議に出席する必要があるかどうか。これは、特定の患者の結果を議論するために2人の医師が会う必要があり、患者が出席する必要がない場合をカバーしています。」",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Appointment.participant.required",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "code"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "ParticipantRequired"
+                        }
+                    ],
+                    "strength": "required",
+                    "description": "参加者は予約に出席する必要がありますか？ (Sanka-sha wa yoyaku ni shusseki suru hitsuyou ga arimasu ka?)",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/participantrequired|4.0.1"
+                },
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "(performer | reusableDevice | subject | location).@performInd"
+                    },
+                    {
+                        "identity": "ical",
+                        "map": "ROLE=REQ-PARTICIPANT (roleparam)"
+                    }
+                ]
+            },
+            {
+                "id": "Appointment.participant.status",
+                "path": "Appointment.participant.status",
+                "short": "受け入れられました | 辞退されました | 仮の | 対応が必要です",
+                "definition": "俳優の参加状況。",
+                "min": 1,
+                "max": "1",
+                "base": {
+                    "path": "Appointment.participant.status",
+                    "min": 1,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "code"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "ParticipationStatus"
+                        }
+                    ],
+                    "strength": "required",
+                    "description": "「アポイントメントへの参加状況」",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/participationstatus|4.0.1"
+                },
+                "mapping": [
+                    {
+                        "identity": "v2",
+                        "map": "AIP-12, AIG-14"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": "(performer | reusableDevice | subject | location).statusCode"
+                    },
+                    {
+                        "identity": "ical",
+                        "map": "ATTENDEE;CN=\"John Doe\";RSVP=TRUE:mailto:john@doe.com (rsvpparam | partstatparam)"
+                    }
+                ]
+            },
+            {
+                "id": "Appointment.participant.period",
+                "path": "Appointment.participant.period",
+                "short": "俳優の参加期間 (haiyuu no sankakukikan)",
+                "definition": "俳優の参加期間。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Appointment.participant.period",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "Period"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "Appointment.requestedPeriod",
+                "path": "Appointment.requestedPeriod",
+                "short": "「予約可能な日時の候補を教えてください」",
+                "definition": "予定される予約に設定された日付範囲のセット（時刻を含む可能性がある）。\n\n通常、（分単位で）期間が提供され、予約の長さを示し、実際に割り当てられた時間の始まりと終わりを埋めるために使用される。ただし、他の場合では、予定システムによって期間が計算される場合があります。",
+                "comment": "「これは再発する予約ができる能力がありません。」",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Appointment.requestedPeriod",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "Period"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Request.occurrence[x]"
+                    },
+                    {
+                        "identity": "v2",
+                        "map": "ARQ-11"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": ".activityTime[@xsi:type = ('SXPR_TS', 'PIVL_TS')]"
+                    }
+                ]
+            }
+        ]
+    },
+    "differential": {
+        "element": [
+            {
+                "id": "Appointment",
+                "path": "Appointment",
+                "short": "特定の日時に患者、医療従事者、関係者、および/またはデバイスの間での医療イベントの予約。これにより、1つ以上の「エンカウンター」が発生する場合があります。",
+                "definition": "特定の日時に、患者、医療従事者、関係者、および/またはデバイスの健康イベントの予約。これは1つ以上のエンカウンターにつながる可能性があります。",
+                "min": 0,
+                "max": "*",
+                "constraint": [
+                    {
+                        "key": "app-4",
+                        "severity": "error",
+                        "human": "「キャンセル理由は、キャンセルされた予約または無断欠席がある場合にのみ使用されます。」",
+                        "expression": "Appointment.cancelationReason.exists() implies (Appointment.status='no-show' or Appointment.status='cancelled')",
+                        "xpath": "not(exists(f:cancellationReason)) or f:status/@value=('no-show', 'cancelled')"
+                    },
+                    {
+                        "key": "app-3",
+                        "severity": "error",
+                        "human": "「提案された予定やキャンセルされた予定のみが開始・終了日付が不足している可能性があります」",
+                        "expression": "(start.exists() and end.exists()) or (status in ('proposed' | 'cancelled' | 'waitlist'))",
+                        "xpath": "((exists(f:start) and exists(f:end)) or (f:status/@value='proposed') or (f:status/@value='cancelled') or (f:status/@value='waitlist'))"
+                    },
+                    {
+                        "key": "app-2",
+                        "severity": "error",
+                        "human": "「始点と終点が指定されるか、指定されないかのいずれかです。」",
+                        "expression": "start.exists() = end.exists()",
+                        "xpath": "((exists(f:start) and exists(f:end)) or (not(exists(f:start)) and not(exists(f:end))))"
+                    }
+                ],
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Request"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": "Act[@moodCode <= 'INT']"
+                    },
+                    {
+                        "identity": "ical",
+                        "map": "VEVENT"
+                    }
+                ]
+            },
+            {
+                "id": "Appointment.identifier",
+                "path": "Appointment.identifier",
+                "short": "このアイテムの外部ID。",
+                "definition": "「この予約に関連する識別子は、ビジネスプロセスで定義され、またはリソース自体への直接のURL参照が適切ではない場合（例：CDA文書、書面/印刷物において）、それを参照するために使用されます。」",
+                "min": 0,
+                "max": "*",
+                "type": [
+                    {
+                        "code": "Identifier"
+                    }
+                ],
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Request.identifier"
+                    },
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.identifier"
+                    },
+                    {
+                        "identity": "v2",
+                        "map": "SCH-1, SCH-2, ARQ-1, ARQ-2"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": ".id"
+                    },
+                    {
+                        "identity": "ical",
+                        "map": "UID"
+                    }
+                ]
+            },
+            {
+                "id": "Appointment.status",
+                "path": "Appointment.status",
+                "short": "提案中 | 保留中 | 予約済み | 到着済み | 履行済み | キャンセル済み | ノーショー | 入力エラー | チェックイン済み | ウェイトリスト",
+                "definition": "「アポイントメントの全般的な状態。参加者それぞれがプロセスに関与することを示す参加状態を持っていますが、この状態は共有の状態を示します。」",
+                "comment": "「もし予定のステータスが「キャンセル」となっている場合、すべての参加者は予約期間に関してカレンダーを解放することが期待され、したがって「ビジー」とマークされていたスロットは「フリー」に再設定できます。\n\nこの要素は、ステータスに入力エラーが含まれており、予約が現在有効でないとマークされるため、修飾子としてラベル付けされています。」",
+                "min": 1,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "code"
+                    }
+                ],
+                "isModifier": true,
+                "isModifierReason": "This element is labelled as a modifier because it is a status element that contains status entered-in-error which means that the resource should not be treated as valid",
+                "isSummary": true,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "AppointmentStatus"
+                        }
+                    ],
+                    "strength": "required",
+                    "description": "「アポイントメントの空き/予定状況」",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/appointmentstatus|4.0.1"
+                },
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Request.status"
+                    },
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.status"
+                    },
+                    {
+                        "identity": "v2",
+                        "map": "SCH-25"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": ".statusCode"
+                    },
+                    {
+                        "identity": "ical",
+                        "map": "STATUS"
+                    }
+                ]
+            },
+            {
+                "id": "Appointment.cancelationReason",
+                "path": "Appointment.cancelationReason",
+                "short": "予約がキャンセルされた理由のコード化",
+                "definition": "予約がキャンセルされた理由のコード化。これは、さらなるアクションが必要か、特定の料金が適用されるかを決定するために、報告/請求/追加処理でよく使用されます。",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "CodeableConcept"
+                    }
+                ],
+                "isSummary": true,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "cancelation-reason"
+                        }
+                    ],
+                    "strength": "example",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/appointment-cancellation-reason"
+                },
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "Appointment.serviceCategory",
+                "path": "Appointment.serviceCategory",
+                "short": "「この予定中に実施されるサービスの広範な分類」",
+                "definition": "この予約中に実施されるサービスの広範な分類。",
+                "min": 0,
+                "max": "*",
+                "type": [
+                    {
+                        "code": "CodeableConcept"
+                    }
+                ],
+                "isSummary": true,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "service-category"
+                        }
+                    ],
+                    "strength": "example",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/service-category"
+                },
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "n/a, might be inferred from the ServiceDeliveryLocation"
+                    },
+                    {
+                        "identity": "ical",
+                        "map": "CATEGORIES"
+                    }
+                ]
+            },
+            {
+                "id": "Appointment.serviceType",
+                "path": "Appointment.serviceType",
+                "short": "この予約中に行われる特定のサービス",
+                "definition": "この予約中に実行される特定のサービス。 (Kono yoyaku chuu ni jikkou sareru tokutei no saabisu.)",
+                "comment": "「プロバイダー間の予約には「FOLLOWUP」というコードが適切であるかもしれません。これは、過去に診察された患者について話し合うことを期待されるためです。」",
+                "min": 0,
+                "max": "*",
+                "type": [
+                    {
+                        "code": "CodeableConcept"
+                    }
+                ],
+                "isSummary": true,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "service-type"
+                        }
+                    ],
+                    "strength": "example",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/service-type"
+                },
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Request.code"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": "n/a, might be inferred from the ServiceDeliveryLocation"
+                    }
+                ]
+            },
+            {
+                "id": "Appointment.specialty",
+                "path": "Appointment.specialty",
+                "short": "「この予約で要求されるサービスを実行するために必要な、専門家の専門性」",
+                "definition": "この予約で要求されるサービスを実行するために必要とされる開業者の専門性。 (Kono yoyaku de yōkyū sare ru sābisu o jikkō suru tame ni hitsuyō to sa reru kaigyō-sha no senmonsei.)",
+                "min": 0,
+                "max": "*",
+                "type": [
+                    {
+                        "code": "CodeableConcept"
+                    }
+                ],
+                "isSummary": true,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "specialty"
+                        }
+                    ],
+                    "strength": "preferred",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/c80-practice-codes"
+                },
+                "mapping": [
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.class"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": ".performer.AssignedPerson.code"
+                    }
+                ]
+            },
+            {
+                "id": "Appointment.appointmentType",
+                "path": "Appointment.appointmentType",
+                "short": "そのスロットに予約された診察のスタイルや患者さん（サービスタイプではありません）",
+                "definition": "そのスロットに予約された患者または患者の予約スタイル（サービスタイプではない）。",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "CodeableConcept"
+                    }
+                ],
+                "isSummary": true,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "appointment-type"
+                        }
+                    ],
+                    "strength": "preferred",
+                    "valueSet": "http://terminology.hl7.org/ValueSet/v2-0276"
+                },
+                "mapping": [
+                    {
+                        "identity": "v2",
+                        "map": "ARQ-7"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": ".code"
+                    },
+                    {
+                        "identity": "ical",
+                        "map": "CLASSIFICATION"
+                    }
+                ]
+            },
+            {
+                "id": "Appointment.reasonCode",
+                "path": "Appointment.reasonCode",
+                "short": "予約の理由はコード化されています。",
+                "definition": "この予約がスケジュールされている理由はコード化されています。これは行政的よりも臨床的なものです。",
+                "min": 0,
+                "max": "*",
+                "type": [
+                    {
+                        "code": "CodeableConcept"
+                    }
+                ],
+                "isSummary": true,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "ApptReason"
+                        }
+                    ],
+                    "strength": "preferred",
+                    "description": "「面談の理由」(Mendan no riyuu)",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/encounter-reason"
+                },
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Request.reasonCode"
+                    },
+                    {
+                        "identity": "v2",
+                        "map": "AIS-3, SCH-7"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": ".reasonCode"
+                    }
+                ]
+            },
+            {
+                "id": "Appointment.reasonReference",
+                "path": "Appointment.reasonReference",
+                "short": "予定された理由(リソース)による予約です。",
+                "definition": "別の情報源から指定された理由に基づいて予約が行われたため、患者が到着しエンカウンターが始まると、それは入院診断として使用される可能性があります。指標は通常、状態（evidence.detailで参照される他のリソースを持つ）または手順です。",
+                "min": 0,
+                "max": "*",
+                "type": [
+                    {
+                        "code": "Reference",
+                        "targetProfile": [
+                            "http://hl7.org/fhir/StructureDefinition/Condition",
+                            "http://hl7.org/fhir/StructureDefinition/Procedure",
+                            "http://hl7.org/fhir/StructureDefinition/Observation",
+                            "http://hl7.org/fhir/StructureDefinition/ImmunizationRecommendation"
+                        ]
+                    }
+                ],
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Request.reasonReference"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": ".inboundRelationship[@typeCode = 'RSON'].observation"
+                    }
+                ]
+            },
+            {
+                "id": "Appointment.priority",
+                "path": "Appointment.priority",
+                "short": "再優先度付けが必要であれば、情報に基づいて決定するために使用します。 (Sa yūsendo tsuke ga hitsuyō de areba, jōhō ni motozuite kettei suru tame ni shiyō shimasu.)",
+                "definition": "予定の優先度。再度予定を優先順位付けする必要がある場合には、情報を提供するために使用できます。（iCalスタンダードは、未定義を0、最も高い優先度を1、最も低い優先度を9と指定しています。）",
+                "comment": "「このプロパティについて、どの程度相互運用性があるかについて実装者のフィードバックを求めています。コード化可能な概念を記録するための拡張機能を使うことは、将来のコネクタソンでテストされるかもしれません。」",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "unsignedInt"
+                    }
+                ],
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Request.priority"
+                    },
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.class"
+                    },
+                    {
+                        "identity": "v2",
+                        "map": "ARQ-12, SCH-11.6 / TQ1-9"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": ".priorityCode"
+                    },
+                    {
+                        "identity": "ical",
+                        "map": "PRIORITY"
+                    }
+                ]
+            },
+            {
+                "id": "Appointment.description",
+                "path": "Appointment.description",
+                "short": "「ミーティングリクエストの件名に表示されるか、またはアポイントメントリストに表示される」",
+                "definition": "「会議依頼または予定リストの件名に表示される任命の簡単な説明。詳細または拡張された情報はコメントフィールドに入力する必要があります。」",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ],
+                "mapping": [
+                    {
+                        "identity": "v2",
+                        "map": "NTE-3"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": ".text"
+                    },
+                    {
+                        "identity": "ical",
+                        "map": "SUMMARY"
+                    }
+                ]
+            },
+            {
+                "id": "Appointment.supportingInformation",
+                "path": "Appointment.supportingInformation",
+                "short": "「任命をサポートする追加情報」",
+                "definition": "予約をするときに、任命をサポートする追加情報が提供されます。",
+                "min": 0,
+                "max": "*",
+                "type": [
+                    {
+                        "code": "Reference",
+                        "targetProfile": [
+                            "http://hl7.org/fhir/StructureDefinition/Resource"
+                        ]
+                    }
+                ],
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Request.supportingInfo"
+                    },
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.context"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": ".inboundRelationship[@typeCode = 'SPRT'].observation"
+                    },
+                    {
+                        "identity": "ical",
+                        "map": "ATTACH"
+                    }
+                ]
+            },
+            {
+                "id": "Appointment.start",
+                "path": "Appointment.start",
+                "short": "「アポイントメントが行われるとき」",
+                "definition": "予約が行われる日時。 (Yoyaku ga okonawareru nichiji.)",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "instant"
+                    }
+                ],
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Request.occurrence[x]"
+                    },
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.init"
+                    },
+                    {
+                        "identity": "v2",
+                        "map": "ARQ-11.1, SCH-11.4 / TQ1-7"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": ".effectiveTime.low"
+                    },
+                    {
+                        "identity": "ical",
+                        "map": "DTSTART"
+                    }
+                ]
+            },
+            {
+                "id": "Appointment.end",
+                "path": "Appointment.end",
+                "short": "「予約が終了する時」(Yoyaku ga shūryō suru toki)",
+                "definition": "「アポイントメントが終了する予定日/時刻」",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "instant"
+                    }
+                ],
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Request.occurrence[x]"
+                    },
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.done[x]"
+                    },
+                    {
+                        "identity": "v2",
+                        "map": "SCH-11.5 / TQ1-8/ calculated based on the start and the duration which is in ARQ-9"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": ".effectiveTime.high"
+                    },
+                    {
+                        "identity": "ical",
+                        "map": "DTEND"
+                    }
+                ]
+            },
+            {
+                "id": "Appointment.minutesDuration",
+                "path": "Appointment.minutesDuration",
+                "short": "開始/終了よりも少なくなる可能性があります（例：推定）。",
+                "definition": "予約時間の予定時間数。この時間は、開始時間と終了時間の間隔よりも短くすることができます。例えば、実際の予約時間が見積もりの場合や、30分の予約を申し込んだが、どの時間でも構わない場合などです。また、長時間の予約の途中で予定されている15分間の休憩がある場合、予約の終了時間と開始時間の差から15分を引いた時間が予定時間となります。",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "positiveInt"
+                    }
+                ],
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Request.occurrence[x]"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": ".activityTime[@xsi:type = ('SXPR_TS', 'PIVL_TS')].width"
+                    },
+                    {
+                        "identity": "ical",
+                        "map": "DURATION (e.g. PT15M)"
+                    }
+                ]
+            },
+            {
+                "id": "Appointment.slot",
+                "path": "Appointment.slot",
+                "short": "「この任命が埋めるスロット」",
+                "definition": "「任命によって埋められる参加者のスケジュールからのスロット。」",
+                "min": 0,
+                "max": "*",
+                "type": [
+                    {
+                        "code": "Reference",
+                        "targetProfile": [
+                            "http://hl7.org/fhir/StructureDefinition/Slot"
+                        ]
+                    }
+                ],
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": ".outboundRelationship[@typeCode = 'REFR'].act[@classCode = 'ACT'][@moodCode = 'SLOT']"
+                    }
+                ]
+            },
+            {
+                "id": "Appointment.created",
+                "path": "Appointment.created",
+                "short": "「この予約が最初に作成された日付」",
+                "definition": "「この予約が最初に作成された日付。これは初期エントリーのmeta.lastModified値と異なる場合があります。これは、FHIRサーバー上でリソースが作成される前に行われたことがあるため、予約の寿命全体にわたって変更されないようにする必要があります。」",
+                "comment": "「このプロパティは、予定の年齢がスケジューリングや予定の請求の処理フローに考慮される多くの使用例で必要です。」",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "dateTime"
+                    }
+                ],
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Request.authoredOn"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": ".author.time"
+                    },
+                    {
+                        "identity": "ical",
+                        "map": "CREATED"
+                    }
+                ]
+            },
+            {
+                "id": "Appointment.comment",
+                "path": "Appointment.comment",
+                "short": "「追加コメント」",
+                "definition": "「予約に関する追加コメント」",
+                "comment": "予約を容易にするための追加テキスト。例えば、「患者は到着後すぐに点滴室に移動する必要がある」とのコメントがあるかもしれません。開始/終了日が設定されていない予定された予約の場合は、このフィールドを使用して、予約リクエストの詳細に関する追加のガイダンス、予約時に考慮する必要のある制限などを提供できます。",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ],
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Request.note"
+                    },
+                    {
+                        "identity": "v2",
+                        "map": "NTE-3"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": ".subjectOf.observation[@moodCode = 'EVN'][code = 'annotation'].value"
+                    },
+                    {
+                        "identity": "ical",
+                        "map": "DESCRIPTION (for internal use)"
+                    }
+                ]
+            },
+            {
+                "id": "Appointment.patientInstruction",
+                "path": "Appointment.patientInstruction",
+                "short": "患者のための詳細な情報と指示。",
+                "definition": "「Appointment.commentには内部利用の情報が含まれていますが、Appointment.patientInstructionsはアポイントメントに関する患者向け情報（例：紹介状を持参するように、前日夜8時から絶食するように）を収集するために使用されます。」",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ],
+                "mapping": [
+                    {
+                        "identity": "v2",
+                        "map": "NTE-3"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": ".subjectOf.observation[@moodCode = 'EVN'][code = 'annotation'].value"
+                    },
+                    {
+                        "identity": "ical",
+                        "map": "DESCRIPTION (for patient use)"
+                    }
+                ]
+            },
+            {
+                "id": "Appointment.basedOn",
+                "path": "Appointment.basedOn",
+                "short": "「このアポイントメントに割り当てられたサービス依頼は評価するためのものです。」",
+                "definition": "この約束は、評価するために割り当てられたサービス依頼に関連しています（例：入局の紹介または手順の依頼）。",
+                "alias": [
+                    "incomingReferral"
+                ],
+                "min": 0,
+                "max": "*",
+                "type": [
+                    {
+                        "code": "Reference",
+                        "targetProfile": [
+                            "http://hl7.org/fhir/StructureDefinition/ServiceRequest"
+                        ]
+                    }
+                ],
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Request.basedOn"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": ".outboundRelationship[@typeCode = 'FLFS'].act[@classCode < 'ActCareProvisionRequestType'][@moodCode = 'RQO']"
+                    }
+                ]
+            },
+            {
+                "id": "Appointment.participant",
+                "path": "Appointment.participant",
+                "short": "「アポイントメントに参加する参加者」(Apointomento ni sanka suru sanka-sha)",
+                "definition": "「アポイントメントに関わった参加者リスト」",
+                "min": 1,
+                "max": "*",
+                "type": [
+                    {
+                        "code": "BackboneElement"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "app-1",
+                        "severity": "error",
+                        "human": "参加者のタイプまたはアクターのいずれかを必ず指定する必要があります。",
+                        "expression": "type.exists() or actor.exists()",
+                        "xpath": "(exists(f:type) or exists(f:actor))"
+                    }
+                ],
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Request.performer, Request.subject"
+                    },
+                    {
+                        "identity": "v2",
+                        "map": "PID, AIP, AIG, AIL"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": "performer | reusableDevice | subject | location"
+                    },
+                    {
+                        "identity": "ical",
+                        "map": "ATTENDEE component to be created"
+                    }
+                ]
+            },
+            {
+                "id": "Appointment.participant.type",
+                "path": "Appointment.participant.type",
+                "short": "「予約の参加者の役割」(Yoyaku no sankasha no yakuwari)",
+                "definition": "「任命における参加者の役割。」",
+                "comment": "参加者の役割は、この予約の範囲内でアクターが何をするかを宣言するために使用できます。\n\nアクターが指定されていない場合、後の段階でアクターが埋められることが期待されます。\n\nこの値は、AppointmentResponseを作成するときに同じでなければならないので、それらをマッチングし、その後に予約を更新できます。",
+                "min": 0,
+                "max": "*",
+                "type": [
+                    {
+                        "code": "CodeableConcept"
+                    }
+                ],
+                "isSummary": true,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "ParticipantType"
+                        }
+                    ],
+                    "strength": "extensible",
+                    "description": "出会いにおける参加者の役割。",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/encounter-participant-type"
+                },
+                "mapping": [
+                    {
+                        "identity": "v2",
+                        "map": "AIP-4, AIG-4"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": "(performer | reusableDevice | subject | location).@typeCode"
+                    },
+                    {
+                        "identity": "ical",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "Appointment.participant.actor",
+                "path": "Appointment.participant.actor",
+                "short": "「人、場所/医療サービス、またはデバイス」",
+                "definition": "「アポイントメントに参加している人、場所/医療サービス、あるいはデバイス。」",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "Reference",
+                        "targetProfile": [
+                            "http://hl7.org/fhir/StructureDefinition/Patient",
+                            "http://hl7.org/fhir/StructureDefinition/Practitioner",
+                            "http://hl7.org/fhir/StructureDefinition/PractitionerRole",
+                            "http://hl7.org/fhir/StructureDefinition/RelatedPerson",
+                            "http://hl7.org/fhir/StructureDefinition/Device",
+                            "http://hl7.org/fhir/StructureDefinition/HealthcareService",
+                            "http://hl7.org/fhir/StructureDefinition/Location"
+                        ]
+                    }
+                ],
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.who"
+                    },
+                    {
+                        "identity": "v2",
+                        "map": "PID-3-Patient ID List | AIL-3 | AIG-3 | AIP-3"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": "performer.person | reusableDevice.manufacturedDevice | subject.patient | location.serviceDeliveryLocation"
+                    },
+                    {
+                        "identity": "ical",
+                        "map": "ATTENDEE: (Need to provide the common name CN and also the MAILTO properties from the practitioner resource) where the participant type is not \"information-only\""
+                    }
+                ]
+            },
+            {
+                "id": "Appointment.participant.required",
+                "path": "Appointment.participant.required",
+                "short": "必須 | オプション | 情報のみ",
+                "definition": "「この参加者が会議に出席する必要があるかどうか。これは、特定の患者の結果を議論するために2人の医師が会う必要があり、患者が出席する必要がない場合をカバーしています。」",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "code"
+                    }
+                ],
+                "isSummary": true,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "ParticipantRequired"
+                        }
+                    ],
+                    "strength": "required",
+                    "description": "参加者は予約に出席する必要がありますか？ (Sanka-sha wa yoyaku ni shusseki suru hitsuyou ga arimasu ka?)",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/participantrequired|4.0.1"
+                },
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "(performer | reusableDevice | subject | location).@performInd"
+                    },
+                    {
+                        "identity": "ical",
+                        "map": "ROLE=REQ-PARTICIPANT (roleparam)"
+                    }
+                ]
+            },
+            {
+                "id": "Appointment.participant.status",
+                "path": "Appointment.participant.status",
+                "short": "受け入れられました | 辞退されました | 仮の | 対応が必要です",
+                "definition": "俳優の参加状況。",
+                "min": 1,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "code"
+                    }
+                ],
+                "isSummary": true,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "ParticipationStatus"
+                        }
+                    ],
+                    "strength": "required",
+                    "description": "「アポイントメントへの参加状況」",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/participationstatus|4.0.1"
+                },
+                "mapping": [
+                    {
+                        "identity": "v2",
+                        "map": "AIP-12, AIG-14"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": "(performer | reusableDevice | subject | location).statusCode"
+                    },
+                    {
+                        "identity": "ical",
+                        "map": "ATTENDEE;CN=\"John Doe\";RSVP=TRUE:mailto:john@doe.com (rsvpparam | partstatparam)"
+                    }
+                ]
+            },
+            {
+                "id": "Appointment.participant.period",
+                "path": "Appointment.participant.period",
+                "short": "俳優の参加期間 (haiyuu no sankakukikan)",
+                "definition": "俳優の参加期間。",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "Period"
+                    }
+                ],
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "Appointment.requestedPeriod",
+                "path": "Appointment.requestedPeriod",
+                "short": "「予約可能な日時の候補を教えてください」",
+                "definition": "予定される予約に設定された日付範囲のセット（時刻を含む可能性がある）。\n\n通常、（分単位で）期間が提供され、予約の長さを示し、実際に割り当てられた時間の始まりと終わりを埋めるために使用される。ただし、他の場合では、予定システムによって期間が計算される場合があります。",
+                "comment": "「これは再発する予約ができる能力がありません。」",
+                "min": 0,
+                "max": "*",
+                "type": [
+                    {
+                        "code": "Period"
+                    }
+                ],
+                "mapping": [
+                    {
+                        "identity": "workflow",
+                        "map": "Request.occurrence[x]"
+                    },
+                    {
+                        "identity": "v2",
+                        "map": "ARQ-11"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": ".activityTime[@xsi:type = ('SXPR_TS', 'PIVL_TS')]"
+                    }
+                ]
+            }
+        ]
+    }
+}

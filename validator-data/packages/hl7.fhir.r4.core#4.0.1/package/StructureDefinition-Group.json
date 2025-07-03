@@ -1,0 +1,1892 @@
+{
+    "resourceType": "StructureDefinition",
+    "id": "Group",
+    "meta": {
+        "lastUpdated": "2019-11-01T09:29:23.356+11:00"
+    },
+    "extension": [
+        {
+            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-category",
+            "valueString": "Base.Individuals"
+        },
+        {
+            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
+            "valueCode": "trial-use"
+        },
+        {
+            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fmm",
+            "valueInteger": 1
+        },
+        {
+            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-security-category",
+            "valueCode": "business"
+        },
+        {
+            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-wg",
+            "valueCode": "fhir"
+        }
+    ],
+    "url": "http://hl7.org/fhir/StructureDefinition/Group",
+    "version": "4.0.1",
+    "name": "Group",
+    "status": "draft",
+    "date": "2019-11-01T09:29:23+11:00",
+    "publisher": "Health Level Seven International (FHIR Infrastructure)",
+    "contact": [
+        {
+            "telecom": [
+                {
+                    "system": "url",
+                    "value": "http://hl7.org/fhir"
+                }
+            ]
+        },
+        {
+            "telecom": [
+                {
+                    "system": "url",
+                    "value": "http://www.hl7.org/Special/committees/fiwg/index.cfm"
+                }
+            ]
+        }
+    ],
+    "description": "「共同的に議論されたり行動されたりすることはあるが、共同で行動することを期待されておらず、法的にも正式に認められていない固定されたエンティティの集合を表す。つまり、組織ではないエンティティの集合。」",
+    "fhirVersion": "4.0.1",
+    "mapping": [
+        {
+            "identity": "rim",
+            "uri": "http://hl7.org/v3",
+            "name": "RIM Mapping"
+        },
+        {
+            "identity": "w5",
+            "uri": "http://hl7.org/fhir/fivews",
+            "name": "FiveWs Pattern Mapping"
+        }
+    ],
+    "kind": "resource",
+    "abstract": false,
+    "type": "Group",
+    "baseDefinition": "http://hl7.org/fhir/StructureDefinition/DomainResource",
+    "derivation": "specialization",
+    "snapshot": {
+        "element": [
+            {
+                "id": "Group",
+                "path": "Group",
+                "short": "「複数のエンティティのグループ」 (Fukusū no entiti no gurūpu)",
+                "definition": "「共同的に議論されたり行動されたりすることはあるが、共同で行動することを期待されておらず、法的にも正式に認められていない固定されたエンティティの集合を表す。つまり、組織ではないエンティティの集合。」",
+                "comment": "\"グループの特徴とグループのメンバーの両方が存在する場合、メンバーは特徴を満たした個人です。他にも特徴を満たす候補者がリストに含まれていない可能性があります。すべてのメンバーは、リストに記載された特性を持たなければなりません。\"",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Group",
+                    "min": 0,
+                    "max": "*"
+                },
+                "constraint": [
+                    {
+                        "key": "dom-2",
+                        "severity": "error",
+                        "human": "もしリソースが他のリソースに含まれている場合、そのリソースにはネストされたリソースを含めてはなりません (moshi risōsu ga hoka no risōsu ni fukumarete iru baai, sono risōsu ni wa nesuto sareta risōsu o fukumete wa narimasen).",
+                        "expression": "contained.contained.empty()",
+                        "xpath": "not(parent::f:contained and f:contained)",
+                        "source": "http://hl7.org/fhir/StructureDefinition/DomainResource"
+                    },
+                    {
+                        "key": "dom-3",
+                        "severity": "error",
+                        "human": "もしリソースが他のリソースに含まれている場合、それはリソースの他の場所から参照されるか、含まれるリソースに参照されるべきです。",
+                        "expression": "contained.where((('#'+id in (%resource.descendants().reference | %resource.descendants().as(canonical) | %resource.descendants().as(uri) | %resource.descendants().as(url))) or descendants().where(reference = '#').exists() or descendants().where(as(canonical) = '#').exists() or descendants().where(as(canonical) = '#').exists()).not()).trace('unmatched', id).empty()",
+                        "xpath": "not(exists(for $id in f:contained/*/f:id/@value return $contained[not(parent::*/descendant::f:reference/@value=concat('#', $contained/*/id/@value) or descendant::f:reference[@value='#'])]))",
+                        "source": "http://hl7.org/fhir/StructureDefinition/DomainResource"
+                    },
+                    {
+                        "key": "dom-4",
+                        "severity": "error",
+                        "human": "もしリソースが別のリソースの中に含まれる場合、meta.versionIdまたはmeta.lastUpdatedを持つべきではありません。",
+                        "expression": "contained.meta.versionId.empty() and contained.meta.lastUpdated.empty()",
+                        "xpath": "not(exists(f:contained/*/f:meta/f:versionId)) and not(exists(f:contained/*/f:meta/f:lastUpdated))",
+                        "source": "http://hl7.org/fhir/StructureDefinition/DomainResource"
+                    },
+                    {
+                        "key": "dom-5",
+                        "severity": "error",
+                        "human": "「もしリソースが他のリソースに含まれている場合、セキュリティラベルを持つべきではありません。」",
+                        "expression": "contained.meta.security.empty()",
+                        "xpath": "not(exists(f:contained/*/f:meta/f:security))",
+                        "source": "http://hl7.org/fhir/StructureDefinition/DomainResource"
+                    },
+                    {
+                        "extension": [
+                            {
+                                "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bestpractice",
+                                "valueBoolean": true
+                            },
+                            {
+                                "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bestpractice-explanation",
+                                "valueMarkdown": "When a resource has no narrative, only systems that fully understand the data can display the resource to a human safely. Including a human readable representation in the resource makes for a much more robust eco-system and cheaper handling of resources by intermediary systems. Some ecosystems restrict distribution of resources to only those systems that do fully understand the resources, and as a consequence implementers may believe that the narrative is superfluous. However experience shows that such eco-systems often open up to new participants over time."
+                            }
+                        ],
+                        "key": "dom-6",
+                        "severity": "warning",
+                        "human": "「資源は堅牢な管理のために物語を持つべきである。」",
+                        "expression": "text.`div`.exists()",
+                        "xpath": "exists(f:text/h:div)",
+                        "source": "http://hl7.org/fhir/StructureDefinition/DomainResource"
+                    },
+                    {
+                        "key": "grp-1",
+                        "severity": "error",
+                        "human": "\"グループが実際でなければ、メンバーを持つことはできません\"",
+                        "expression": "member.empty() or (actual = true)",
+                        "xpath": "f:actual/@value=true() or not(exists(f:member))"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "Entity. Role, or Act"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": "Entity[determinerCode=\"GRP\" or determinerCode=\"GRP_KIND\"]"
+                    }
+                ]
+            },
+            {
+                "id": "Group.id",
+                "path": "Group.id",
+                "short": "このアーティファクトの論理ID",
+                "definition": "「リソースのURLで使用される論理ID。一度割り当てられたら、この値は変更されません。」",
+                "comment": "「リソースにIDがないのは、作成操作を使用してサーバーに送信されているときだけです。」",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Resource.id",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "extension": [
+                            {
+                                "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fhir-type",
+                                "valueUrl": "string"
+                            }
+                        ],
+                        "code": "http://hl7.org/fhirpath/System.String"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true
+            },
+            {
+                "id": "Group.meta",
+                "path": "Group.meta",
+                "short": "「リソースに関するメタデータ」",
+                "definition": "リソースに関するメタデータ。これはインフラストラクチャによって維持されるコンテンツです。 コンテンツの変更は、リソースのバージョン変更と常に関連しているわけではありません。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Resource.meta",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "Meta"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true
+            },
+            {
+                "id": "Group.implicitRules",
+                "path": "Group.implicitRules",
+                "short": "このコンテンツが作成されたルールセット",
+                "definition": "「リソース構築時に遵守された一連のルールを指すものであり、コンテンツを処理する際に理解する必要があります。しばしば、特別なルールを定義する実装ガイドとその他のプロファイルなどを含むものです。」",
+                "comment": "このルールセットを主張することで、取引先の限られた集団にしか内容を理解させることができず、長期的にはデータの有用性が制限されます。しかしながら、現存するヘルスエコシステムは高度に分断化しており、一般的に計算可能な形式でデータを定義、収集、交換する準備が整っていません。できる限り、実装者および/または仕様ライターはこの要素の使用を避けるべきです。使用する場合、URLは、そのナラティブとともに他のプロファイル、値セットなどを含む実装ガイドを定義する参照となります。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Resource.implicitRules",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "uri"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": true,
+                "isModifierReason": "This element is labeled as a modifier because the implicit rules may provide additional knowledge about the resource that modifies it's meaning or interpretation",
+                "isSummary": true
+            },
+            {
+                "id": "Group.language",
+                "path": "Group.language",
+                "short": "「リソースコンテンツの言語」(Risōsukontentsu no gengo)",
+                "definition": "「リソースが書かれている基本言語。」",
+                "comment": "言語はインデックスとアクセシビリティをサポートするために提供されます（通常、テキスト読み上げなどのサービスは言語タグを使用します）。物語のHTML言語タグは、物語に適用されます。リソース上の言語タグは、リソース内のデータから生成される他のプレゼンテーションの言語を指定するために使用できます。すべてのコンテンツが基本言語である必要はありません。Resource.languageは自動的に物語に適用されたと想定してはいけません。言語が指定されている場合、HTMLのdiv要素にも指定する必要があります（xml：langとhtml lang属性の関係に関する情報はHTML5の規則を参照）。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Resource.language",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "code"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-maxValueSet",
+                            "valueCanonical": "http://hl7.org/fhir/ValueSet/all-languages"
+                        },
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "Language"
+                        },
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-isCommonBinding",
+                            "valueBoolean": true
+                        }
+                    ],
+                    "strength": "preferred",
+                    "description": "「人間の言語。」(Ningen no gengo.)",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/languages"
+                }
+            },
+            {
+                "id": "Group.text",
+                "path": "Group.text",
+                "short": "「人間の解釈のためのリソースのテキスト要約」",
+                "definition": "「リソースの要約を含む人が読めるナビゲーションであり、リソースの内容を人に表現するために使用できます。ナビゲーションはすべての構造化されたデータをエンコードする必要はありませんが、人間がナビゲーションを読むだけで「臨床的に安全」であるために十分な詳細を含む必要があります。リソース定義には、臨床的な安全性を確保するためにナビゲーションで表現する必要があるコンテンツが定義される場合があります。」",
+                "comment": "含まれるリソースには説明がありません。含まれないリソースには説明が必要です。場合によっては、リソースが少量のデータしか含まず、テキストだけで表現されることがあります（minOccurs = 1要素がすべて満たされている限り）。これは、情報が「テキストの塊」としてキャプチャされるレガシーシステムからのデータや、テキストが生またはナレーションされて符号化された情報が後で追加される場合に必要な場合があります。",
+                "alias": [
+                    "narrative",
+                    "html",
+                    "xhtml",
+                    "display"
+                ],
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "DomainResource.text",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "Narrative"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "Act.text?"
+                    }
+                ]
+            },
+            {
+                "id": "Group.contained",
+                "path": "Group.contained",
+                "short": "「含まれている、インラインのリソース」(Fukuma rete iru, inrain no risōsu)",
+                "definition": "「これらのリソースは、それらを含むリソースから独立した存在を持ちません。それらは独立して識別することはできず、独自の独立したトランザクション範囲を持つこともできません。」",
+                "comment": "「コンテンツが適切に識別できる場合には、これを行うべきではありません。識別が失われると、再び復元することは非常に困難であり（文脈に依存します）、メタ要素にプロファイルとタグを持つことができますが、セキュリティのラベルを持っていてはいけません。」",
+                "alias": [
+                    "inline resources",
+                    "anonymous resources",
+                    "contained resources"
+                ],
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "DomainResource.contained",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "Resource"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "N/A"
+                    }
+                ]
+            },
+            {
+                "id": "Group.extension",
+                "path": "Group.extension",
+                "short": "実装によって定義される追加コンテンツ",
+                "definition": "「リソースの基本的な定義の一部ではない追加情報を表すために使用することができます。拡張機能の使用を安全かつ管理可能にするために、定義と使用の一定のガバナンスが適用されます。実装者はどんな拡張機能でも定義できますが、拡張機能の定義の一部として満たす必要がある要件があります」",
+                "comment": "どのようなアプリケーション、プロジェクト、または標準が拡張機能を使用しているかに関わらず、拡張機能の使用には決して汚名が付くわけではありません - それらを使用または定義する機関または管轄区域に関係なく。拡張機能の使用こそが、FHIR仕様を誰にとっても簡単なコアレベルで維持することを可能にします。",
+                "alias": [
+                    "extensions",
+                    "user content"
+                ],
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "DomainResource.extension",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "Extension"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    },
+                    {
+                        "key": "ext-1",
+                        "severity": "error",
+                        "human": "「拡張機能または値[x]のいずれかが必要です。両方ではありません。」",
+                        "expression": "extension.exists() != value.exists()",
+                        "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Extension"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "N/A"
+                    }
+                ]
+            },
+            {
+                "id": "Group.modifierExtension",
+                "path": "Group.modifierExtension",
+                "short": "無視できない拡張機能 (Mushi dekinai kakuchou kinou)",
+                "definition": "「リソースの基本的な定義に含まれない、要素の理解や、それを含む要素の子孫の理解を修正する追加情報を表すためにも使用されることがあります。通常、修飾要素は否定や修飾を提供します。拡張機能の使用を安全で管理しやすくするために、拡張機能の定義と使用に対して厳格な統治が適用されます。実装者は拡張機能を定義することが許可されていますが、拡張機能の定義の一部として満たす必要がある要件があります。リソースを処理するアプリケーションは、修飾子拡張をチェックする必要があります。修飾子拡張は、リソースまたはドメインリソースの任意の要素の意味を変更してはなりません（修飾子拡張自体の意味も変更できません）。」",
+                "comment": "どのようなアプリケーション、プロジェクト、または標準が拡張機能を使用しているかに関わらず、拡張機能の使用には決して汚名が付くわけではありません - それらを使用または定義する機関または管轄区域に関係なく。拡張機能の使用こそが、FHIR仕様を誰にとっても簡単なコアレベルで維持することを可能にします。",
+                "requirements": "Modifier extensions allow for extensions that *cannot* be safely ignored to be clearly distinguished from the vast majority of extensions which can be safely ignored.  This promotes interoperability by eliminating the need for implementers to prohibit the presence of extensions. For further information, see the [definition of modifier extensions](extensibility.html#modifierExtension).",
+                "alias": [
+                    "extensions",
+                    "user content"
+                ],
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "DomainResource.modifierExtension",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "Extension"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    },
+                    {
+                        "key": "ext-1",
+                        "severity": "error",
+                        "human": "「拡張機能または値[x]のいずれかが必要です。両方ではありません。」",
+                        "expression": "extension.exists() != value.exists()",
+                        "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Extension"
+                    }
+                ],
+                "isModifier": true,
+                "isModifierReason": "Modifier extensions are expected to modify the meaning or interpretation of the resource that contains them",
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "N/A"
+                    }
+                ]
+            },
+            {
+                "id": "Group.identifier",
+                "path": "Group.identifier",
+                "short": "\"ユニークなID\"",
+                "definition": "このグループのためのユニークなビジネス識別子。",
+                "requirements": "Allows the group to be referenced from external specifications.",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Group.identifier",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "Identifier"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.identifier"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": "unique(./id[displayable=\"true\" and scope=\"OBJ\"])"
+                    }
+                ]
+            },
+            {
+                "id": "Group.active",
+                "path": "Group.active",
+                "short": "「このグループの記録が現在使用中かどうか」",
+                "definition": "「グループの記録が使用可能か、歴史的目的のために保管されているのかを示します。」",
+                "requirements": "Need to be able to mark a group record as not to be used because it was created in error or is otherwise no longer available (e.g. a herd that no longer exists).",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Group.active",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "boolean"
+                    }
+                ],
+                "meaningWhenMissing": "This resource is generally assumed to be active if no value is provided for the active element",
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.status"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": "./statusCode"
+                    }
+                ]
+            },
+            {
+                "id": "Group.type",
+                "path": "Group.type",
+                "short": "人 | 動物 | 開業者 | デバイス | 薬剤 | 物質",
+                "definition": "「グループに含まれるリソースの広い分類を特定します。」(Gurūpu ni fukumareru risōsu no hiroi bunrui o tokutei shimasu.)",
+                "comment": "グループメンバーは適切なリソースタイプでなければなりません（人または動物の場合は患者、それ以外のタイプの場合はプラクティショナー、デバイス、医薬品、または物質）。",
+                "requirements": "Identifies what type of resources the group is made up of.",
+                "min": 1,
+                "max": "1",
+                "base": {
+                    "path": "Group.type",
+                    "min": 1,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "code"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "GroupType"
+                        }
+                    ],
+                    "strength": "required",
+                    "description": "「グループの一部であるリソースの種類。」",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/group-type|4.0.1"
+                },
+                "mapping": [
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.class"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": "person: ./classCode=\"PSN\"  animal: ./classCode=\"ANM\"  device: ./classCode=\"DEV\"  medication: ./classCode=\"MMAT\" and ./playedRole[isNormalRole() and classCode=\"THER\"]  food: ./classCode=\"FOOD\""
+                    }
+                ]
+            },
+            {
+                "id": "Group.actual",
+                "path": "Group.actual",
+                "short": "記述的あるいは実際の (Kijutsuteki aruiwa jissai no)",
+                "definition": "「もし真であれば、この資源が特定の現実の人々のグループを指していることを示します。もし偽であれば、そのグループは意図された人々の集合を定義します。」",
+                "requirements": "There are use-cases for groups that define specific collections of individuals, and other groups that define \"types\" of intended individuals.  The requirements for both kinds of groups are similar, so we use a single resource, distinguished by this flag.",
+                "min": 1,
+                "max": "1",
+                "base": {
+                    "path": "Group.actual",
+                    "min": 1,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "boolean"
+                    }
+                ],
+                "condition": [
+                    "grp-1"
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.class"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": "true: ./determinerCode=\"GRP\"  false: ./determinerCode=\"GRP_KIND\""
+                    }
+                ]
+            },
+            {
+                "id": "Group.code",
+                "path": "Group.code",
+                "short": "「グループのメンバーの種類」",
+                "definition": "「群衆に含まれる特定の種類のリソースを提供する。例えば \"牛\"、\"注射器\"など」という意味です。",
+                "comment": "「一般的には、人員リソースに関してこれは省略されます。」",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Group.code",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "CodeableConcept"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "GroupKind"
+                        }
+                    ],
+                    "strength": "example",
+                    "description": "「特定の資源。たとえば、牛、注射器、湖など。」"
+                },
+                "mapping": [
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.what[x]"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": "./code"
+                    }
+                ]
+            },
+            {
+                "id": "Group.name",
+                "path": "Group.name",
+                "short": "「グループのラベル」(Gurūpu no raberu)",
+                "definition": "「人間の識別とコミュニケーションのために割り当てられたグループに対するラベル」",
+                "requirements": "Used to identify the group in human communication.",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Group.name",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "./name[type=\"ST\"]"
+                    }
+                ]
+            },
+            {
+                "id": "Group.quantity",
+                "path": "Group.quantity",
+                "short": "\"メンバーの数\" (Menbā no kazu)",
+                "definition": "「グループに含まれるリソースインスタンスの数のカウント」",
+                "comment": "「一部のメンバーがアクティブでない場合は、数量がメンバーの数より少ないことに注意してください。」",
+                "requirements": "Group size is a common defining characteristic.",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Group.quantity",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "unsignedInt"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "./quantity"
+                    }
+                ]
+            },
+            {
+                "id": "Group.managingEntity",
+                "path": "Group.managingEntity",
+                "short": "「グループの定義の管理者である実体」",
+                "definition": "「グループ特性と/または登録メンバーを定義し維持する責任を持つ実体。」",
+                "comment": "これは厳密に言えば群れや群集の所有権に対応するものではありませんが、簡単な場合にはこの関係を表すのに十分でしょう。より複雑な場合には拡張が必要です。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Group.managingEntity",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "Reference",
+                        "targetProfile": [
+                            "http://hl7.org/fhir/StructureDefinition/Organization",
+                            "http://hl7.org/fhir/StructureDefinition/RelatedPerson",
+                            "http://hl7.org/fhir/StructureDefinition/Practitioner",
+                            "http://hl7.org/fhir/StructureDefinition/PractitionerRole"
+                        ]
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true
+            },
+            {
+                "id": "Group.characteristic",
+                "path": "Group.characteristic",
+                "short": "「特性によってグループメンバーの含める/除外する」",
+                "definition": "「グループのメンバーが共有する存在または不在の特徴を特定します。」",
+                "comment": "すべての特性がその実体に当てはまらなければ、それはグループのメンバーではありません。",
+                "requirements": "Needs to be a generic mechanism for identifying what individuals can be part of a group.",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Group.characteristic",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "BackboneElement"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "./playedRole[isNormalRole()]/participation[isNormalParticipation() and typeCode=\"SBJ\"]/act[isNormalAct and classCode=\"OBS\" and moodCode=\"EVN\"]"
+                    }
+                ]
+            },
+            {
+                "id": "Group.characteristic.id",
+                "path": "Group.characteristic.id",
+                "representation": [
+                    "xmlAttr"
+                ],
+                "short": "エレメント相互参照のためのユニークID",
+                "definition": "リソース内の要素の固有ID（内部参照用）。これは、スペースを含まない任意の文字列値である可能性があります。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Element.id",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "extension": [
+                            {
+                                "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fhir-type",
+                                "valueUrl": "string"
+                            }
+                        ],
+                        "code": "http://hl7.org/fhirpath/System.String"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "Group.characteristic.extension",
+                "path": "Group.characteristic.extension",
+                "short": "実装によって定義される追加コンテンツ",
+                "definition": "「要素の基本的な定義に含まれない追加情報を表すために使用されることがあります。拡張機能の使用を安全かつ管理しやすくするために、定義および使用に適用される厳格なガバナンスのセットがあります。実装者は拡張機能を定義できますが、拡張機能の定義の一部として満たす必要のある要件のセットがあります。」",
+                "comment": "どのようなアプリケーション、プロジェクト、または標準が拡張機能を使用しているかに関わらず、拡張機能の使用には決して汚名が付くわけではありません - それらを使用または定義する機関または管轄区域に関係なく。拡張機能の使用こそが、FHIR仕様を誰にとっても簡単なコアレベルで維持することを可能にします。",
+                "alias": [
+                    "extensions",
+                    "user content"
+                ],
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Element.extension",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "Extension"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    },
+                    {
+                        "key": "ext-1",
+                        "severity": "error",
+                        "human": "「拡張機能または値[x]のいずれかが必要です。両方ではありません。」",
+                        "expression": "extension.exists() != value.exists()",
+                        "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Extension"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "Group.characteristic.modifierExtension",
+                "path": "Group.characteristic.modifierExtension",
+                "short": "「認識されなくても無視できない拡張機能」(Ninshiki sarenakutemo mushi dekinai kakuchou kinou)",
+                "definition": "「基本的な要素の定義に含まれない追加情報を表すために使用されることがあり、それによって、その要素自体または取り込んでいる要素の子孫の理解を修正する。修飾子要素は通常、否定または修飾を提供します。拡張機能の安全で管理しやすい使用を実現するために、定義および使用に厳しいガバナンスセットが適用されています。どの実装者でも拡張機能を定義できますが、拡張機能の定義の一部として満たす必要がある要件があります。リソースを処理するアプリケーションは、修飾子拡張子をチェックする必要があります。\n\n修飾子拡張機能は、リソースまたはドメインリソースの任意の要素の意味を変更してはなりません（修飾子拡張自体の意味を変更することもできません）。」",
+                "comment": "どのようなアプリケーション、プロジェクト、または標準が拡張機能を使用しているかに関わらず、拡張機能の使用には決して汚名が付くわけではありません - それらを使用または定義する機関または管轄区域に関係なく。拡張機能の使用こそが、FHIR仕様を誰にとっても簡単なコアレベルで維持することを可能にします。",
+                "requirements": "Modifier extensions allow for extensions that *cannot* be safely ignored to be clearly distinguished from the vast majority of extensions which can be safely ignored.  This promotes interoperability by eliminating the need for implementers to prohibit the presence of extensions. For further information, see the [definition of modifier extensions](extensibility.html#modifierExtension).",
+                "alias": [
+                    "extensions",
+                    "user content",
+                    "modifiers"
+                ],
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "BackboneElement.modifierExtension",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "Extension"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    },
+                    {
+                        "key": "ext-1",
+                        "severity": "error",
+                        "human": "「拡張機能または値[x]のいずれかが必要です。両方ではありません。」",
+                        "expression": "extension.exists() != value.exists()",
+                        "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Extension"
+                    }
+                ],
+                "isModifier": true,
+                "isModifierReason": "Modifier extensions are expected to modify the meaning or interpretation of the element that contains them",
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "N/A"
+                    }
+                ]
+            },
+            {
+                "id": "Group.characteristic.code",
+                "path": "Group.characteristic.code",
+                "short": "「特徴的な種類」と言えるでしょう。",
+                "definition": "「主張されている特徴の種類を識別するためのコード。」",
+                "requirements": "Need a formal way of identifying the characteristic being described.",
+                "min": 1,
+                "max": "1",
+                "base": {
+                    "path": "Group.characteristic.code",
+                    "min": 1,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "CodeableConcept"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "GroupCharacteristicKind"
+                        }
+                    ],
+                    "strength": "example",
+                    "description": "「グループメンバーを表す特徴のリスト；例：性別、年齢、所有者、場所など」"
+                },
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "./code"
+                    }
+                ]
+            },
+            {
+                "id": "Group.characteristic.value[x]",
+                "path": "Group.characteristic.value[x]",
+                "short": "特徴による価値 (Tokuchou ni yoru kachi)",
+                "definition": "「グループのメンバーが持つ（または持たない場合も参照）特性の価値」",
+                "comment": "「レンジ」に関して言えば、グループのメンバーの値は指定された範囲内のどこかにあることを意味します。」",
+                "requirements": "The value of the characteristic is what determines group membership.",
+                "min": 1,
+                "max": "1",
+                "base": {
+                    "path": "Group.characteristic.value[x]",
+                    "min": 1,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "CodeableConcept"
+                    },
+                    {
+                        "code": "boolean"
+                    },
+                    {
+                        "code": "Quantity"
+                    },
+                    {
+                        "code": "Range"
+                    },
+                    {
+                        "code": "Reference"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "GroupCharacteristicValue"
+                        }
+                    ],
+                    "strength": "example",
+                    "description": "記述的メンバー特性の価値；赤、男性、肺炎、白人など。"
+                },
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "./value"
+                    }
+                ]
+            },
+            {
+                "id": "Group.characteristic.exclude",
+                "path": "Group.characteristic.exclude",
+                "short": "グループに含まれるか含まれないか",
+                "definition": "もしそれが真実なら、その特性はグループのメンバーが持っていないものであることを示します。",
+                "comment": "「アプリケーションが除外されたメンバーを含めるか、逆に含まれるべきでないメンバーを誤って含めることができないため、「修飾語の場合」としてラベルが付けられています。」",
+                "requirements": "Sometimes group membership is determined by characteristics not possessed.",
+                "min": 1,
+                "max": "1",
+                "base": {
+                    "path": "Group.characteristic.exclude",
+                    "min": 1,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "boolean"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "./valueNegationInd"
+                    }
+                ]
+            },
+            {
+                "id": "Group.characteristic.period",
+                "path": "Group.characteristic.period",
+                "short": "特性を試験する期間",
+                "definition": "特性がテストされる期間。例えば、患者は6月の間に手術を受けました。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Group.characteristic.period",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "Period"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false
+            },
+            {
+                "id": "Group.member",
+                "path": "Group.member",
+                "short": "「グループには誰や何がいるか？」(gurūpu ni wa dare ya nani ga iru ka?)",
+                "definition": "「グループのメンバーであるリソースインスタンスを特定します。」",
+                "requirements": "Often the only thing of interest about a group is \"who's in it\".",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Group.member",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "BackboneElement"
+                    }
+                ],
+                "condition": [
+                    "grp-1"
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "./scopedRole[isNormalRole() and classCode=\"MBR\"]/player"
+                    }
+                ]
+            },
+            {
+                "id": "Group.member.id",
+                "path": "Group.member.id",
+                "representation": [
+                    "xmlAttr"
+                ],
+                "short": "エレメント相互参照のためのユニークID",
+                "definition": "リソース内の要素の固有ID（内部参照用）。これは、スペースを含まない任意の文字列値である可能性があります。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Element.id",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "extension": [
+                            {
+                                "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fhir-type",
+                                "valueUrl": "string"
+                            }
+                        ],
+                        "code": "http://hl7.org/fhirpath/System.String"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "Group.member.extension",
+                "path": "Group.member.extension",
+                "short": "実装によって定義される追加コンテンツ",
+                "definition": "「要素の基本的な定義に含まれない追加情報を表すために使用されることがあります。拡張機能の使用を安全かつ管理しやすくするために、定義および使用に適用される厳格なガバナンスのセットがあります。実装者は拡張機能を定義できますが、拡張機能の定義の一部として満たす必要のある要件のセットがあります。」",
+                "comment": "どのようなアプリケーション、プロジェクト、または標準が拡張機能を使用しているかに関わらず、拡張機能の使用には決して汚名が付くわけではありません - それらを使用または定義する機関または管轄区域に関係なく。拡張機能の使用こそが、FHIR仕様を誰にとっても簡単なコアレベルで維持することを可能にします。",
+                "alias": [
+                    "extensions",
+                    "user content"
+                ],
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Element.extension",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "Extension"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    },
+                    {
+                        "key": "ext-1",
+                        "severity": "error",
+                        "human": "「拡張機能または値[x]のいずれかが必要です。両方ではありません。」",
+                        "expression": "extension.exists() != value.exists()",
+                        "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Extension"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "Group.member.modifierExtension",
+                "path": "Group.member.modifierExtension",
+                "short": "「認識されなくても無視できない拡張機能」(Ninshiki sarenakutemo mushi dekinai kakuchou kinou)",
+                "definition": "「基本的な要素の定義に含まれない追加情報を表すために使用されることがあり、それによって、その要素自体または取り込んでいる要素の子孫の理解を修正する。修飾子要素は通常、否定または修飾を提供します。拡張機能の安全で管理しやすい使用を実現するために、定義および使用に厳しいガバナンスセットが適用されています。どの実装者でも拡張機能を定義できますが、拡張機能の定義の一部として満たす必要がある要件があります。リソースを処理するアプリケーションは、修飾子拡張子をチェックする必要があります。\n\n修飾子拡張機能は、リソースまたはドメインリソースの任意の要素の意味を変更してはなりません（修飾子拡張自体の意味を変更することもできません）。」",
+                "comment": "どのようなアプリケーション、プロジェクト、または標準が拡張機能を使用しているかに関わらず、拡張機能の使用には決して汚名が付くわけではありません - それらを使用または定義する機関または管轄区域に関係なく。拡張機能の使用こそが、FHIR仕様を誰にとっても簡単なコアレベルで維持することを可能にします。",
+                "requirements": "Modifier extensions allow for extensions that *cannot* be safely ignored to be clearly distinguished from the vast majority of extensions which can be safely ignored.  This promotes interoperability by eliminating the need for implementers to prohibit the presence of extensions. For further information, see the [definition of modifier extensions](extensibility.html#modifierExtension).",
+                "alias": [
+                    "extensions",
+                    "user content",
+                    "modifiers"
+                ],
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "BackboneElement.modifierExtension",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "Extension"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    },
+                    {
+                        "key": "ext-1",
+                        "severity": "error",
+                        "human": "「拡張機能または値[x]のいずれかが必要です。両方ではありません。」",
+                        "expression": "extension.exists() != value.exists()",
+                        "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Extension"
+                    }
+                ],
+                "isModifier": true,
+                "isModifierReason": "Modifier extensions are expected to modify the meaning or interpretation of the element that contains them",
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "N/A"
+                    }
+                ]
+            },
+            {
+                "id": "Group.member.entity",
+                "path": "Group.member.entity",
+                "short": "\"グループメンバーへの言及\" (Gurūpu menbā e no gen'itsu)",
+                "definition": "「グループのメンバーであるエンティティに言及します。Group.typeと整合性が必要です。エンティティが別のグループである場合は、タイプを同じにする必要があります。」",
+                "min": 1,
+                "max": "1",
+                "base": {
+                    "path": "Group.member.entity",
+                    "min": 1,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "Reference",
+                        "targetProfile": [
+                            "http://hl7.org/fhir/StructureDefinition/Patient",
+                            "http://hl7.org/fhir/StructureDefinition/Practitioner",
+                            "http://hl7.org/fhir/StructureDefinition/PractitionerRole",
+                            "http://hl7.org/fhir/StructureDefinition/Device",
+                            "http://hl7.org/fhir/StructureDefinition/Medication",
+                            "http://hl7.org/fhir/StructureDefinition/Substance",
+                            "http://hl7.org/fhir/StructureDefinition/Group"
+                        ]
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false
+            },
+            {
+                "id": "Group.member.period",
+                "path": "Group.member.period",
+                "short": "「期間中メンバーはグループに所属していました」",
+                "definition": "「もしそれが分かっている場合、メンバーがグループにいた期間。」",
+                "requirements": "Need to track who was in a group at a  particular time.",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Group.member.period",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "Period"
+                    }
+                ],
+                "meaningWhenMissing": "The member is in the group at this time",
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false
+            },
+            {
+                "id": "Group.member.inactive",
+                "path": "Group.member.inactive",
+                "short": "もしメンバーがグループから抜けた場合。",
+                "definition": "「そのメンバーがもともとグループに所属していた可能性があるが、現在はグループにいないことを示す旗」",
+                "requirements": "Sometimes you don't know when someone stopped being in a group, but not when.",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Group.member.inactive",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "boolean"
+                    }
+                ],
+                "meaningWhenMissing": "Members are considered active unless explicitly specified otherwise",
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false
+            }
+        ]
+    },
+    "differential": {
+        "element": [
+            {
+                "id": "Group",
+                "path": "Group",
+                "short": "「複数のエンティティのグループ」 (Fukusū no entiti no gurūpu)",
+                "definition": "「共同的に議論されたり行動されたりすることはあるが、共同で行動することを期待されておらず、法的にも正式に認められていない固定されたエンティティの集合を表す。つまり、組織ではないエンティティの集合。」",
+                "comment": "\"グループの特徴とグループのメンバーの両方が存在する場合、メンバーは特徴を満たした個人です。他にも特徴を満たす候補者がリストに含まれていない可能性があります。すべてのメンバーは、リストに記載された特性を持たなければなりません。\"",
+                "min": 0,
+                "max": "*",
+                "constraint": [
+                    {
+                        "key": "grp-1",
+                        "severity": "error",
+                        "human": "\"グループが実際でなければ、メンバーを持つことはできません\"",
+                        "expression": "member.empty() or (actual = true)",
+                        "xpath": "f:actual/@value=true() or not(exists(f:member))"
+                    }
+                ],
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "Entity[determinerCode=\"GRP\" or determinerCode=\"GRP_KIND\"]"
+                    }
+                ]
+            },
+            {
+                "id": "Group.identifier",
+                "path": "Group.identifier",
+                "short": "\"ユニークなID\"",
+                "definition": "このグループのためのユニークなビジネス識別子。",
+                "requirements": "Allows the group to be referenced from external specifications.",
+                "min": 0,
+                "max": "*",
+                "type": [
+                    {
+                        "code": "Identifier"
+                    }
+                ],
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.identifier"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": "unique(./id[displayable=\"true\" and scope=\"OBJ\"])"
+                    }
+                ]
+            },
+            {
+                "id": "Group.active",
+                "path": "Group.active",
+                "short": "「このグループの記録が現在使用中かどうか」",
+                "definition": "「グループの記録が使用可能か、歴史的目的のために保管されているのかを示します。」",
+                "requirements": "Need to be able to mark a group record as not to be used because it was created in error or is otherwise no longer available (e.g. a herd that no longer exists).",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "boolean"
+                    }
+                ],
+                "meaningWhenMissing": "This resource is generally assumed to be active if no value is provided for the active element",
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.status"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": "./statusCode"
+                    }
+                ]
+            },
+            {
+                "id": "Group.type",
+                "path": "Group.type",
+                "short": "人 | 動物 | 開業者 | デバイス | 薬剤 | 物質",
+                "definition": "「グループに含まれるリソースの広い分類を特定します。」(Gurūpu ni fukumareru risōsu no hiroi bunrui o tokutei shimasu.)",
+                "comment": "グループメンバーは適切なリソースタイプでなければなりません（人または動物の場合は患者、それ以外のタイプの場合はプラクティショナー、デバイス、医薬品、または物質）。",
+                "requirements": "Identifies what type of resources the group is made up of.",
+                "min": 1,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "code"
+                    }
+                ],
+                "isSummary": true,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "GroupType"
+                        }
+                    ],
+                    "strength": "required",
+                    "description": "「グループの一部であるリソースの種類。」",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/group-type|4.0.1"
+                },
+                "mapping": [
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.class"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": "person: ./classCode=\"PSN\"  animal: ./classCode=\"ANM\"  device: ./classCode=\"DEV\"  medication: ./classCode=\"MMAT\" and ./playedRole[isNormalRole() and classCode=\"THER\"]  food: ./classCode=\"FOOD\""
+                    }
+                ]
+            },
+            {
+                "id": "Group.actual",
+                "path": "Group.actual",
+                "short": "記述的あるいは実際の (Kijutsuteki aruiwa jissai no)",
+                "definition": "「もし真であれば、この資源が特定の現実の人々のグループを指していることを示します。もし偽であれば、そのグループは意図された人々の集合を定義します。」",
+                "requirements": "There are use-cases for groups that define specific collections of individuals, and other groups that define \"types\" of intended individuals.  The requirements for both kinds of groups are similar, so we use a single resource, distinguished by this flag.",
+                "min": 1,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "boolean"
+                    }
+                ],
+                "condition": [
+                    "grp-1"
+                ],
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.class"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": "true: ./determinerCode=\"GRP\"  false: ./determinerCode=\"GRP_KIND\""
+                    }
+                ]
+            },
+            {
+                "id": "Group.code",
+                "path": "Group.code",
+                "short": "「グループのメンバーの種類」",
+                "definition": "「群衆に含まれる特定の種類のリソースを提供する。例えば \"牛\"、\"注射器\"など」という意味です。",
+                "comment": "「一般的には、人員リソースに関してこれは省略されます。」",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "CodeableConcept"
+                    }
+                ],
+                "isSummary": true,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "GroupKind"
+                        }
+                    ],
+                    "strength": "example",
+                    "description": "「特定の資源。たとえば、牛、注射器、湖など。」"
+                },
+                "mapping": [
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.what[x]"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": "./code"
+                    }
+                ]
+            },
+            {
+                "id": "Group.name",
+                "path": "Group.name",
+                "short": "「グループのラベル」(Gurūpu no raberu)",
+                "definition": "「人間の識別とコミュニケーションのために割り当てられたグループに対するラベル」",
+                "requirements": "Used to identify the group in human communication.",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ],
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "./name[type=\"ST\"]"
+                    }
+                ]
+            },
+            {
+                "id": "Group.quantity",
+                "path": "Group.quantity",
+                "short": "\"メンバーの数\" (Menbā no kazu)",
+                "definition": "「グループに含まれるリソースインスタンスの数のカウント」",
+                "comment": "「一部のメンバーがアクティブでない場合は、数量がメンバーの数より少ないことに注意してください。」",
+                "requirements": "Group size is a common defining characteristic.",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "unsignedInt"
+                    }
+                ],
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "./quantity"
+                    }
+                ]
+            },
+            {
+                "id": "Group.managingEntity",
+                "path": "Group.managingEntity",
+                "short": "「グループの定義の管理者である実体」",
+                "definition": "「グループ特性と/または登録メンバーを定義し維持する責任を持つ実体。」",
+                "comment": "これは厳密に言えば群れや群集の所有権に対応するものではありませんが、簡単な場合にはこの関係を表すのに十分でしょう。より複雑な場合には拡張が必要です。",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "Reference",
+                        "targetProfile": [
+                            "http://hl7.org/fhir/StructureDefinition/Organization",
+                            "http://hl7.org/fhir/StructureDefinition/RelatedPerson",
+                            "http://hl7.org/fhir/StructureDefinition/Practitioner",
+                            "http://hl7.org/fhir/StructureDefinition/PractitionerRole"
+                        ]
+                    }
+                ],
+                "isSummary": true
+            },
+            {
+                "id": "Group.characteristic",
+                "path": "Group.characteristic",
+                "short": "「特性によってグループメンバーの含める/除外する」",
+                "definition": "「グループのメンバーが共有する存在または不在の特徴を特定します。」",
+                "comment": "すべての特性がその実体に当てはまらなければ、それはグループのメンバーではありません。",
+                "requirements": "Needs to be a generic mechanism for identifying what individuals can be part of a group.",
+                "min": 0,
+                "max": "*",
+                "type": [
+                    {
+                        "code": "BackboneElement"
+                    }
+                ],
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "./playedRole[isNormalRole()]/participation[isNormalParticipation() and typeCode=\"SBJ\"]/act[isNormalAct and classCode=\"OBS\" and moodCode=\"EVN\"]"
+                    }
+                ]
+            },
+            {
+                "id": "Group.characteristic.code",
+                "path": "Group.characteristic.code",
+                "short": "「特徴的な種類」と言えるでしょう。",
+                "definition": "「主張されている特徴の種類を識別するためのコード。」",
+                "requirements": "Need a formal way of identifying the characteristic being described.",
+                "min": 1,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "CodeableConcept"
+                    }
+                ],
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "GroupCharacteristicKind"
+                        }
+                    ],
+                    "strength": "example",
+                    "description": "「グループメンバーを表す特徴のリスト；例：性別、年齢、所有者、場所など」"
+                },
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "./code"
+                    }
+                ]
+            },
+            {
+                "id": "Group.characteristic.value[x]",
+                "path": "Group.characteristic.value[x]",
+                "short": "特徴による価値 (Tokuchou ni yoru kachi)",
+                "definition": "「グループのメンバーが持つ（または持たない場合も参照）特性の価値」",
+                "comment": "「レンジ」に関して言えば、グループのメンバーの値は指定された範囲内のどこかにあることを意味します。」",
+                "requirements": "The value of the characteristic is what determines group membership.",
+                "min": 1,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "CodeableConcept"
+                    },
+                    {
+                        "code": "boolean"
+                    },
+                    {
+                        "code": "Quantity"
+                    },
+                    {
+                        "code": "Range"
+                    },
+                    {
+                        "code": "Reference"
+                    }
+                ],
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "GroupCharacteristicValue"
+                        }
+                    ],
+                    "strength": "example",
+                    "description": "記述的メンバー特性の価値；赤、男性、肺炎、白人など。"
+                },
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "./value"
+                    }
+                ]
+            },
+            {
+                "id": "Group.characteristic.exclude",
+                "path": "Group.characteristic.exclude",
+                "short": "グループに含まれるか含まれないか",
+                "definition": "もしそれが真実なら、その特性はグループのメンバーが持っていないものであることを示します。",
+                "comment": "「アプリケーションが除外されたメンバーを含めるか、逆に含まれるべきでないメンバーを誤って含めることができないため、「修飾語の場合」としてラベルが付けられています。」",
+                "requirements": "Sometimes group membership is determined by characteristics not possessed.",
+                "min": 1,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "boolean"
+                    }
+                ],
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "./valueNegationInd"
+                    }
+                ]
+            },
+            {
+                "id": "Group.characteristic.period",
+                "path": "Group.characteristic.period",
+                "short": "特性を試験する期間",
+                "definition": "特性がテストされる期間。例えば、患者は6月の間に手術を受けました。",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "Period"
+                    }
+                ]
+            },
+            {
+                "id": "Group.member",
+                "path": "Group.member",
+                "short": "「グループには誰や何がいるか？」(gurūpu ni wa dare ya nani ga iru ka?)",
+                "definition": "「グループのメンバーであるリソースインスタンスを特定します。」",
+                "requirements": "Often the only thing of interest about a group is \"who's in it\".",
+                "min": 0,
+                "max": "*",
+                "type": [
+                    {
+                        "code": "BackboneElement"
+                    }
+                ],
+                "condition": [
+                    "grp-1"
+                ],
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "./scopedRole[isNormalRole() and classCode=\"MBR\"]/player"
+                    }
+                ]
+            },
+            {
+                "id": "Group.member.entity",
+                "path": "Group.member.entity",
+                "short": "\"グループメンバーへの言及\" (Gurūpu menbā e no gen'itsu)",
+                "definition": "「グループのメンバーであるエンティティに言及します。Group.typeと整合性が必要です。エンティティが別のグループである場合は、タイプを同じにする必要があります。」",
+                "min": 1,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "Reference",
+                        "targetProfile": [
+                            "http://hl7.org/fhir/StructureDefinition/Patient",
+                            "http://hl7.org/fhir/StructureDefinition/Practitioner",
+                            "http://hl7.org/fhir/StructureDefinition/PractitionerRole",
+                            "http://hl7.org/fhir/StructureDefinition/Device",
+                            "http://hl7.org/fhir/StructureDefinition/Medication",
+                            "http://hl7.org/fhir/StructureDefinition/Substance",
+                            "http://hl7.org/fhir/StructureDefinition/Group"
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": "Group.member.period",
+                "path": "Group.member.period",
+                "short": "「期間中メンバーはグループに所属していました」",
+                "definition": "「もしそれが分かっている場合、メンバーがグループにいた期間。」",
+                "requirements": "Need to track who was in a group at a  particular time.",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "Period"
+                    }
+                ],
+                "meaningWhenMissing": "The member is in the group at this time"
+            },
+            {
+                "id": "Group.member.inactive",
+                "path": "Group.member.inactive",
+                "short": "もしメンバーがグループから抜けた場合。",
+                "definition": "「そのメンバーがもともとグループに所属していた可能性があるが、現在はグループにいないことを示す旗」",
+                "requirements": "Sometimes you don't know when someone stopped being in a group, but not when.",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "boolean"
+                    }
+                ],
+                "meaningWhenMissing": "Members are considered active unless explicitly specified otherwise"
+            }
+        ]
+    }
+}

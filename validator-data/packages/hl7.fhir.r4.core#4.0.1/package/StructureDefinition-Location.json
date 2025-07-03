@@ -1,0 +1,2331 @@
+{
+    "resourceType": "StructureDefinition",
+    "id": "Location",
+    "meta": {
+        "lastUpdated": "2019-11-01T09:29:23.356+11:00"
+    },
+    "extension": [
+        {
+            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-category",
+            "valueString": "Base.Entities"
+        },
+        {
+            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
+            "valueCode": "trial-use"
+        },
+        {
+            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fmm",
+            "valueInteger": 3
+        },
+        {
+            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-security-category",
+            "valueCode": "business"
+        },
+        {
+            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-wg",
+            "valueCode": "pa"
+        }
+    ],
+    "url": "http://hl7.org/fhir/StructureDefinition/Location",
+    "version": "4.0.1",
+    "name": "Location",
+    "status": "draft",
+    "date": "2019-11-01T09:29:23+11:00",
+    "publisher": "Health Level Seven International (Patient Administration)",
+    "contact": [
+        {
+            "telecom": [
+                {
+                    "system": "url",
+                    "value": "http://hl7.org/fhir"
+                }
+            ]
+        },
+        {
+            "telecom": [
+                {
+                    "system": "url",
+                    "value": "http://www.hl7.org/Special/committees/pafm/index.cfm"
+                }
+            ]
+        }
+    ],
+    "description": "「サービス提供の場所の詳細及び位置情報、資源や参加者を保管、発見、収容する場所についての情報。」",
+    "fhirVersion": "4.0.1",
+    "mapping": [
+        {
+            "identity": "rim",
+            "uri": "http://hl7.org/v3",
+            "name": "RIM Mapping"
+        },
+        {
+            "identity": "w5",
+            "uri": "http://hl7.org/fhir/fivews",
+            "name": "FiveWs Pattern Mapping"
+        }
+    ],
+    "kind": "resource",
+    "abstract": false,
+    "type": "Location",
+    "baseDefinition": "http://hl7.org/fhir/StructureDefinition/DomainResource",
+    "derivation": "specialization",
+    "snapshot": {
+        "element": [
+            {
+                "id": "Location",
+                "path": "Location",
+                "short": "物理的な場所の詳細と位置情報",
+                "definition": "「サービス提供の場所の詳細及び位置情報、資源や参加者を保管、発見、収容する場所についての情報。」",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Location",
+                    "min": 0,
+                    "max": "*"
+                },
+                "constraint": [
+                    {
+                        "key": "dom-2",
+                        "severity": "error",
+                        "human": "もしリソースが他のリソースに含まれている場合、そのリソースにはネストされたリソースを含めてはなりません (moshi risōsu ga hoka no risōsu ni fukumarete iru baai, sono risōsu ni wa nesuto sareta risōsu o fukumete wa narimasen).",
+                        "expression": "contained.contained.empty()",
+                        "xpath": "not(parent::f:contained and f:contained)",
+                        "source": "http://hl7.org/fhir/StructureDefinition/DomainResource"
+                    },
+                    {
+                        "key": "dom-3",
+                        "severity": "error",
+                        "human": "もしリソースが他のリソースに含まれている場合、それはリソースの他の場所から参照されるか、含まれるリソースに参照されるべきです。",
+                        "expression": "contained.where((('#'+id in (%resource.descendants().reference | %resource.descendants().as(canonical) | %resource.descendants().as(uri) | %resource.descendants().as(url))) or descendants().where(reference = '#').exists() or descendants().where(as(canonical) = '#').exists() or descendants().where(as(canonical) = '#').exists()).not()).trace('unmatched', id).empty()",
+                        "xpath": "not(exists(for $id in f:contained/*/f:id/@value return $contained[not(parent::*/descendant::f:reference/@value=concat('#', $contained/*/id/@value) or descendant::f:reference[@value='#'])]))",
+                        "source": "http://hl7.org/fhir/StructureDefinition/DomainResource"
+                    },
+                    {
+                        "key": "dom-4",
+                        "severity": "error",
+                        "human": "もしリソースが別のリソースの中に含まれる場合、meta.versionIdまたはmeta.lastUpdatedを持つべきではありません。",
+                        "expression": "contained.meta.versionId.empty() and contained.meta.lastUpdated.empty()",
+                        "xpath": "not(exists(f:contained/*/f:meta/f:versionId)) and not(exists(f:contained/*/f:meta/f:lastUpdated))",
+                        "source": "http://hl7.org/fhir/StructureDefinition/DomainResource"
+                    },
+                    {
+                        "key": "dom-5",
+                        "severity": "error",
+                        "human": "「もしリソースが他のリソースに含まれている場合、セキュリティラベルを持つべきではありません。」",
+                        "expression": "contained.meta.security.empty()",
+                        "xpath": "not(exists(f:contained/*/f:meta/f:security))",
+                        "source": "http://hl7.org/fhir/StructureDefinition/DomainResource"
+                    },
+                    {
+                        "extension": [
+                            {
+                                "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bestpractice",
+                                "valueBoolean": true
+                            },
+                            {
+                                "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bestpractice-explanation",
+                                "valueMarkdown": "When a resource has no narrative, only systems that fully understand the data can display the resource to a human safely. Including a human readable representation in the resource makes for a much more robust eco-system and cheaper handling of resources by intermediary systems. Some ecosystems restrict distribution of resources to only those systems that do fully understand the resources, and as a consequence implementers may believe that the narrative is superfluous. However experience shows that such eco-systems often open up to new participants over time."
+                            }
+                        ],
+                        "key": "dom-6",
+                        "severity": "warning",
+                        "human": "「資源は堅牢な管理のために物語を持つべきである。」",
+                        "expression": "text.`div`.exists()",
+                        "xpath": "exists(f:text/h:div)",
+                        "source": "http://hl7.org/fhir/StructureDefinition/DomainResource"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "Entity. Role, or Act"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": ".Role[classCode=SDLC]"
+                    }
+                ]
+            },
+            {
+                "id": "Location.id",
+                "path": "Location.id",
+                "short": "このアーティファクトの論理ID",
+                "definition": "「リソースのURLで使用される論理ID。一度割り当てられたら、この値は変更されません。」",
+                "comment": "「リソースにIDがないのは、作成操作を使用してサーバーに送信されているときだけです。」",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Resource.id",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "extension": [
+                            {
+                                "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fhir-type",
+                                "valueUrl": "string"
+                            }
+                        ],
+                        "code": "http://hl7.org/fhirpath/System.String"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true
+            },
+            {
+                "id": "Location.meta",
+                "path": "Location.meta",
+                "short": "「リソースに関するメタデータ」",
+                "definition": "リソースに関するメタデータ。これはインフラストラクチャによって維持されるコンテンツです。 コンテンツの変更は、リソースのバージョン変更と常に関連しているわけではありません。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Resource.meta",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "Meta"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true
+            },
+            {
+                "id": "Location.implicitRules",
+                "path": "Location.implicitRules",
+                "short": "このコンテンツが作成されたルールセット",
+                "definition": "「リソース構築時に遵守された一連のルールを指すものであり、コンテンツを処理する際に理解する必要があります。しばしば、特別なルールを定義する実装ガイドとその他のプロファイルなどを含むものです。」",
+                "comment": "このルールセットを主張することで、取引先の限られた集団にしか内容を理解させることができず、長期的にはデータの有用性が制限されます。しかしながら、現存するヘルスエコシステムは高度に分断化しており、一般的に計算可能な形式でデータを定義、収集、交換する準備が整っていません。できる限り、実装者および/または仕様ライターはこの要素の使用を避けるべきです。使用する場合、URLは、そのナラティブとともに他のプロファイル、値セットなどを含む実装ガイドを定義する参照となります。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Resource.implicitRules",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "uri"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": true,
+                "isModifierReason": "This element is labeled as a modifier because the implicit rules may provide additional knowledge about the resource that modifies it's meaning or interpretation",
+                "isSummary": true
+            },
+            {
+                "id": "Location.language",
+                "path": "Location.language",
+                "short": "「リソースコンテンツの言語」(Risōsukontentsu no gengo)",
+                "definition": "「リソースが書かれている基本言語。」",
+                "comment": "言語はインデックスとアクセシビリティをサポートするために提供されます（通常、テキスト読み上げなどのサービスは言語タグを使用します）。物語のHTML言語タグは、物語に適用されます。リソース上の言語タグは、リソース内のデータから生成される他のプレゼンテーションの言語を指定するために使用できます。すべてのコンテンツが基本言語である必要はありません。Resource.languageは自動的に物語に適用されたと想定してはいけません。言語が指定されている場合、HTMLのdiv要素にも指定する必要があります（xml：langとhtml lang属性の関係に関する情報はHTML5の規則を参照）。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Resource.language",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "code"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-maxValueSet",
+                            "valueCanonical": "http://hl7.org/fhir/ValueSet/all-languages"
+                        },
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "Language"
+                        },
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-isCommonBinding",
+                            "valueBoolean": true
+                        }
+                    ],
+                    "strength": "preferred",
+                    "description": "「人間の言語。」(Ningen no gengo.)",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/languages"
+                }
+            },
+            {
+                "id": "Location.text",
+                "path": "Location.text",
+                "short": "「人間の解釈のためのリソースのテキスト要約」",
+                "definition": "「リソースの要約を含む人が読めるナビゲーションであり、リソースの内容を人に表現するために使用できます。ナビゲーションはすべての構造化されたデータをエンコードする必要はありませんが、人間がナビゲーションを読むだけで「臨床的に安全」であるために十分な詳細を含む必要があります。リソース定義には、臨床的な安全性を確保するためにナビゲーションで表現する必要があるコンテンツが定義される場合があります。」",
+                "comment": "含まれるリソースには説明がありません。含まれないリソースには説明が必要です。場合によっては、リソースが少量のデータしか含まず、テキストだけで表現されることがあります（minOccurs = 1要素がすべて満たされている限り）。これは、情報が「テキストの塊」としてキャプチャされるレガシーシステムからのデータや、テキストが生またはナレーションされて符号化された情報が後で追加される場合に必要な場合があります。",
+                "alias": [
+                    "narrative",
+                    "html",
+                    "xhtml",
+                    "display"
+                ],
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "DomainResource.text",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "Narrative"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "Act.text?"
+                    }
+                ]
+            },
+            {
+                "id": "Location.contained",
+                "path": "Location.contained",
+                "short": "「含まれている、インラインのリソース」(Fukuma rete iru, inrain no risōsu)",
+                "definition": "「これらのリソースは、それらを含むリソースから独立した存在を持ちません。それらは独立して識別することはできず、独自の独立したトランザクション範囲を持つこともできません。」",
+                "comment": "「コンテンツが適切に識別できる場合には、これを行うべきではありません。識別が失われると、再び復元することは非常に困難であり（文脈に依存します）、メタ要素にプロファイルとタグを持つことができますが、セキュリティのラベルを持っていてはいけません。」",
+                "alias": [
+                    "inline resources",
+                    "anonymous resources",
+                    "contained resources"
+                ],
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "DomainResource.contained",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "Resource"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "N/A"
+                    }
+                ]
+            },
+            {
+                "id": "Location.extension",
+                "path": "Location.extension",
+                "short": "実装によって定義される追加コンテンツ",
+                "definition": "「リソースの基本的な定義の一部ではない追加情報を表すために使用することができます。拡張機能の使用を安全かつ管理可能にするために、定義と使用の一定のガバナンスが適用されます。実装者はどんな拡張機能でも定義できますが、拡張機能の定義の一部として満たす必要がある要件があります」",
+                "comment": "どのようなアプリケーション、プロジェクト、または標準が拡張機能を使用しているかに関わらず、拡張機能の使用には決して汚名が付くわけではありません - それらを使用または定義する機関または管轄区域に関係なく。拡張機能の使用こそが、FHIR仕様を誰にとっても簡単なコアレベルで維持することを可能にします。",
+                "alias": [
+                    "extensions",
+                    "user content"
+                ],
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "DomainResource.extension",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "Extension"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    },
+                    {
+                        "key": "ext-1",
+                        "severity": "error",
+                        "human": "「拡張機能または値[x]のいずれかが必要です。両方ではありません。」",
+                        "expression": "extension.exists() != value.exists()",
+                        "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Extension"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "N/A"
+                    }
+                ]
+            },
+            {
+                "id": "Location.modifierExtension",
+                "path": "Location.modifierExtension",
+                "short": "無視できない拡張機能 (Mushi dekinai kakuchou kinou)",
+                "definition": "「リソースの基本的な定義に含まれない、要素の理解や、それを含む要素の子孫の理解を修正する追加情報を表すためにも使用されることがあります。通常、修飾要素は否定や修飾を提供します。拡張機能の使用を安全で管理しやすくするために、拡張機能の定義と使用に対して厳格な統治が適用されます。実装者は拡張機能を定義することが許可されていますが、拡張機能の定義の一部として満たす必要がある要件があります。リソースを処理するアプリケーションは、修飾子拡張をチェックする必要があります。修飾子拡張は、リソースまたはドメインリソースの任意の要素の意味を変更してはなりません（修飾子拡張自体の意味も変更できません）。」",
+                "comment": "どのようなアプリケーション、プロジェクト、または標準が拡張機能を使用しているかに関わらず、拡張機能の使用には決して汚名が付くわけではありません - それらを使用または定義する機関または管轄区域に関係なく。拡張機能の使用こそが、FHIR仕様を誰にとっても簡単なコアレベルで維持することを可能にします。",
+                "requirements": "Modifier extensions allow for extensions that *cannot* be safely ignored to be clearly distinguished from the vast majority of extensions which can be safely ignored.  This promotes interoperability by eliminating the need for implementers to prohibit the presence of extensions. For further information, see the [definition of modifier extensions](extensibility.html#modifierExtension).",
+                "alias": [
+                    "extensions",
+                    "user content"
+                ],
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "DomainResource.modifierExtension",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "Extension"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    },
+                    {
+                        "key": "ext-1",
+                        "severity": "error",
+                        "human": "「拡張機能または値[x]のいずれかが必要です。両方ではありません。」",
+                        "expression": "extension.exists() != value.exists()",
+                        "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Extension"
+                    }
+                ],
+                "isModifier": true,
+                "isModifierReason": "Modifier extensions are expected to modify the meaning or interpretation of the resource that contains them",
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "N/A"
+                    }
+                ]
+            },
+            {
+                "id": "Location.identifier",
+                "path": "Location.identifier",
+                "short": "ユニークなコードまたは番号は、その場所を利用者に識別します。",
+                "definition": "ユーザーに場所を識別するためのユニークなコードまたは番号。",
+                "requirements": "Organization label locations in registries, need to keep track of those.",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Location.identifier",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "Identifier"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.identifier"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": ".id"
+                    }
+                ]
+            },
+            {
+                "id": "Location.status",
+                "path": "Location.status",
+                "short": "活動中 | 凍結中 | 非活動中",
+                "definition": "\"ステータスのプロパティはリソースの一般的な利用可能性をカバーし、現在の値は操作ステータスまたは場所に構成されたスケジュール/スロットによってカバーされる可能性があります。\"",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Location.status",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "code"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": true,
+                "isModifierReason": "This element is labeled as a modifier because the status contains codes that mark the resource as not currently valid",
+                "isSummary": true,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "LocationStatus"
+                        }
+                    ],
+                    "strength": "required",
+                    "description": "「場所がまだ使用されているかどうかを示します。」(Basho ga mada shiyou sarete iru ka dou ka wo shimeshimasu.)",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/location-status|4.0.1"
+                },
+                "mapping": [
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.status"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": ".statusCode"
+                    }
+                ]
+            },
+            {
+                "id": "Location.operationalStatus",
+                "path": "Location.operationalStatus",
+                "short": "その場所の運営状況（通常はベッド/部屋についてのみ）",
+                "definition": "運用状況は、ベッドにもっとも関連性の高い運用値（ただし，単独個室/ユニット/チェアなど、例えば隔離ユニット/透析チェアなどにも適用される）をカバーします。通常、汚染、ハウスキーピング、メンテナンスなどの作業を含む概念をカバーするものです。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Location.operationalStatus",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "Coding"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "OperationalStatus"
+                        }
+                    ],
+                    "strength": "preferred",
+                    "description": "「通常ベッド/部屋が位置する場所の稼働状況」",
+                    "valueSet": "http://terminology.hl7.org/ValueSet/v2-0116"
+                },
+                "mapping": [
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.status"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "Location.name",
+                "path": "Location.name",
+                "short": "「人による場所の名前」(hito ni yoru basho no namae)",
+                "definition": "人間が使用する場所の名前。一意である必要はありません。",
+                "comment": "場所の名前が変わった場合は、古い名前をエイリアス列に入れて、検索でまだ場所が見つけられるようにしてください。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Location.name",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": ".name"
+                    }
+                ]
+            },
+            {
+                "id": "Location.alias",
+                "path": "Location.alias",
+                "short": "「過去にその場所が知られていたまたは知られている別の名前のリスト」",
+                "definition": "「その場所が過去に知られていた別名のリスト。」",
+                "comment": "エイリアス/歴史的な名称に関連する日付はありません。これは、名前が使用された時期を追跡するためではなく、古い名称でも場所を特定できるように検索を支援するためのものです。",
+                "requirements": "Over time locations and organizations go through many changes and can be known by different names.\n\nFor searching knowing previous names that the location was known by can be very useful.",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Location.alias",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": ".name"
+                    }
+                ]
+            },
+            {
+                "id": "Location.description",
+                "path": "Location.description",
+                "short": "「場所についての追加の詳細情報であり、名前以上に場所を明確に特定するために表示できるもの」",
+                "definition": "場所の説明は、場所を見つけたり参照したりするのに役立ちます。",
+                "requirements": "Humans need additional information to verify a correct location has been identified.",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Location.description",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": ".playingEntity[classCode=PLC determinerCode=INSTANCE].desc"
+                    }
+                ]
+            },
+            {
+                "id": "Location.mode",
+                "path": "Location.mode",
+                "short": "例|種類",
+                "definition": "「リソースインスタンスが特定の場所を表すのか、場所のクラスを表すのかを示します。」",
+                "comment": "「この場所は、場所の種類によって使用方法と理解方法が変化するため、修飾語としてラベル付けされます。」",
+                "requirements": "When using a Location resource for scheduling or orders, we need to be able to refer to a class of Locations instead of a specific Location.",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Location.mode",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "code"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "LocationMode"
+                        }
+                    ],
+                    "strength": "required",
+                    "description": "「リソースインスタンスが特定の場所を表すのか、場所のクラスを表すのかを示します。」",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/location-mode|4.0.1"
+                },
+                "mapping": [
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.class"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": ".playingEntity[classCode=PLC].determinerCode"
+                    }
+                ]
+            },
+            {
+                "id": "Location.type",
+                "path": "Location.type",
+                "short": "「実行される関数の種類」",
+                "definition": "「場所で行われる機能のタイプを示します。」(Basho de okonawareru kinou no taipu wo shimesu.)",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Location.type",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "CodeableConcept"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "LocationType"
+                        }
+                    ],
+                    "strength": "extensible",
+                    "description": "「場所で行われる機能のタイプを示します。」(Basho de okonawareru kinou no taipu wo shimesu.)",
+                    "valueSet": "http://terminology.hl7.org/ValueSet/v3-ServiceDeliveryLocationRoleType"
+                },
+                "mapping": [
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.class"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": ".code"
+                    }
+                ]
+            },
+            {
+                "id": "Location.telecom",
+                "path": "Location.telecom",
+                "short": "「場所の連絡先情報」",
+                "definition": "場所で利用可能なコミュニケーション機器の連絡先詳細。これには電話番号、ファックス番号、携帯電話番号、メールアドレス、Webサイトが含まれる場合があります。",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Location.telecom",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "ContactPoint"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": ".telecom"
+                    }
+                ]
+            },
+            {
+                "id": "Location.address",
+                "path": "Location.address",
+                "short": "「物理的な場所」",
+                "definition": "「物理的な位置」と言います。",
+                "comment": "追加の住所は、別のロケーションリソースのインスタンスを使用するか、または組織を介して記録する必要があります。",
+                "requirements": "If locations can be visited, we need to keep track of their address.",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Location.address",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "Address"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": ".addr"
+                    }
+                ]
+            },
+            {
+                "id": "Location.physicalType",
+                "path": "Location.physicalType",
+                "short": "場所の物理的形態 (Basho no butsuri-teki keitai)",
+                "definition": "場所の物理的形式、例えば建物、部屋、車両、道路。 (Basho no butsuri-teki keitai, tatoeba tatemono, heya, sharyou, douro)",
+                "requirements": "For purposes of showing relevant locations in queries, we need to categorize locations.",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Location.physicalType",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "CodeableConcept"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "PhysicalType"
+                        }
+                    ],
+                    "strength": "example",
+                    "description": "場所の実体形態。",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/location-physical-type"
+                },
+                "mapping": [
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.class"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": ".playingEntity [classCode=PLC].code"
+                    }
+                ]
+            },
+            {
+                "id": "Location.position",
+                "path": "Location.position",
+                "short": "絶対的な地理的位置 (Zettaiteki na chiriteki ichi)",
+                "definition": "「Location」の絶対的な地理的位置は、WGS84基準面を用いて表されます。(これはKMLで使用されている同じ座標系です。)",
+                "requirements": "For mobile applications and automated route-finding knowing the exact location of the Location is required.",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Location.position",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "BackboneElement"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": ".playingEntity [classCode=PLC determinerCode=INSTANCE].positionText"
+                    }
+                ]
+            },
+            {
+                "id": "Location.position.id",
+                "path": "Location.position.id",
+                "representation": [
+                    "xmlAttr"
+                ],
+                "short": "エレメント相互参照のためのユニークID",
+                "definition": "リソース内の要素の固有ID（内部参照用）。これは、スペースを含まない任意の文字列値である可能性があります。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Element.id",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "extension": [
+                            {
+                                "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fhir-type",
+                                "valueUrl": "string"
+                            }
+                        ],
+                        "code": "http://hl7.org/fhirpath/System.String"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "Location.position.extension",
+                "path": "Location.position.extension",
+                "short": "実装によって定義される追加コンテンツ",
+                "definition": "「要素の基本的な定義に含まれない追加情報を表すために使用されることがあります。拡張機能の使用を安全かつ管理しやすくするために、定義および使用に適用される厳格なガバナンスのセットがあります。実装者は拡張機能を定義できますが、拡張機能の定義の一部として満たす必要のある要件のセットがあります。」",
+                "comment": "どのようなアプリケーション、プロジェクト、または標準が拡張機能を使用しているかに関わらず、拡張機能の使用には決して汚名が付くわけではありません - それらを使用または定義する機関または管轄区域に関係なく。拡張機能の使用こそが、FHIR仕様を誰にとっても簡単なコアレベルで維持することを可能にします。",
+                "alias": [
+                    "extensions",
+                    "user content"
+                ],
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Element.extension",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "Extension"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    },
+                    {
+                        "key": "ext-1",
+                        "severity": "error",
+                        "human": "「拡張機能または値[x]のいずれかが必要です。両方ではありません。」",
+                        "expression": "extension.exists() != value.exists()",
+                        "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Extension"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "Location.position.modifierExtension",
+                "path": "Location.position.modifierExtension",
+                "short": "「認識されなくても無視できない拡張機能」(Ninshiki sarenakutemo mushi dekinai kakuchou kinou)",
+                "definition": "「基本的な要素の定義に含まれない追加情報を表すために使用されることがあり、それによって、その要素自体または取り込んでいる要素の子孫の理解を修正する。修飾子要素は通常、否定または修飾を提供します。拡張機能の安全で管理しやすい使用を実現するために、定義および使用に厳しいガバナンスセットが適用されています。どの実装者でも拡張機能を定義できますが、拡張機能の定義の一部として満たす必要がある要件があります。リソースを処理するアプリケーションは、修飾子拡張子をチェックする必要があります。\n\n修飾子拡張機能は、リソースまたはドメインリソースの任意の要素の意味を変更してはなりません（修飾子拡張自体の意味を変更することもできません）。」",
+                "comment": "どのようなアプリケーション、プロジェクト、または標準が拡張機能を使用しているかに関わらず、拡張機能の使用には決して汚名が付くわけではありません - それらを使用または定義する機関または管轄区域に関係なく。拡張機能の使用こそが、FHIR仕様を誰にとっても簡単なコアレベルで維持することを可能にします。",
+                "requirements": "Modifier extensions allow for extensions that *cannot* be safely ignored to be clearly distinguished from the vast majority of extensions which can be safely ignored.  This promotes interoperability by eliminating the need for implementers to prohibit the presence of extensions. For further information, see the [definition of modifier extensions](extensibility.html#modifierExtension).",
+                "alias": [
+                    "extensions",
+                    "user content",
+                    "modifiers"
+                ],
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "BackboneElement.modifierExtension",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "Extension"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    },
+                    {
+                        "key": "ext-1",
+                        "severity": "error",
+                        "human": "「拡張機能または値[x]のいずれかが必要です。両方ではありません。」",
+                        "expression": "extension.exists() != value.exists()",
+                        "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Extension"
+                    }
+                ],
+                "isModifier": true,
+                "isModifierReason": "Modifier extensions are expected to modify the meaning or interpretation of the element that contains them",
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "N/A"
+                    }
+                ]
+            },
+            {
+                "id": "Location.position.longitude",
+                "path": "Location.position.longitude",
+                "short": "\"WGS84データムを使用した経度\" (WGS84データムをしようしたけいど)",
+                "definition": "「経度。値の範囲と解釈は、KMLの経度要素のテキストと同じです（以下の注を参照）。」",
+                "min": 1,
+                "max": "1",
+                "base": {
+                    "path": "Location.position.longitude",
+                    "min": 1,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "decimal"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "(RIM Opted not to map the sub-elements of GPS location, is now an OBS)"
+                    }
+                ]
+            },
+            {
+                "id": "Location.position.latitude",
+                "path": "Location.position.latitude",
+                "short": "WGS84データムに基づく緯度",
+                "definition": "緯度。値のドメインと解釈は、KMLの緯度要素のテキストと同じです（以下の注意事項を参照）。",
+                "min": 1,
+                "max": "1",
+                "base": {
+                    "path": "Location.position.latitude",
+                    "min": 1,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "decimal"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "(RIM Opted not to map the sub-elements of GPS location, is now an OBS)"
+                    }
+                ]
+            },
+            {
+                "id": "Location.position.altitude",
+                "path": "Location.position.altitude",
+                "short": "「WGS84基準の高度」",
+                "definition": "高度。値の範囲と解釈は、KMLの高度要素のテキストと同じです（以下の注釈を参照）。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Location.position.altitude",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "decimal"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "(RIM Opted not to map the sub-elements of GPS location, is now an OBS)"
+                    }
+                ]
+            },
+            {
+                "id": "Location.managingOrganization",
+                "path": "Location.managingOrganization",
+                "short": "\"配備と維持の責任を負う組織\" (Haibei to iji no sekinin oou soshiki)",
+                "definition": "場所の提供と保守に責任を負う組織。",
+                "comment": "この場所がサービスを提供する組織階層の一部としても使用できます。これらのサービスは、HealthcareServiceリソースを通じて定義することができます。",
+                "requirements": "Need to know who manages the location.",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Location.managingOrganization",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "Reference",
+                        "targetProfile": [
+                            "http://hl7.org/fhir/StructureDefinition/Organization"
+                        ]
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": ".scopingEntity[classCode=ORG determinerKind=INSTANCE]"
+                    }
+                ]
+            },
+            {
+                "id": "Location.partOf",
+                "path": "Location.partOf",
+                "short": "「別の場所。この場所は物理的に一部です。」(Betsu no basho. Kono basho wa butsuri-teki ni ichibu desu.)",
+                "definition": "「この場所が物理的に一部である別の場所」",
+                "requirements": "For purposes of location, display and identification, knowing which locations are located within other locations is important.",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Location.partOf",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "extension": [
+                            {
+                                "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-hierarchy",
+                                "valueBoolean": true
+                            }
+                        ],
+                        "code": "Reference",
+                        "targetProfile": [
+                            "http://hl7.org/fhir/StructureDefinition/Location"
+                        ]
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": ".inboundLink[typeCode=PART].source[classCode=SDLC]"
+                    }
+                ]
+            },
+            {
+                "id": "Location.hoursOfOperation",
+                "path": "Location.hoursOfOperation",
+                "short": "「この場所は通常、週のどの日または時間にオープンしていますか？」 (Kono basho wa tsūjō, shū no dono hi matawa jikan ni ōpun shiteimasu ka?)",
+                "definition": "この場所は週の何日/何時に通常開いていますか？(Kono basho wa shū no nan-nichi/nan-ji ni tsūjō aite imasu ka?)",
+                "comment": "このタイプの情報は、施設が利用可能であると顧客に通知するディレクトリやウェブサイトによって一般的に公開されます。場所内の特定のサービスには、場所の時間よりも短く（または長く）なるかもしれない営業時間があります。",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Location.hoursOfOperation",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "BackboneElement"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": ".effectiveTime"
+                    }
+                ]
+            },
+            {
+                "id": "Location.hoursOfOperation.id",
+                "path": "Location.hoursOfOperation.id",
+                "representation": [
+                    "xmlAttr"
+                ],
+                "short": "エレメント相互参照のためのユニークID",
+                "definition": "リソース内の要素の固有ID（内部参照用）。これは、スペースを含まない任意の文字列値である可能性があります。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Element.id",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "extension": [
+                            {
+                                "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fhir-type",
+                                "valueUrl": "string"
+                            }
+                        ],
+                        "code": "http://hl7.org/fhirpath/System.String"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "Location.hoursOfOperation.extension",
+                "path": "Location.hoursOfOperation.extension",
+                "short": "実装によって定義される追加コンテンツ",
+                "definition": "「要素の基本的な定義に含まれない追加情報を表すために使用されることがあります。拡張機能の使用を安全かつ管理しやすくするために、定義および使用に適用される厳格なガバナンスのセットがあります。実装者は拡張機能を定義できますが、拡張機能の定義の一部として満たす必要のある要件のセットがあります。」",
+                "comment": "どのようなアプリケーション、プロジェクト、または標準が拡張機能を使用しているかに関わらず、拡張機能の使用には決して汚名が付くわけではありません - それらを使用または定義する機関または管轄区域に関係なく。拡張機能の使用こそが、FHIR仕様を誰にとっても簡単なコアレベルで維持することを可能にします。",
+                "alias": [
+                    "extensions",
+                    "user content"
+                ],
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Element.extension",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "Extension"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    },
+                    {
+                        "key": "ext-1",
+                        "severity": "error",
+                        "human": "「拡張機能または値[x]のいずれかが必要です。両方ではありません。」",
+                        "expression": "extension.exists() != value.exists()",
+                        "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Extension"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "Location.hoursOfOperation.modifierExtension",
+                "path": "Location.hoursOfOperation.modifierExtension",
+                "short": "「認識されなくても無視できない拡張機能」(Ninshiki sarenakutemo mushi dekinai kakuchou kinou)",
+                "definition": "「基本的な要素の定義に含まれない追加情報を表すために使用されることがあり、それによって、その要素自体または取り込んでいる要素の子孫の理解を修正する。修飾子要素は通常、否定または修飾を提供します。拡張機能の安全で管理しやすい使用を実現するために、定義および使用に厳しいガバナンスセットが適用されています。どの実装者でも拡張機能を定義できますが、拡張機能の定義の一部として満たす必要がある要件があります。リソースを処理するアプリケーションは、修飾子拡張子をチェックする必要があります。\n\n修飾子拡張機能は、リソースまたはドメインリソースの任意の要素の意味を変更してはなりません（修飾子拡張自体の意味を変更することもできません）。」",
+                "comment": "どのようなアプリケーション、プロジェクト、または標準が拡張機能を使用しているかに関わらず、拡張機能の使用には決して汚名が付くわけではありません - それらを使用または定義する機関または管轄区域に関係なく。拡張機能の使用こそが、FHIR仕様を誰にとっても簡単なコアレベルで維持することを可能にします。",
+                "requirements": "Modifier extensions allow for extensions that *cannot* be safely ignored to be clearly distinguished from the vast majority of extensions which can be safely ignored.  This promotes interoperability by eliminating the need for implementers to prohibit the presence of extensions. For further information, see the [definition of modifier extensions](extensibility.html#modifierExtension).",
+                "alias": [
+                    "extensions",
+                    "user content",
+                    "modifiers"
+                ],
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "BackboneElement.modifierExtension",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "Extension"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    },
+                    {
+                        "key": "ext-1",
+                        "severity": "error",
+                        "human": "「拡張機能または値[x]のいずれかが必要です。両方ではありません。」",
+                        "expression": "extension.exists() != value.exists()",
+                        "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Extension"
+                    }
+                ],
+                "isModifier": true,
+                "isModifierReason": "Modifier extensions are expected to modify the meaning or interpretation of the element that contains them",
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "N/A"
+                    }
+                ]
+            },
+            {
+                "id": "Location.hoursOfOperation.daysOfWeek",
+                "path": "Location.hoursOfOperation.daysOfWeek",
+                "short": "月曜日｜火曜日｜水曜日｜木曜日｜金曜日｜土曜日｜日曜日",
+                "definition": "「開始時間と終了時間の間で利用可能な曜日を示します。」",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Location.hoursOfOperation.daysOfWeek",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "code"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "DaysOfWeek"
+                        }
+                    ],
+                    "strength": "required",
+                    "description": "曜日 (Youbi)",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/days-of-week|4.0.1"
+                },
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": ".effectiveTime"
+                    }
+                ]
+            },
+            {
+                "id": "Location.hoursOfOperation.allDay",
+                "path": "Location.hoursOfOperation.allDay",
+                "short": "場所は一日中開いています。 (Basho wa ichinichijuu hiraiteimasu.)",
+                "definition": "場所は一日中開いています。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Location.hoursOfOperation.allDay",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "boolean"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": ".effectiveTime"
+                    }
+                ]
+            },
+            {
+                "id": "Location.hoursOfOperation.openingTime",
+                "path": "Location.hoursOfOperation.openingTime",
+                "short": "場所が開口する時間 (Basho ga kaiko suru jikan)",
+                "definition": "場所が開く時間。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Location.hoursOfOperation.openingTime",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "time"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": ".effectiveTime"
+                    }
+                ]
+            },
+            {
+                "id": "Location.hoursOfOperation.closingTime",
+                "path": "Location.hoursOfOperation.closingTime",
+                "short": "場所が閉まる時間",
+                "definition": "場所が閉まる時間。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Location.hoursOfOperation.closingTime",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "time"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": ".effectiveTime"
+                    }
+                ]
+            },
+            {
+                "id": "Location.availabilityExceptions",
+                "path": "Location.availabilityExceptions",
+                "short": "利用可能例外の説明 (りようかのうれいがいのせつめい) - Description of availability exceptions",
+                "definition": "場所の開館時間が通常と異なる場合の説明（例：祝日の利用可能時間）。開館時間の詳細で説明されている通常のサイトの利用可能性のすべての例外を簡潔に説明すること。",
+                "min": 0,
+                "max": "1",
+                "base": {
+                    "path": "Location.availabilityExceptions",
+                    "min": 0,
+                    "max": "1"
+                },
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "Location.endpoint",
+                "path": "Location.endpoint",
+                "short": "サービスへのアクセスを提供する技術的なエンドポイントは、その場所で運用されます。",
+                "definition": "場所で運用されるサービスへアクセスするためのテクニカルエンドポイント。",
+                "requirements": "Organizations may have different systems at different locations that provide various services and need to be able to define the technical connection details for how to connect to them, and for what purpose.",
+                "min": 0,
+                "max": "*",
+                "base": {
+                    "path": "Location.endpoint",
+                    "min": 0,
+                    "max": "*"
+                },
+                "type": [
+                    {
+                        "code": "Reference",
+                        "targetProfile": [
+                            "http://hl7.org/fhir/StructureDefinition/Endpoint"
+                        ]
+                    }
+                ],
+                "constraint": [
+                    {
+                        "key": "ele-1",
+                        "severity": "error",
+                        "human": "すべてのFHIR要素は、@valueまたはchildrenを持っている必要があります。",
+                        "expression": "hasValue() or (children().count() > id.count())",
+                        "xpath": "@value|f:*|h:div",
+                        "source": "http://hl7.org/fhir/StructureDefinition/Element"
+                    }
+                ],
+                "isModifier": false,
+                "isSummary": false,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "n/a"
+                    }
+                ]
+            }
+        ]
+    },
+    "differential": {
+        "element": [
+            {
+                "id": "Location",
+                "path": "Location",
+                "short": "物理的な場所の詳細と位置情報",
+                "definition": "「サービス提供の場所の詳細及び位置情報、資源や参加者を保管、発見、収容する場所についての情報。」",
+                "min": 0,
+                "max": "*",
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": ".Role[classCode=SDLC]"
+                    }
+                ]
+            },
+            {
+                "id": "Location.identifier",
+                "path": "Location.identifier",
+                "short": "ユニークなコードまたは番号は、その場所を利用者に識別します。",
+                "definition": "ユーザーに場所を識別するためのユニークなコードまたは番号。",
+                "requirements": "Organization label locations in registries, need to keep track of those.",
+                "min": 0,
+                "max": "*",
+                "type": [
+                    {
+                        "code": "Identifier"
+                    }
+                ],
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.identifier"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": ".id"
+                    }
+                ]
+            },
+            {
+                "id": "Location.status",
+                "path": "Location.status",
+                "short": "活動中 | 凍結中 | 非活動中",
+                "definition": "\"ステータスのプロパティはリソースの一般的な利用可能性をカバーし、現在の値は操作ステータスまたは場所に構成されたスケジュール/スロットによってカバーされる可能性があります。\"",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "code"
+                    }
+                ],
+                "isModifier": true,
+                "isModifierReason": "This element is labeled as a modifier because the status contains codes that mark the resource as not currently valid",
+                "isSummary": true,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "LocationStatus"
+                        }
+                    ],
+                    "strength": "required",
+                    "description": "「場所がまだ使用されているかどうかを示します。」(Basho ga mada shiyou sarete iru ka dou ka wo shimeshimasu.)",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/location-status|4.0.1"
+                },
+                "mapping": [
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.status"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": ".statusCode"
+                    }
+                ]
+            },
+            {
+                "id": "Location.operationalStatus",
+                "path": "Location.operationalStatus",
+                "short": "その場所の運営状況（通常はベッド/部屋についてのみ）",
+                "definition": "運用状況は、ベッドにもっとも関連性の高い運用値（ただし，単独個室/ユニット/チェアなど、例えば隔離ユニット/透析チェアなどにも適用される）をカバーします。通常、汚染、ハウスキーピング、メンテナンスなどの作業を含む概念をカバーするものです。",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "Coding"
+                    }
+                ],
+                "isSummary": true,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "OperationalStatus"
+                        }
+                    ],
+                    "strength": "preferred",
+                    "description": "「通常ベッド/部屋が位置する場所の稼働状況」",
+                    "valueSet": "http://terminology.hl7.org/ValueSet/v2-0116"
+                },
+                "mapping": [
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.status"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "Location.name",
+                "path": "Location.name",
+                "short": "「人による場所の名前」(hito ni yoru basho no namae)",
+                "definition": "人間が使用する場所の名前。一意である必要はありません。",
+                "comment": "場所の名前が変わった場合は、古い名前をエイリアス列に入れて、検索でまだ場所が見つけられるようにしてください。",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ],
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": ".name"
+                    }
+                ]
+            },
+            {
+                "id": "Location.alias",
+                "path": "Location.alias",
+                "short": "「過去にその場所が知られていたまたは知られている別の名前のリスト」",
+                "definition": "「その場所が過去に知られていた別名のリスト。」",
+                "comment": "エイリアス/歴史的な名称に関連する日付はありません。これは、名前が使用された時期を追跡するためではなく、古い名称でも場所を特定できるように検索を支援するためのものです。",
+                "requirements": "Over time locations and organizations go through many changes and can be known by different names.\n\nFor searching knowing previous names that the location was known by can be very useful.",
+                "min": 0,
+                "max": "*",
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ],
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": ".name"
+                    }
+                ]
+            },
+            {
+                "id": "Location.description",
+                "path": "Location.description",
+                "short": "「場所についての追加の詳細情報であり、名前以上に場所を明確に特定するために表示できるもの」",
+                "definition": "場所の説明は、場所を見つけたり参照したりするのに役立ちます。",
+                "requirements": "Humans need additional information to verify a correct location has been identified.",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ],
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": ".playingEntity[classCode=PLC determinerCode=INSTANCE].desc"
+                    }
+                ]
+            },
+            {
+                "id": "Location.mode",
+                "path": "Location.mode",
+                "short": "例|種類",
+                "definition": "「リソースインスタンスが特定の場所を表すのか、場所のクラスを表すのかを示します。」",
+                "comment": "「この場所は、場所の種類によって使用方法と理解方法が変化するため、修飾語としてラベル付けされます。」",
+                "requirements": "When using a Location resource for scheduling or orders, we need to be able to refer to a class of Locations instead of a specific Location.",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "code"
+                    }
+                ],
+                "isSummary": true,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "LocationMode"
+                        }
+                    ],
+                    "strength": "required",
+                    "description": "「リソースインスタンスが特定の場所を表すのか、場所のクラスを表すのかを示します。」",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/location-mode|4.0.1"
+                },
+                "mapping": [
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.class"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": ".playingEntity[classCode=PLC].determinerCode"
+                    }
+                ]
+            },
+            {
+                "id": "Location.type",
+                "path": "Location.type",
+                "short": "「実行される関数の種類」",
+                "definition": "「場所で行われる機能のタイプを示します。」(Basho de okonawareru kinou no taipu wo shimesu.)",
+                "min": 0,
+                "max": "*",
+                "type": [
+                    {
+                        "code": "CodeableConcept"
+                    }
+                ],
+                "isSummary": true,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "LocationType"
+                        }
+                    ],
+                    "strength": "extensible",
+                    "description": "「場所で行われる機能のタイプを示します。」(Basho de okonawareru kinou no taipu wo shimesu.)",
+                    "valueSet": "http://terminology.hl7.org/ValueSet/v3-ServiceDeliveryLocationRoleType"
+                },
+                "mapping": [
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.class"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": ".code"
+                    }
+                ]
+            },
+            {
+                "id": "Location.telecom",
+                "path": "Location.telecom",
+                "short": "「場所の連絡先情報」",
+                "definition": "場所で利用可能なコミュニケーション機器の連絡先詳細。これには電話番号、ファックス番号、携帯電話番号、メールアドレス、Webサイトが含まれる場合があります。",
+                "min": 0,
+                "max": "*",
+                "type": [
+                    {
+                        "code": "ContactPoint"
+                    }
+                ],
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": ".telecom"
+                    }
+                ]
+            },
+            {
+                "id": "Location.address",
+                "path": "Location.address",
+                "short": "「物理的な場所」",
+                "definition": "「物理的な位置」と言います。",
+                "comment": "追加の住所は、別のロケーションリソースのインスタンスを使用するか、または組織を介して記録する必要があります。",
+                "requirements": "If locations can be visited, we need to keep track of their address.",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "Address"
+                    }
+                ],
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": ".addr"
+                    }
+                ]
+            },
+            {
+                "id": "Location.physicalType",
+                "path": "Location.physicalType",
+                "short": "場所の物理的形態 (Basho no butsuri-teki keitai)",
+                "definition": "場所の物理的形式、例えば建物、部屋、車両、道路。 (Basho no butsuri-teki keitai, tatoeba tatemono, heya, sharyou, douro)",
+                "requirements": "For purposes of showing relevant locations in queries, we need to categorize locations.",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "CodeableConcept"
+                    }
+                ],
+                "isSummary": true,
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "PhysicalType"
+                        }
+                    ],
+                    "strength": "example",
+                    "description": "場所の実体形態。",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/location-physical-type"
+                },
+                "mapping": [
+                    {
+                        "identity": "w5",
+                        "map": "FiveWs.class"
+                    },
+                    {
+                        "identity": "rim",
+                        "map": ".playingEntity [classCode=PLC].code"
+                    }
+                ]
+            },
+            {
+                "id": "Location.position",
+                "path": "Location.position",
+                "short": "絶対的な地理的位置 (Zettaiteki na chiriteki ichi)",
+                "definition": "「Location」の絶対的な地理的位置は、WGS84基準面を用いて表されます。(これはKMLで使用されている同じ座標系です。)",
+                "requirements": "For mobile applications and automated route-finding knowing the exact location of the Location is required.",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "BackboneElement"
+                    }
+                ],
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": ".playingEntity [classCode=PLC determinerCode=INSTANCE].positionText"
+                    }
+                ]
+            },
+            {
+                "id": "Location.position.longitude",
+                "path": "Location.position.longitude",
+                "short": "\"WGS84データムを使用した経度\" (WGS84データムをしようしたけいど)",
+                "definition": "「経度。値の範囲と解釈は、KMLの経度要素のテキストと同じです（以下の注を参照）。」",
+                "min": 1,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "decimal"
+                    }
+                ],
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "(RIM Opted not to map the sub-elements of GPS location, is now an OBS)"
+                    }
+                ]
+            },
+            {
+                "id": "Location.position.latitude",
+                "path": "Location.position.latitude",
+                "short": "WGS84データムに基づく緯度",
+                "definition": "緯度。値のドメインと解釈は、KMLの緯度要素のテキストと同じです（以下の注意事項を参照）。",
+                "min": 1,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "decimal"
+                    }
+                ],
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "(RIM Opted not to map the sub-elements of GPS location, is now an OBS)"
+                    }
+                ]
+            },
+            {
+                "id": "Location.position.altitude",
+                "path": "Location.position.altitude",
+                "short": "「WGS84基準の高度」",
+                "definition": "高度。値の範囲と解釈は、KMLの高度要素のテキストと同じです（以下の注釈を参照）。",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "decimal"
+                    }
+                ],
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "(RIM Opted not to map the sub-elements of GPS location, is now an OBS)"
+                    }
+                ]
+            },
+            {
+                "id": "Location.managingOrganization",
+                "path": "Location.managingOrganization",
+                "short": "\"配備と維持の責任を負う組織\" (Haibei to iji no sekinin oou soshiki)",
+                "definition": "場所の提供と保守に責任を負う組織。",
+                "comment": "この場所がサービスを提供する組織階層の一部としても使用できます。これらのサービスは、HealthcareServiceリソースを通じて定義することができます。",
+                "requirements": "Need to know who manages the location.",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "Reference",
+                        "targetProfile": [
+                            "http://hl7.org/fhir/StructureDefinition/Organization"
+                        ]
+                    }
+                ],
+                "isSummary": true,
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": ".scopingEntity[classCode=ORG determinerKind=INSTANCE]"
+                    }
+                ]
+            },
+            {
+                "id": "Location.partOf",
+                "path": "Location.partOf",
+                "short": "「別の場所。この場所は物理的に一部です。」(Betsu no basho. Kono basho wa butsuri-teki ni ichibu desu.)",
+                "definition": "「この場所が物理的に一部である別の場所」",
+                "requirements": "For purposes of location, display and identification, knowing which locations are located within other locations is important.",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "extension": [
+                            {
+                                "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-hierarchy",
+                                "valueBoolean": true
+                            }
+                        ],
+                        "code": "Reference",
+                        "targetProfile": [
+                            "http://hl7.org/fhir/StructureDefinition/Location"
+                        ]
+                    }
+                ],
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": ".inboundLink[typeCode=PART].source[classCode=SDLC]"
+                    }
+                ]
+            },
+            {
+                "id": "Location.hoursOfOperation",
+                "path": "Location.hoursOfOperation",
+                "short": "「この場所は通常、週のどの日または時間にオープンしていますか？」 (Kono basho wa tsūjō, shū no dono hi matawa jikan ni ōpun shiteimasu ka?)",
+                "definition": "この場所は週の何日/何時に通常開いていますか？(Kono basho wa shū no nan-nichi/nan-ji ni tsūjō aite imasu ka?)",
+                "comment": "このタイプの情報は、施設が利用可能であると顧客に通知するディレクトリやウェブサイトによって一般的に公開されます。場所内の特定のサービスには、場所の時間よりも短く（または長く）なるかもしれない営業時間があります。",
+                "min": 0,
+                "max": "*",
+                "type": [
+                    {
+                        "code": "BackboneElement"
+                    }
+                ],
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": ".effectiveTime"
+                    }
+                ]
+            },
+            {
+                "id": "Location.hoursOfOperation.daysOfWeek",
+                "path": "Location.hoursOfOperation.daysOfWeek",
+                "short": "月曜日｜火曜日｜水曜日｜木曜日｜金曜日｜土曜日｜日曜日",
+                "definition": "「開始時間と終了時間の間で利用可能な曜日を示します。」",
+                "min": 0,
+                "max": "*",
+                "type": [
+                    {
+                        "code": "code"
+                    }
+                ],
+                "binding": {
+                    "extension": [
+                        {
+                            "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                            "valueString": "DaysOfWeek"
+                        }
+                    ],
+                    "strength": "required",
+                    "description": "曜日 (Youbi)",
+                    "valueSet": "http://hl7.org/fhir/ValueSet/days-of-week|4.0.1"
+                },
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": ".effectiveTime"
+                    }
+                ]
+            },
+            {
+                "id": "Location.hoursOfOperation.allDay",
+                "path": "Location.hoursOfOperation.allDay",
+                "short": "場所は一日中開いています。 (Basho wa ichinichijuu hiraiteimasu.)",
+                "definition": "場所は一日中開いています。",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "boolean"
+                    }
+                ],
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": ".effectiveTime"
+                    }
+                ]
+            },
+            {
+                "id": "Location.hoursOfOperation.openingTime",
+                "path": "Location.hoursOfOperation.openingTime",
+                "short": "場所が開口する時間 (Basho ga kaiko suru jikan)",
+                "definition": "場所が開く時間。",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "time"
+                    }
+                ],
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": ".effectiveTime"
+                    }
+                ]
+            },
+            {
+                "id": "Location.hoursOfOperation.closingTime",
+                "path": "Location.hoursOfOperation.closingTime",
+                "short": "場所が閉まる時間",
+                "definition": "場所が閉まる時間。",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "time"
+                    }
+                ],
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": ".effectiveTime"
+                    }
+                ]
+            },
+            {
+                "id": "Location.availabilityExceptions",
+                "path": "Location.availabilityExceptions",
+                "short": "利用可能例外の説明 (りようかのうれいがいのせつめい) - Description of availability exceptions",
+                "definition": "場所の開館時間が通常と異なる場合の説明（例：祝日の利用可能時間）。開館時間の詳細で説明されている通常のサイトの利用可能性のすべての例外を簡潔に説明すること。",
+                "min": 0,
+                "max": "1",
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ],
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "n/a"
+                    }
+                ]
+            },
+            {
+                "id": "Location.endpoint",
+                "path": "Location.endpoint",
+                "short": "サービスへのアクセスを提供する技術的なエンドポイントは、その場所で運用されます。",
+                "definition": "場所で運用されるサービスへアクセスするためのテクニカルエンドポイント。",
+                "requirements": "Organizations may have different systems at different locations that provide various services and need to be able to define the technical connection details for how to connect to them, and for what purpose.",
+                "min": 0,
+                "max": "*",
+                "type": [
+                    {
+                        "code": "Reference",
+                        "targetProfile": [
+                            "http://hl7.org/fhir/StructureDefinition/Endpoint"
+                        ]
+                    }
+                ],
+                "mapping": [
+                    {
+                        "identity": "rim",
+                        "map": "n/a"
+                    }
+                ]
+            }
+        ]
+    }
+}

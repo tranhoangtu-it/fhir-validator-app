@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Công cụ Validation JSON/XML JP-CLINS</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Công cụ Validation JP-CLINS</h1>
+        <div class="header-controls">
+            <div class="language-selector">
+                <label for="language-select">Ngôn ngữ:</label>
+                <select id="language-select">
+                    <option value="en">English</option>
+                    <option value="ja" selected>Japanese</option>
+                    <option value="vi">Tiếng Việt</option>
+                </select>
+            </div>
+            <button id="theme-toggle">Chuyển chế độ Sáng/Tối</button>
+        </div>
+    </header>
+
+    <main>
+        <section class="input-section">
+            <h2>Nhập Chuỗi JSON hoặc XML</h2>
+            <textarea id="input-string" placeholder="Nhập chuỗi JSON hoặc XML tại đây..."></textarea>
+            <button id="validate-button">Chạy Validation</button>
+        </section>
+
+        <section class="output-section">
+            <h2>Kết Quả Validation</h2>
+            <div id="validation-output">
+                <p class="info">Thông tin: Sẵn sàng để nhập dữ liệu và chạy validation.</p>
+            </div>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
